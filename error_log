@@ -1,0 +1,144 @@
+[11-Jul-2016 07:38:02 UTC] PHP Fatal error:  Call to undefined function redirect() in /home/restopowersoftwa/public_html/application/controllers/Paypal.php on line 18
+[11-Jul-2016 07:39:00 UTC] PHP Parse error:  syntax error, unexpected '(' in /home/restopowersoftwa/public_html/application/views/paypal_payment.php on line 45
+[11-Jul-2016 10:51:13 UTC] PHP Fatal error:  Call to a member function check_order_payment() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Paypal.php on line 37
+[13-Jul-2016 10:42:22 UTC] PHP Fatal error:  Call to undefined method CI_DB_mysqli_result::last_query() in /home/restopowersoftwa/public_html/application/models/Administration/Advertise_management.php on line 78
+[13-Jul-2016 10:42:27 UTC] PHP Fatal error:  Call to undefined method CI_DB_mysqli_result::last_query() in /home/restopowersoftwa/public_html/application/models/Administration/Advertise_management.php on line 78
+[13-Jul-2016 10:47:23 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1688
+[14-Jul-2016 07:32:33 UTC] PHP Fatal error:  Call to undefined function redirect() in /home/restopowersoftwa/public_html/application/controllers/Paypal.php on line 19
+[15-Jul-2016 12:18:52 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1785
+[15-Jul-2016 13:16:38 UTC] PHP Fatal error:  Cannot redeclare create_captcha() (previously declared in /home/restopowersoftwa/public_html/system/helpers/captcha_helper.php:63) in /home/restopowersoftwa/public_html/application/helpers/restaurant_helper.php on line 727
+[15-Jul-2016 13:17:11 UTC] PHP Fatal error:  Cannot redeclare create_captcha() (previously declared in /home/restopowersoftwa/public_html/system/helpers/captcha_helper.php:63) in /home/restopowersoftwa/public_html/application/helpers/restaurant_helper.php on line 727
+[25-Jul-2016 15:27:06 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/restopowersoftwa/public_html/application/views/login.php on line 20
+[26-Jul-2016 05:31:04 UTC] PHP Fatal error:  Call to a member function role_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 121
+[26-Jul-2016 05:31:10 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[26-Jul-2016 05:31:16 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[26-Jul-2016 05:31:21 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[26-Jul-2016 06:33:44 UTC] PHP Fatal error:  Call to undefined method Home::_create_captcha() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 171
+[26-Jul-2016 06:34:00 UTC] PHP Fatal error:  Call to undefined method Home::_create_captcha() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 171
+[26-Jul-2016 06:34:10 UTC] PHP Fatal error:  Call to undefined method Home::_create_captcha() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 171
+[26-Jul-2016 08:17:40 UTC] PHP Fatal error:  Call to undefined method Home::_send_email() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 203
+[26-Jul-2016 08:20:53 UTC] PHP Fatal error:  Call to undefined method Home::_show_message() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 205
+[26-Jul-2016 11:13:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:14:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:15:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:16:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:17:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:18:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:18:40 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:18:41 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:18:41 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:19:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:20:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:21:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:21:43 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:21:43 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:21:43 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:22:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:22:23 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:22:44 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:23:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:23:55 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:24:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:24:21 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:24:52 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 11:25:01 UTC] PHP Parse error:  syntax error, unexpected '$route' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/config/routes.php on line 115
+[26-Jul-2016 13:15:53 UTC] PHP Fatal error:  Call to undefined method Tank_auth::create_profile() in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 884
+[26-Jul-2016 15:06:10 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1055
+[26-Jul-2016 15:07:22 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1081
+[26-Jul-2016 15:23:08 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1088
+[26-Jul-2016 15:25:03 UTC] PHP Fatal error:  Call to undefined method Tank_auth::create_profile() in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1033
+[26-Jul-2016 15:30:52 UTC] PHP Fatal error:  Call to undefined method Tank_auth::create_profile() in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1056
+[26-Jul-2016 15:40:29 UTC] PHP Fatal error:  Call to undefined method Custom_function::create_profile() in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1056
+[27-Jul-2016 14:57:14 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[27-Jul-2016 14:57:43 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[28-Jul-2016 06:57:54 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/restopowersoftwa/public_html/application/views/auth/customer_register_form.php on line 239
+[28-Jul-2016 07:25:58 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1042
+[28-Jul-2016 07:26:35 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1043
+[28-Jul-2016 07:44:05 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1061
+[28-Jul-2016 08:35:11 UTC] PHP Fatal error:  Call to undefined method Custom_function::customer_email() in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1187
+[28-Jul-2016 09:43:15 UTC] PHP Fatal error:  Call to undefined method Custom_function::customer_email() in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1233
+[28-Jul-2016 10:17:48 UTC] PHP Fatal error:  Call to undefined method Custom_function::create_profile() in /home/restopowersoftwa/public_html/application/models/Custom_function.php on line 105
+[28-Jul-2016 12:50:28 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1283
+[28-Jul-2016 12:51:36 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1271
+[29-Jul-2016 06:37:38 UTC] PHP Fatal error:  Call to a member function role_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 121
+[29-Jul-2016 06:37:40 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:42 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:43 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:45 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:47 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:49 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:51 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:52 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:54 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:56 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:58 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:37:59 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:01 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:02 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:04 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:06 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:08 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:09 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:11 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:13 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:15 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:16 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:18 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:19 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:23 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 06:38:25 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 07:37:22 UTC] PHP Fatal error:  Call to a member function role_by_id() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 62
+[29-Jul-2016 11:34:57 UTC] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT), expecting ',' or ';' in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 906
+[29-Jul-2016 11:35:00 UTC] PHP Parse error:  syntax error, unexpected 'die' (T_EXIT), expecting ',' or ';' in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 906
+[29-Jul-2016 12:30:31 UTC] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1051
+[29-Jul-2016 12:31:17 UTC] PHP Fatal error:  Call to a member function getApiDetails() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 920
+[29-Jul-2016 12:35:43 UTC] PHP Fatal error:  Call to a member function getApiDetails() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 920
+[29-Jul-2016 12:59:46 UTC] PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 2299
+[29-Jul-2016 13:00:14 UTC] PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 2299
+[29-Jul-2016 13:26:44 UTC] PHP Fatal error:  Call to undefined method Tank_auth::get_login() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 2299
+[29-Jul-2016 13:27:13 UTC] PHP Fatal error:  Call to undefined method Tank_auth::get_logged_in() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 2299
+[29-Jul-2016 15:09:45 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ';' in /home/restopowersoftwa/public_html/application/models/Customer_management.php on line 376
+[29-Jul-2016 15:09:45 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ';' in /home/restopowersoftwa/public_html/application/models/Customer_management.php on line 376
+[29-Jul-2016 15:10:52 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ';' in /home/restopowersoftwa/public_html/application/models/Customer_management.php on line 376
+[30-Jul-2016 13:59:13 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/restopowersoftwa/public_html/application/views/restaurant_list.php on line 429
+[30-Jul-2016 15:45:03 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/restopowersoftwa/public_html/application/views/restaurant_table_list.php on line 372
+[30-Jul-2016 16:19:34 UTC] PHP Parse error:  syntax error, unexpected '.', expecting variable (T_VARIABLE) or '$' in /home/restopowersoftwa/public_html/application/views/restaurant_list.php on line 737
+[03-Aug-2016 07:36:18 UTC] PHP Fatal error:  Call to undefined method Home_Restro::resro_service_list() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 2384
+[03-Aug-2016 07:36:32 UTC] PHP Fatal error:  Call to undefined method Home_Restro::resro_service_list() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 2384
+[03-Aug-2016 10:28:35 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/restopowersoftwa/public_html/application/helpers/restaurant_helper.php on line 720
+[03-Aug-2016 11:24:08 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/restopowersoftwa/public_html/application/views/restaurant_profile.php on line 121
+[03-Aug-2016 11:24:42 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/restopowersoftwa/public_html/application/views/restaurant_profile.php on line 121
+[03-Aug-2016 11:24:45 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/restopowersoftwa/public_html/application/views/restaurant_profile.php on line 121
+[03-Aug-2016 11:44:49 UTC] PHP Parse error:  syntax error, unexpected '{' in /home/restopowersoftwa/public_html/application/views/restaurant_profile.php on line 122
+[03-Aug-2016 11:45:05 UTC] PHP Parse error:  syntax error, unexpected '{' in /home/restopowersoftwa/public_html/application/views/restaurant_profile.php on line 122
+[03-Aug-2016 12:33:39 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/restopowersoftwa/public_html/application/views/restaurant_profile.php on line 133
+[03-Aug-2016 15:02:51 UTC] PHP Fatal error:  Call to a member function restro_registration_list() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Administration/Restro_registration.php on line 34
+[03-Aug-2016 15:07:18 UTC] PHP Fatal error:  Call to a member function restro_registration_list() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Administration/Restro_registration.php on line 35
+[03-Aug-2016 17:09:50 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1347
+[04-Aug-2016 15:12:20 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1398
+[04-Aug-2016 15:41:44 UTC] PHP Parse error:  syntax error, unexpected '$restoREG' (T_VARIABLE) in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1400
+[04-Aug-2016 16:02:23 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1397
+[04-Aug-2016 16:03:13 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ',' or ';' in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1399
+[04-Aug-2016 16:06:06 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1399
+[05-Aug-2016 07:03:10 UTC] PHP Fatal error:  Call to undefined method CI_Form_validation::unset_field_data() in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1454
+[05-Aug-2016 07:28:23 UTC] PHP Parse error:  syntax error, unexpected '[' in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1457
+[05-Aug-2016 07:28:42 UTC] PHP Parse error:  syntax error, unexpected '[' in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1457
+[05-Aug-2016 07:29:03 UTC] PHP Parse error:  syntax error, unexpected '[' in /home/restopowersoftwa/public_html/application/controllers/Home.php on line 1457
+[05-Aug-2016 08:03:36 UTC] PHP Parse error:  syntax error, unexpected '{' in /home/restopowersoftwa/public_html/application/views/email/reset_password-html.php on line 15
+[05-Aug-2016 08:30:25 UTC] PHP Fatal error:  Call to a member function restro_registrotion() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1145
+[05-Aug-2016 08:47:48 UTC] PHP Parse error:  syntax error, unexpected 'email' (T_STRING) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1131
+[05-Aug-2016 11:18:02 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1113
+[05-Aug-2016 11:19:25 UTC] PHP Parse error:  syntax error, unexpected 't' (T_STRING) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1129
+[05-Aug-2016 11:22:30 UTC] PHP Parse error:  syntax error, unexpected '80' (T_LNUMBER) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1119
+[05-Aug-2016 11:24:24 UTC] PHP Parse error:  syntax error, unexpected '80' (T_LNUMBER) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1119
+[05-Aug-2016 11:28:36 UTC] PHP Parse error:  syntax error, unexpected 'max' (T_STRING) in /home/restopowersoftwa/public_html/application/controllers/Auth.php on line 1118
+[06-Aug-2016 08:09:15 UTC] PHP Fatal error:  Call to a member function show_all_city() on a non-object in /home/restopowersoftwa/public_html/application/controllers/Administration/Restro_registration.php on line 54
+[06-Aug-2016 10:15:35 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/restopowersoftwa/public_html/application/views/Administration/edit_restro_register.php on line 18
+[06-Aug-2016 10:48:07 UTC] PHP Fatal error:  Call to undefined method Restro_register::deleteRestro_registration() in /home/restopowersoftwa/public_html/application/controllers/Administration/Restro_registration.php on line 45
+[06-Aug-2016 12:24:38 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/restopowersoftwa/public_html/application/views/Administration/edit_restro_register.php on line 95
+[06-Aug-2016 12:30:59 UTC] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/restopowersoftwa/public_html/application/views/Administration/edit_restro_register.php on line 96
+[06-Aug-2016 12:42:25 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/restopowersoftwa/public_html/application/views/Administration/edit_restro_register.php on line 101
+[06-Aug-2016 13:06:12 UTC] PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in /home/restopowersoftwa/public_html/application/views/Administration/edit_restro_register.php on line 95
+[06-Aug-2016 13:25:13 UTC] PHP Fatal error:  Call to undefined method Home_Restro::update_restro_registrotion() in /home/restopowersoftwa/public_html/application/controllers/Administration/Restro_registration.php on line 166
+[06-Aug-2016 13:27:28 UTC] PHP Fatal error:  Call to undefined method Home_Restro::update_restro_registration() in /home/restopowersoftwa/public_html/application/controllers/Administration/Restro_registration.php on line 166
+[15-Aug-2016 02:14:28 UTC] PHP Fatal error:  Call to undefined function redirect() in /home/restopowersoftwa/public_html/application/controllers/Paypal.php on line 19

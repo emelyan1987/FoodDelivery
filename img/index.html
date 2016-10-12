@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Mataam</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+      <!--  <script src="dist/js/jQuery-2.2.1.js" type="text/javascript"></script>
+        <script src="dist/js/bootstrap.js" type="text/javascript"></script>-->
+        <link href="css/roxWeb.css" rel="stylesheet" type="text/css"/>
+        <link href="css/animate.css" rel="stylesheet" type="text/css"/>
+    </head>
+    
+    <style>
+	
+	@media (max-width: 767px){
+	.we-aretxt h1{font-size:20px !important;}
+	.my_section{width:100% !important;}
+	.drawing-new{margin-top:-839px !important;}
+	.resturant_section{width:100% !important;}	
+	.res_img{width:86px !important;}
+	.res_owtxt{font-size:17px !important;}
+	.firstColumn{margin-left:1px !important;}
+	.follow-txt{font-size:19px !important;}
+	.myResImg{width:auto !important;}
+	.res_img img{width:55% !important;}
+	.mgts{background:url(img/background_mobile.png) no-repeat !important; height:800px !important; background-position:top center !important; margin-top:-30px !important;}
+	.my_section{margin-top:20px !important;}
+	.drawing-new{margin-top:-925px !important;}
+	.insideFirstColumn{width:auto !important;}
+	.resturant_section{margin-top:0px !important;}
+	.insideSecondColumn{background: rgba(0, 0, 0, 0) url("img/greenBgGradient_mobile.jpg") repeat scroll calc(100% - 20px) center !important;}
+	
+		
+	}
+	
+	@media (min-width: 1280px) and (max-width: 1350px) {
+	.resturant_section{width:43% !important;}	
+	}
+		.mgts{background:url(img/background.png) no-repeat; height:1300px;}
+	.my_section{width:94%; margin:auto; display:block; z-index:-1; margin-top:40px; border-radius:20px;}
+	.resturant_txt{text-transform:capitalize; font-size:34px;}
+	.drawing-new{width:315px; margin-top:-798px;}
+	.loginArea
+	 {
+		 border: 2px solid #eee;
+		 border-radius: 10px;
+		 margin: 60px;
+		 padding: 265px 20px;
+   
+       } 
+	   .mgts{background-position:center 0px; height:800px; margin-top:-50px;}   
+.col-md-12.lunch {
+    font-size: 20px;
+    right: -34px;
+    top: -671px;
+}
+
+								
+.firstColumn {
+    border-radius: 100px 100px 0;
+    display: inline-block;
+    height: 90px;
+    margin-left: 33px;
+    margin-top: 344px;
+    overflow: hidden;
+    transform: rotate(-45deg);
+    width: 90px;
+}
+.secondColumn {
+    border-radius: 100px 100px 0;
+    display: inline-block;
+    height: 90px;
+    margin-left:-16px;
+    margin-top: 279px;
+    overflow: hidden;
+    position: absolute;
+    transform: rotate(45deg);
+    width: 90px;
+}
+
+
+.thirdColumn {
+    border-radius: 100px 100px 100px 0;
+    display: inline-block;
+    height: 90px;
+    margin-left: 63px;
+    margin-top: 100px;
+    overflow: hidden;
+    transform: rotate(45deg);
+    width: 90px;
+}
+.fourthColumn {
+    border-radius: 100px 0 100px 100px;
+    display: inline-block;
+    height: 90px;
+    margin-left: -170px;
+    margin-top: 412px;
+    overflow: hidden;
+    position: absolute;
+    transform: rotate(-45deg);
+    width: 90px;
+}
+.insideFourthColumn {
+    background: rgba(0, 0, 0, 0) url("img/redBgGradient.jpg") repeat scroll center center;
+    border-radius: 100px 100px 0;
+    color: #fff;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    height: 164px;
+    margin: -40px 0 0 -48px;
+    opacity: 0.5;
+    overflow: hidden;
+    padding: 62px 0 0;
+    text-align: center;
+    text-transform: uppercase;
+    transform: rotate(45deg);
+    width: 194px;
+}
+
+
+
+.insideSecondColumn {
+    background: rgba(0, 0, 0, 0) url("img/greenBgGradient.jpg") repeat scroll calc(100% - 20px) center;
+    border-radius: 100px 100px 0;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    height: 230px;
+    margin-left: -2px;
+    margin-top: -29px;
+    opacity: 0.5;
+    overflow: hidden;
+    padding-right: 0;
+    padding-top: 28px;
+    text-align: center;
+    text-transform: uppercase;
+    transform: rotate(-45deg);
+    width: 210px;
+	padding-right:20px;
+}
+.insideThirdColumn {
+    background: rgba(0, 0, 0, 0) url("img/orangeBgGradient.jpg") repeat scroll center center;
+    border-radius: 100px 100px 0;
+    color: #fff;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: bold;
+    height: 175px;
+
+    opacity: 0.5;
+    overflow: hidden;
+    padding: 12px 0 0 30px;
+    text-align: center;
+    text-transform: uppercase;
+    transform: rotate(-45deg);
+    width: 190px;
+}
+
+
+.insideFirstColumn {
+    background: rgba(0, 0, 0, 0) url("img/blueBgGradient.jpg") repeat scroll center center;
+    border-radius: 100px 100px 0;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    height: 160px;
+    margin-left: -15px;
+    margin-top: -14px;
+    opacity: 0.5;
+    overflow: hidden;
+    padding-right: 113px;
+    padding-top: 85px;
+    text-align: center;
+    text-transform: uppercase;
+    transform: rotate(45deg);
+}
+
+.col-md-12.lunch {
+    font-size: 20px;
+    right: -427px;
+    top: -117px;
+}
+.col-md-6.resturant {
+    bottom: 45px;
+    left: 386px;
+    width: 42%;
+}
+.col-md-12.follow {
+    bottom: -43px;
+    left: 908px;
+    top: -35px;
+}
+
+.col-md-5.resturant{margin-top:100px;}
+/*.pickup-txt{width:50%; float:left;}*/
+
+.we-aretxt h1{font-size:58px; color:#2e2e2e; padding-top:10px;  font-family: "Ubuntu","Ubuntu Beta",UbuntuBeta,Ubuntu,"Bitstream Vera Sans","DejaVu Sans",Tahoma,sans-serif;}
+.resturant_section{width:34%; margin:auto; display:block; margin-top:70px;}
+.res_img{width:109px; float:left; }
+.res_owtxt{/*padding-top:15px;*/ font-size:33px; padding-top:10px;}
+.btn-success-newone {
+    background-color: #73b720;
+    border-color: #73b720;
+    border-radius: 0 !important;
+    box-shadow: 0 -40px 0 rgba(0, 0, 0, 0.18) inset;
+    color: #fff;
+     font-family: "Ubuntu","Ubuntu Beta",UbuntuBeta,Ubuntu,"Bitstream Vera Sans","DejaVu Sans",Tahoma,sans-serif;
+    font-weight: bold;
+    font-size: 28px;
+    font-weight: normal;
+    padding: 12px 0;
+    text-transform:capitalize;
+}
+
+.follow-txt{font-size:30px; color:#2e2e2e;   font-family: "Ubuntu","Ubuntu Beta",UbuntuBeta,Ubuntu,"Bitstream Vera Sans","DejaVu Sans",Tahoma,sans-serif;} 
+    </style>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="navbar-header">
+                          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
+                            <!--<span class="sr-only"></span>-->
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                          </button>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                          <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">Lnaguage <span class="caret"></span></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="#">Hindi</a></li>
+                                <li><a href="#">English</a></li>
+                                <li><a href="#">Italian</a></li>
+                                <li><a href="#">French</a></li>
+                                <li><a href="#">Gujarati</a></li>
+                              </ul>
+                            </li>
+                          </ul>
+                          <ul class="nav navbar-nav navbar-right">
+                              <li><a href="#"><i class="fa fa-user"></i> Login</a></li>
+                              <li><a href="#" class="cartBtn"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                          </ul>
+                        </div><!--/.nav-collapse -->
+                    </div>
+                </div>
+            </nav>
+            <div class="themeHeader bg-green-light">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="logoSection">
+                                <img class="img-responsive center-block" src="img/logo.png" alt="companyLogo"/>
+                            </div>
+                        </div>
+                        <div class="col-md-offset-6 col-md-3">
+                            <div class="liveChatSection">
+                                <img class="liveChatImg" alt="" src="img/livechat.png"/>
+                                <span>
+                                    Live Chat
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="myNewTemplate my_section">
+                <div class="row">
+                    <div class="col-md-12 col-xs-12">                  
+                                
+                                    <div class="form-group">
+                                    <div class="mgts">   </div>
+                            
+
+                            <!--<div class="center-block">-->
+                                <div class="drawingSection drawing-new text-center">
+                                    <div class="firstColumn">    
+                                        <div class="insideFirstColumn" onclick="changeTab1()">
+                                            <img class="greenBgGradient2" src="img/icon/cock.png" alt=""/> <br>
+                                            <span class="pickup-txt">Pickup</span>
+                                        </div>
+                                    </div>
+                                    <div class="secondColumn">   
+                                        <div class="insideSecondColumn" onclick="changeTab2()">
+                                            <img class="img-responsive myResImg center-block" src="img/icon/car.png" alt=""/>
+                                            <span>Delivery</span>
+                                        </div>
+                                    </div>
+                                    <div class="thirdColumn">                    
+                                        <div class="insideThirdColumn" onclick="changeTab3()">
+                                            <img class="img-responsive myResImg center-block" src="img/icon/man.png" alt=""/>
+                                            <span>Catering</span>
+                                        </div>
+                                    </div>
+                                    <div class="fourthColumn"> 
+                                                     
+                                        <div class="insideFourthColumn" onclick="changeTab4()">
+                                            <img class="orangeBgGradientfirst" src="img/icon/food.png" alt=""/> <br>
+                                                        <span>Reservation</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                            	<div class="col-md-12 we-aretxt text-center">
+                                                	<h1>We Are About To Launch</h1>
+                                                </div>
+                                            </div>
+                              
+                                <div class="row">
+                                <div class="col-md-12">
+                                <div class="col-md-4"></div>
+                                      <div class="col-md-5 resturant_section">
+                                          <button class="btn btn-block btn-success-newone resturant_txt">
+                                             <div class="res_img"><img src="img/res_img_new.png" class="img-responsive"></div>
+                                             <div class="res_owtxt">Restaurant Owner !!</div>
+                                         </button>
+                                    </div>
+                                    </div>
+                                    
+                                    </div>
+                                    
+                                    <div class="row">
+                                    	<div class="col-md-12">
+                                        	<div class="col-md-4 pull-right">
+                                            	<div class="col-md-10 col-xs-10 text-right follow-txt">Follow Us On</div>
+                                                <div class="col-md-2 col-xs-2 text-right"><img src="img/bottom_icon.png" alt="" border="0"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        		<div class="col-md-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                         
+        
+        
+        
+
+        <script>
+            function changeTab1(){
+                $(".insideFirstColumn").css("opacity","1");
+                $(".insideSecondColumn").css("opacity","0.5");
+                $(".insideThirdColumn").css("opacity","0.5");
+                $(".insideFourthColumn").css("opacity","0.5");
+                $(".pickupTab").css("display","block");
+                $(".deliveryTab").css("display","none");
+                $(".cateringTab").css("display","none");
+                $(".reservationTab").css("display","none");
+            }
+            function changeTab2(){
+                $(".insideFirstColumn").css("opacity","0.5");
+                $(".insideSecondColumn").css("opacity","1");
+                $(".insideThirdColumn").css("opacity","0.5");
+                $(".insideFourthColumn").css("opacity","0.5");
+                $(".deliveryTab").css("display","block");
+                $(".pickupTab").css("display","none");
+                $(".cateringTab").css("display","none");
+                $(".reservationTab").css("display","none");
+            }
+            function changeTab3(){
+                $(".insideFirstColumn").css("opacity","0.5");
+                $(".insideSecondColumn").css("opacity","0.5");
+                $(".insideThirdColumn").css("opacity","1");
+                $(".insideFourthColumn").css("opacity","0.5");
+                $(".deliveryTab").css("display","none");
+                $(".pickupTab").css("display","none");
+                $(".cateringTab").css("display","block");
+                $(".reservationTab").css("display","none");
+            }
+            function changeTab4(){
+                $(".insideFirstColumn").css("opacity","0.5");
+                $(".insideSecondColumn").css("opacity","0.5");
+                $(".insideThirdColumn").css("opacity","0.5");
+                $(".insideFourthColumn").css("opacity","1");
+                $(".deliveryTab").css("display","none");
+                $(".pickupTab").css("display","none");
+                $(".cateringTab").css("display","none");
+                $(".reservationTab").css("display","block");
+            }
+        </script>
+    </body>
+</html>

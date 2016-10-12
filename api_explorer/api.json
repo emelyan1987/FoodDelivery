@@ -1,0 +1,362 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Mataam REST API Explorer",
+    "version": "0.1"
+  },
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "users api"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "This API is responsible for login Customer(Not implemented yet)",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userMobileAuth"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/registration/confirm": {
+      "get": {
+        "tags": [
+          "registration"
+        ],
+        "description": "This API is responsible for user registration confirmation(Not implemented yet)",
+        "operationId": "registrationConfirm",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "verify_token",
+            "description": "User temporary token for confirm registration",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "403": {
+            "description": "Token expired",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/registration/repeat_confirm": {
+      "post": {
+        "tags": [
+          "registration"
+        ],
+        "description": "This API send email with new confirm link(Not implemented yet.)",
+        "operationId": "registrationRepeatConfirm",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for getting User",
+        "operationId": " get User",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "allowMultiple": false,
+            "required": false,
+            "in": "path",
+            "description": "User id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for creating User",
+        "operationId": "create User",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": true,
+            "schema": {      
+              "$ref": "#/definitions/userCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "error": {
+      "properties": {
+        "error": {
+          "type": "integer"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "extendedError": {
+      "properties": {
+        "error": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "float"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "successDelete": {
+      "properties": {
+        "status": {
+          "type": "integer",
+          "default": 200
+        }
+      }
+    },
+    "successUpdate": {
+      "properties": {
+        "status": {
+          "type": "integer",
+          "default": 200
+        }
+      }
+    },
+    "id": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "userMobileAuth": {
+      "required": ["email", "password"],
+      "properties": {
+        "mobile_no": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "userModel": {
+      "required": ["mobile_no", "first_name", "last_name", "password"],
+      "properties": {
+        "mobile_no": {
+          "type": "string"
+        }, 
+        "first_name": {
+          "type": "string"
+        }, 
+        "last_name": {
+          "type": "string"
+        }, 
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string"
+        },
+        "modified": {
+          "type": "string"
+        }
+      }
+    },
+    "userCreate": {
+      "required": ["mobile_no", "first_name", "last_name", "password"],
+      "properties": {
+        "mobile_no": {
+          "type": "string"
+        }, 
+        "first_name": {
+          "type": "string"
+        }, 
+        "last_name": {
+          "type": "string"
+        }, 
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,620 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Mar 13, 2016, 12:46:31 PM
+    Author     : Puneet Taylor
+    Email      : puneettaylorpt.pt@gmail.com
+                 puneet.tailor@powersoftware.eu
+*/
+
+.themeHeader{
+    margin-top: 50px;
+    display: block;
+    width: 100%;
+    /* position: relative; */
+}
+.one_half{
+    width: 50%;
+    display: block;
+    float: left;
+    overflow: hidden;
+}
+.drawingSection{
+    width: 520px;
+    margin: 50px auto;
+    padding: 6px 6px 106px 6px;
+}
+.firstColumn{
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    border-radius: 100px 100px 0px 100px;
+    transform: rotate(-45deg);
+    margin-left: 0px;
+    margin-top: 100px;
+    overflow: hidden;
+}
+.insideFirstColumn{
+    opacity: 0.5;
+    text-align: center;
+    width: 250px;
+    height: 222px;
+    padding-top: 30px;
+    padding-right: 50px;
+    font-size: 18px;
+    display: inline-block;
+    color: #FFF;
+    font-weight: bold;
+    background: url(../../img/blueBgGradient.jpg) center;
+    text-transform: uppercase;
+    border-radius: 100px 100px 0px 100px;
+    transform: rotate(45deg);
+    margin-left: 0px;
+    overflow: hidden;
+    margin-top: 0px;
+    margin-left: -7px;
+}
+.firstColumn:hover .insideFirstColumn{
+    opacity: 1 !important;
+    transition: ease-in-out;
+    transition-duration: 1s;
+    cursor: pointer;
+}
+.firstColumn .active,.secondColumn .active,.thirdColumn .active,.fourthColumn .active{
+    opacity: 1 !important;
+}
+
+.secondColumn{
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    border-radius: 100px 100px 0px 100px;
+    transform: rotate(45deg);
+    margin-left: -50px;
+    margin-top: -50px;
+    overflow: hidden;
+    position: absolute;
+}
+.insideSecondColumn{
+    opacity: 0.5;
+    text-align: center;
+    width: 250px;
+    height: 250px;
+    padding-top: 42px;
+    padding-right: 36px;
+    font-size: 18px;
+    display: inline-block;
+    color: #FFF;
+    font-weight: bold;
+    background: url(../../img/greenBgGradient.jpg) center;
+    background-position-x: -20px;
+    text-transform: uppercase;
+    border-radius: 100px 100px 0px 100px;
+    transform: rotate(-45deg);
+    margin-left: 0px;
+    overflow: hidden;
+    margin-top: -25px;
+}
+.secondColumn:hover .insideSecondColumn{
+    opacity: 1;
+    transition: ease-in-out;
+    transition-duration: 1s;
+    cursor: pointer;
+}
+.thirdColumn{
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    border-radius: 100px 100px 100px 0px;
+    transform: rotate(45deg);
+    margin-left: 100px;
+    margin-top: 100px;
+    overflow: hidden;
+}
+.insideThirdColumn{
+    opacity: 0.5;
+    text-align: center;
+    width: 250px;
+    height: 250px;
+    font-size: 18px;
+    display: inline-block;
+    color: #FFF;
+    font-weight: bold;
+    background: url(../../img/orangeBgGradient.jpg) center;
+    text-transform: uppercase;
+    border-radius: 100px 100px 0px 100px;
+    transform: rotate(-45deg);
+    overflow: hidden;
+    margin: -2px 0px 0px -30px;
+    padding: 26px 0 0 30px;
+}
+.thirdColumn:hover .insideThirdColumn{
+    opacity: 1;
+    transition: ease-in-out;
+    transition-duration: 1s;
+    cursor: pointer;
+}
+.fourthColumn{
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    border-radius: 100px 0px 100px 100px;
+    transform: rotate(-45deg);
+    margin-left: -350px;
+    margin-top: 250px;
+    overflow: hidden;
+    position: absolute;
+}
+.insideFourthColumn{
+    opacity: 0.5;
+    text-align: center;
+    width: 250px;
+    height: 250px;
+    font-size: 18px;
+    display: inline-block;
+    color: #FFF;
+    font-weight: bold;
+    background: url(../../img/redBgGradient.jpg) center;
+    text-transform: uppercase;
+    border-radius: 100px 100px 0px 100px;
+    transform: rotate(45deg);
+    overflow: hidden;
+    margin: -40px 0px 0px -12px;
+    padding: 54px 0 0 10px;
+}
+.fourthColumn:hover .insideFourthColumn{
+    opacity: 1;
+    transition: ease-in-out;
+    transition-duration: 1s;
+    cursor: pointer;
+}
+
+
+.red{
+    color: #f00;
+}
+
+.bg-red{
+    background: #f00;
+    color: #FFF;
+}
+
+.green{
+    color: #0f0;
+}
+
+.bg-green{
+    background: #73B720;
+    color: #FFF;
+}
+
+.bg-green-light{
+    background: url(../../img/header.png) center no-repeat;
+    color: #FFF;
+    background-size: cover;
+}
+
+.bg-orange{
+    background: #FF8205;
+    color: #FFF;
+}
+
+.orange{
+    color: #FF8205;
+}
+
+.blue{
+    color: blue;
+}
+
+.bg-blue{
+    background: blue;
+    color: #fff;
+}
+
+.logoSection{
+    
+}
+
+.liveChatSection{
+    float: right;
+    padding: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.liveChatImg{
+    
+}
+.cartBtn{
+    background: #FFEA4E;
+    color: #000 !important;
+}
+.myNewTemplate{
+    display: inline-block;
+    width: 100%;
+    margin-top: 20px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+}
+
+.cateringTab{
+    padding: 100px 20px 20px;
+    display: none;
+}
+.reservationTab{
+    padding: 100px 20px 20px;
+    display: none;
+}
+.deliveryTab{
+    padding: 100px 20px 20px;
+    display: none;
+}
+.pickupTab{
+    padding: 100px 20px 20px;
+}
+
+.newInput{
+    background: #ececec;
+    padding: 25px 0 !important;
+    border: none;
+    border-radius: 0px;
+}
+.newInputQuantity{
+    background: #ececec;
+    padding: 8px 0 !important;
+    border: none;
+    border-radius: 0px;
+    max-width: 50px;
+}
+
+.btn-warning-new{
+    background-color: #FF8106;
+    border-color: #FF8106;
+    border-radius: 0 !important;
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0px -35px 0px rgba(0, 0, 0, 0.18) inset;
+    text-transform: uppercase;
+}
+
+.btn-success-new{
+    background-color: #73B720;
+    border-color: #73B720;
+    border-radius: 0 !important;
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0px -35px 0px rgba(0, 0, 0, 0.18) inset;
+    text-transform: uppercase;
+}
+
+.btn-primary-new{
+    background-color: #2793FF;
+    border-color: #2793FF;
+    border-radius: 0 !important;
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0px -35px 0px rgba(0, 0, 0, 0.18) inset;
+    text-transform: uppercase;
+}
+.btn-danger-new{
+    background-color: #D31E03;
+    border-color: #D31E03;
+    border-radius: 0 !important;
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0px -35px 0px rgba(0, 0, 0, 0.18) inset;
+    text-transform: uppercase;
+}
+
+.quantity{
+    width: 125px;
+    margin: 0px auto;
+}
+
+.advert{
+    /*display: block;*/
+    width: 100%;
+    background: #eee;
+    padding: 10px 0;
+}
+
+footer{
+    background: url(../../img/footerBg.jpg) center no-repeat;
+    background-size: cover;
+    padding: 20px 0 0;
+}
+
+footer h3{
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    padding: 50px 0;
+}
+
+.playStoreImg{
+    padding: 30px;
+}
+
+.footerNav{
+    background: #231F20;
+    padding: 10px;
+}
+
+.footerNav h5{
+    margin: 0;
+    color: #fff;
+}
+
+.footerNav ul li a:hover{
+    text-decoration: none;
+}
+
+.copyrightSection{
+    background: #171516;
+    width: 100%;
+    display: block;
+    color: #fff;
+    padding: 5px 0;
+}
+
+
+.social span{
+    margin: 0 5px;
+    min-width: 20px;
+    display: inline-block;
+}
+
+.main_fourth{
+    width: 25%;
+    float: left;
+    display: inline-block;
+    min-height: 200px;
+    padding: 5px;
+}
+.upperLayer1{
+    background: url(../../img/icon/food1.png) no-repeat;
+    background-size: cover;
+    min-height: 200px;
+}
+.upperLayer2{
+    background: url(../../img/icon/food2.png) no-repeat;
+    background-size: cover;
+    min-height: 200px;
+}
+.upperLayer3{
+    background: url(../../img/icon/food3.png) no-repeat;
+    background-size: cover;
+    min-height: 200px;
+}
+.upperLayer4{
+    background: url(../../img/icon/food4.png) no-repeat;
+    background-size: cover;
+    min-height: 200px;
+}
+.innerLayer{
+    background: rgba(0,0,0,0.5);
+    min-height: 200px;
+    margin: 0px;
+    padding: 0px;
+    display: block;
+    width: 100%;
+}
+.main{
+    padding: 10px 0;
+    display: inline-flex;
+    width: 100%;
+    display: flex;
+}
+
+.innerLayer h4{
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
+    font-size: 25px;
+    padding: 50px 0 10px 0;
+}
+
+.innerLayer h5{
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+}
+
+.bottomIconTitle{
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 30px;
+}
+.bottomIconTitle span{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    background: #73B720;
+    border-radius: 100%;
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+}
+
+.bottomIconSection{
+    width: 100%;
+    padding: 20px 0;
+    display: block;
+}
+
+@media(max-width:770px){
+    .one_half{
+        width: 100%;
+    }
+    .drawingSection{
+        max-width: 260px;
+        margin: 0px auto;
+        padding: 6px 6px 106px 6px;
+        overflow: hidden;
+        z-index: 5555;
+    }
+    .firstColumn{
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        border-radius: 100px 100px 0px 100px;
+        transform: rotate(-45deg);
+        margin-left: 0px;
+        margin-top: 75px;
+        overflow: hidden;
+    }
+    .insideFirstColumn{
+        opacity: 0.5;
+        text-align: center;
+        width: 150px;
+        height: 130px;
+        font-size: 18px;
+        display: inline-block;
+        color: #FFF;
+        font-weight: bold;
+        background: url(../../img/blueBgGradient.jpg) center;
+        text-transform: uppercase;
+        border-radius: 100px 100px 0px 100px;
+        transform: rotate(45deg);
+        overflow: hidden;
+        margin-left: -7px;
+        margin-top: -14px;
+        background-position-y: -53px;
+        /*background-position-x: -;*/
+    }
+    .secondColumn{
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        border-radius: 100px 100px 0px 100px;
+        transform: rotate(45deg);
+        margin-left: -32px;
+        margin-top: 0px;
+        overflow: hidden;
+        position: absolute;
+    }
+    .insideSecondColumn{
+        opacity: 0.5;
+        text-align: center;
+        width: 150px;
+        height: 150px;
+        font-size: 18px;
+        display: inline-block;
+        color: #FFF;
+        font-weight: bold;
+        background: url(../../img/greenBgGradient.jpg) center;
+        background-position-x: -54px;
+        text-transform: uppercase;
+        border-radius: 100px 100px 0px 100px;
+        transform: rotate(-45deg);
+        margin-left: 0px;
+        overflow: hidden;
+        margin: -9px 0px 0px -7px;
+    }
+    .thirdColumn{
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        border-radius: 100px 100px 100px 0px;
+        transform: rotate(45deg);
+        margin-left: 40px;
+        margin-top: 75px;
+        overflow: hidden;
+    }
+    .insideThirdColumn{
+        opacity: 0.5;
+        text-align: center;
+        width: 150px;
+        height: 150px;
+        font-size: 18px;
+        display: inline-block;
+        color: #FFF;
+        font-weight: bold;
+        background: url(../../img/orangeBgGradient.jpg) center;
+        text-transform: uppercase;
+        border-radius: 100px 100px 0px 100px;
+        transform: rotate(-45deg);
+        overflow: hidden;
+        margin: -18px 0px 0px -14px;
+        padding: 26px 0 0 30px;
+    }
+    .fourthColumn{
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        border-radius: 100px 0px 100px 100px;
+        transform: rotate(-45deg);
+        margin-left: -172px;
+        margin-top: 150px;
+        overflow: hidden;
+        position: absolute;
+    }
+    .insideFourthColumn{
+        opacity: 0.5;
+        text-align: center;
+        width: 150px;
+        height: 150px;
+        font-size: 18px;
+        display: inline-block;
+        color: #FFF;
+        font-weight: bold;
+        background: url(../../img/redBgGradient.jpg) center;
+        background-position-y: -42px;
+        background-position-x: -47px;
+        text-transform: uppercase;
+        border-radius: 100px 100px 0px 100px;
+        transform: rotate(45deg);
+        overflow: hidden;
+        margin: -30px 0px 0px -25px;
+    }
+    .myResImg{
+        width: 50% !important;
+    }
+    .insideFirstColumn span{
+        font-size: 12px;
+        padding: 0px;
+    }
+    .insideSecondColumn{
+        font-size: 12px;
+        padding: 0px;
+    }
+    .insideThirdColumn{
+        font-size: 12px;
+        padding: 0px;
+    }
+    .insideFourthColumn{
+        font-size: 12px;
+        padding-top: 14px;
+    }
+    .liveChatSection{
+        max-width: 200px;
+        margin: 0 auto;
+        display: block;
+        float: none !important;
+    }
+    .pickupTab{
+        padding: 20px;
+    }
+    .reservationTab{
+        padding: 20px;
+    }
+    .deliveryTab{
+        padding: 20px;
+    }
+    .cateringTab{
+        padding: 20px;
+    }
+    .main_fourth{
+        width: 50%;
+    }
+}
