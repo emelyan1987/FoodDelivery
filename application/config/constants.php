@@ -83,3 +83,10 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+/* =============  RESOURCE RETURN CODE ============== */
+defined('RESULT_SUCCESS')        OR define('RESULT_SUCCESS', 0); // no errors
+defined('RESULT_ERROR_NOT_FOUND')        OR define('RESULT_ERROR_NOT_FOUND', 4001); 
+defined('RESULT_ERROR_ID_REQUIRED')        OR define('RESULT_ERROR_ID_REQUIRED', 4002); 
+defined('RESULT_ERROR_PARAMS_INVALID')        OR define('RESULT_ERROR_PARAMS_INVALID', 4003); 

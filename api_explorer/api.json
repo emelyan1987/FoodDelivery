@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Mataam REST API Explorer",
-    "version": "0.1"
+    "version": "1.0"
   },
   "basePath": "/api",
   "schemes": [
@@ -169,24 +169,15 @@
         "tags": [
           "users"
         ],
-        "description": "This API is responsible for getting User",
-        "operationId": " get User",
+        "description": "This API is responsible for getting Users",
+        "operationId": "getUsers",
         "consumes": [
           "application/json"
         ],
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "allowMultiple": false,
-            "required": false,
-            "in": "path",
-            "description": "User id",
-            "type": "integer"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "successful response",
@@ -195,7 +186,7 @@
             }
           },
           "400": {
-            "description": "Invalid json/ invalid dataset",
+            "description": "Invalid request",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -213,7 +204,7 @@
           "users"
         ],
         "description": "This API is responsible for creating User",
-        "operationId": "create User",
+        "operationId": "createUser",
         "consumes": [
           "application/json"
         ],
@@ -252,15 +243,168 @@
           }
         }
       }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for getting an User with specific ID",
+        "operationId": "getUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "allowMultiple": false,
+            "required": false,
+            "in": "path",
+            "description": "User id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "404": {
+            "description": "Not found resource",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for updating an User data with specific ID",
+        "operationId": "updateUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "id",
+            "allowMultiple": false,
+            "required": true,
+            "in": "path",
+            "description": "User id",
+            "type": "integer"
+          }, {
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": true,
+            "schema": {      
+              "$ref": "#/definitions/userCreate"
+            }
+          }],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "404": {
+            "description": "Not found resource",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for deleting an User with specific ID",
+        "operationId": "deleteUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "id",
+            "allowMultiple": false,
+            "required": false,
+            "in": "path",
+            "description": "User id",
+            "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "404": {
+            "description": "Not found resource",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
     "error": {
       "properties": {
-        "error": {
+        "code": {
           "type": "integer"
         },
-        "details": {
+        "message": {
           "type": "string"
         }
       }
@@ -282,7 +426,7 @@
       "properties": {
         "status": {
           "type": "integer",
-          "default": 200
+          "default": 202
         }
       }
     },
@@ -290,7 +434,7 @@
       "properties": {
         "status": {
           "type": "integer",
-          "default": 200
+          "default": 202
         }
       }
     },

@@ -14,4 +14,6 @@ $lang['password_required'] = 'The password required.';
 $lang['email_invalid'] = 'The email invalid.';
 $lang['mobile_no_duplicated'] = 'The mobile_no duplicated.';
 $lang['email_duplicated'] = 'The email duplicated.';
-$lang['user_not_found'] = 'Could not find the user.';
+$lang['resource_not_found'] = 'Could not found the resource.';
+$lang['id_required'] = 'The id required.';
+$lang['delete_success'] = 'Deleted successfully.';

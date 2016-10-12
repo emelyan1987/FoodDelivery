@@ -26,7 +26,9 @@
 
             $this->load->library('form_validation');
             $this->load->model('UserModel');
-            $this->lang->load('user');
+            $this->lang->load('api');
+
+            $this->load->helper("http_helper");
         } 
 
         private function validate() {
@@ -62,89 +64,162 @@
         }
 
         public function index_get($id=null)
-        {
-            if ($id === NULL)
-            {
-                $users = $this->UserModel->find(null);
-                $this->response($users, REST_Controller::HTTP_OK);
-            } else {
-                $id = (int) $id;
-                if ($id <= 0)
+        {                 
+            try {                
+                if ($id === NULL)
                 {
-                    $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
+                    $users = $this->UserModel->find(null);                     
+                    
+                    $resource = array();
+                    foreach($users as $user) {
+                        $resource[] = $this->UserModel->getPublicFields($user);    
+                    }
+                } else {                         
+                    $user = $this->UserModel->findById($id);                    
+                    if($user) {
+                        $resource = $this->UserModel->getPublicFields($user);
+                    }
                 }
-                $user = $this->UserModel->findById($id);
 
-                if(!$user) {
-                    $this->response($this->lang->line('user_not_found'), REST_Controller::HTTP_NOT_FOUND); // BAD_REQUEST (400) being the HTTP response code
+                if(!$resource) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_NOT_FOUND); 
                 }
-                $this->response($user, REST_Controller::HTTP_OK);
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$resource
+                    ), REST_Controller::HTTP_OK);
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), getHttpErrorStatus($e->getCode()));
             }
-
         }
 
 
         public function index_post()
         {
-            // $this->some_model->update_user( ... );
-
             try {
                 if(!$this->validate()) {
-                    throw new Exception(implode(",", $this->messages), REST_Controller::HTTP_BAD_REQUEST);
+                    throw new Exception(implode(",", $this->messages), RESULT_ERROR_PARAMS_INVALID);
                 }
 
                 // Check duplicate
                 if($this->post('email')) {
                     $users = $this->UserModel->find(array("email"=>$this->post('email')));
-                    if(count($users)) throw new Exception($this->lang->line('email_duplicated'));
-                }
-
+                    if(count($users)) {
+                        throw new Exception($this->lang->line('email_duplicated'), RESULT_ERROR_PARAMS_INVALID);
+                    }
+                }  
 
                 $users = $this->UserModel->find(array("mobile_no"=>$this->post('mobile_no')));
-                if(count($users)) throw new Exception($this->lang->line('mobile_no_duplicated'));
+                if(count($users)) {
+                    throw new Exception($this->lang->line('mobile_no_duplicated'), RESULT_ERROR_PARAMS_INVALID);
+                }
 
-                $id = $this->UserModel->create($this->post());
+                
+                $data = array();
+                
+                $hasher = new PasswordHash(
+                       $this->config->item('phpass_hash_strength', 'tank_auth'),
+                       $this->config->item('phpass_hash_portable', 'tank_auth'));
+                       
+                $data["mobile_no"] = $this->post('mobile_no');
+                $data["first_name"] = $this->post('first_name');
+                $data["last_name"] = $this->post('last_name');
+                $data["password"] = $hasher->HashPassword($this->post('password'));
+                if($this->post('email')) {                                        
+                    $data["email"] = $this->post('email');
+                }
+                
+                $id = $this->UserModel->create($data);
 
                 $user = $this->UserModel->findById($id);
 
-                $this->response($user, REST_Controller::HTTP_CREATED);
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$this->UserModel->getPublicFields($user)   
+                    ), REST_Controller::HTTP_CREATED);
 
-            } catch(Exception $e) {                   
-                $this->response($e->getMessage(), $e->getCode());
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), getHttpErrorStatus($e->getCode()));
             }                 
         }
 
 
         public function index_put($id=null)
         {
-            if($id == null)
-                $this->response("id required. (i.e. api/users/1)", REST_Controller::HTTP_BAD_REQUEST);
-            // $this->some_model->update_user( ... );
-            $message = [
-                'id' => 100, // Automatically generated by the model
-                'name' => $this->post('name'),
-                'email' => $this->post('email'),
-                'message' => 'Added a resource'
-            ];
-            $this->set_response($message, REST_Controller::HTTP_CREATED); // CREATED (201) being the HTTP response code
+            try{
+
+                if($id == null) {
+                    throw new Exception($this->lang->line('id_required'), RESULT_ERROR_ID_REQUIRED);
+                }
+
+                $data = array();
+
+                if($this->put("mobile_no")) $data["mobile_no"] = $this->put("mobile_no");
+                if($this->put("first_name")) $data["first_name"] = $this->put("first_name");
+                if($this->put("last_name")) $data["last_name"] = $this->put("last_name");
+                if($this->put("email")) $data["email"] = $this->put("email");
+
+                // Check duplicate
+                if(isset($data["email"])) {
+                    $users = $this->UserModel->find(array("email"=>$data["email"]));
+                    if(count($users) && $users[0]->id!=$id) {
+                        throw new Exception($this->lang->line('email_duplicated'), RESULT_ERROR_PARAMS_INVALID);
+                    }
+                }  
+
+                if(isset($data["mobile_no"])) {
+                    $users = $this->UserModel->find(array("mobile_no"=>$data["mobile_no"]));
+                    if(count($users) && $users[0]->id!=$id) {                        
+                        throw new Exception($this->lang->line('mobile_no_duplicated'), RESULT_ERROR_PARAMS_INVALID);
+                    }
+                }
+
+                if(!empty($data)) { 
+                    $this->UserModel->update($id, $data);
+                }
+
+                $user = $this->UserModel->findById($id);
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$this->UserModel->getPublicFields($user)
+                    ), REST_Controller::HTTP_ACCEPTED); 
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), getHttpErrorStatus($e->getCode()));
+            } 
+
+
+
         }
+
         public function index_delete($id=null)
         {
-            if($id == null)
-                $this->response("id required. (i.e. api/users/1)", REST_Controller::HTTP_BAD_REQUEST);
+            try{
+                if($id == null) {
+                    throw new Exception($this->lang->line('id_required'), RESULT_ERROR_ID_REQUIRED);
+                }
 
-            $id = (int) $this->get('id');
-            // Validate the id.
-            if ($id <= 0)
-            {
-                // Set the response and exit
-                $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-            }
-            // $this->some_model->delete_something($id);
-            $message = [
-                'id' => $id,
-                'message' => 'Deleted the resource'
-            ];
-            $this->set_response($message, REST_Controller::HTTP_NO_CONTENT); // NO_CONTENT (204) being the HTTP response code
+                $user = $this->UserModel->findById($id);
+                if(!$user) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_NOT_FOUND);
+                }
+                $this->UserModel->delete($id);
+
+                $this->response(array("code"=>RESULT_SUCCESS), REST_Controller::HTTP_ACCEPTED);
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), getHttpErrorStatus($e->getCode()));
+            } 
         }
 }

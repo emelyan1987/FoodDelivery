@@ -3,6 +3,7 @@
     class UserModel extends CI_Model
     {
 
+        protected $publicFields = array('id', 'mobile_no', 'first_name', 'last_name', 'email', 'created', 'modified');
 
         function __construct()
         {
@@ -13,19 +14,39 @@
 
         }
 
+        public function getPublicFields($model) {
+            foreach ($model as $key => $value) {
+
+                if(!in_array($key, $this->publicFields)) {
+                    unset($model->{$key});
+                }
+
+            }
+            
+            
+            return $model;
+        }
         public function create($data)
         {
             $data["created"] = date("Y-m-d H:i:s");
             $data["modified"] = date("Y-m-d H:i:s");
-            if($this->db->insert('users', $data))
-                return $this->db->insert_id();
-            else
-                return null;            
+
+            $insert_id = null;
+            $this->db->trans_start();
+            if($this->db->insert('users', $data)) {
+                $insert_id = $this->db->insert_id();
+            }
+            $this->db->trans_complete();
+
+            return $insert_id;                
+
         }
         public function update($id, $data){
             $data["modified"] = date("Y-m-d H:i:s");
+            $this->db->trans_start();
             $this->db->where('id',  $id);
             $this->db->update('users', $data);
+            $this->db->trans_complete();
         }
 
         public function find($params){   
@@ -53,7 +74,11 @@
 
 
         public function delete($id){
-            return $this->db->delete('users', array('id' => $id));
+            $this->db->trans_start();
+            $ret = $this->db->delete('users', array('id' => $id));
+            $this->db->trans_complete();
+
+            return $ret;
         }
 
 }
