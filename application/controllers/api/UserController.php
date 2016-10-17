@@ -2,6 +2,7 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
     // This can be removed if you use __autoload() in config.php OR use Modular Extensions
     require APPPATH . '/libraries/REST_Controller.php';
+    require APPPATH . '/libraries/cryptolib.php';
 
     require APPPATH . '/libraries/Twilio/autoload.php';
 
@@ -33,6 +34,7 @@
             $this->load->library('form_validation');
             $this->load->model('UserModel');
             $this->load->model('UserSmsModel');
+            $this->load->model('UserAccessTokenModel');
             $this->lang->load('api');
 
             $this->load->helper("http");
@@ -310,6 +312,53 @@
                 $this->UserModel->update($user_id, $data);
 
                 $this->response(array("code"=>RESULT_SUCCESS), REST_Controller::HTTP_ACCEPTED); 
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), getHttpErrorStatus($e->getCode()));
+            } 
+        }
+        
+        public function login_post() {
+            try { 
+                $mobile_no = $this->post('mobile_no');
+                $password = $this->post('password'); 
+                $ttl = $this->post('ttl'); 
+                
+                if(!isset($mobile_no) || !isset($password)) {
+                    throw new Exception($this->lang->line('parameter_incorrect'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $user = $this->UserModel->findOne(array(   
+                    'mobile_no'=>$mobile_no
+                ));        
+
+                if(!$user) {
+                    throw new Exception($this->lang->line('credential_invalid'), RESULT_ERROR_RESOURCE_NOT_FOUND);
+                }
+                
+                $hasher = new PasswordHash(
+                    $this->config->item('phpass_hash_strength', 'tank_auth'),
+                    $this->config->item('phpass_hash_portable', 'tank_auth'));
+                    
+                if(!$hasher->CheckPassword($password, $user->password)) {
+                    throw new Exception($this->lang->line('credential_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $data["user_id"] = $user->id;   
+                $token = CryptoLib::randomString(50);
+                $data["access_token"] = $token;
+                if($ttl && $this->form_validation->numeric($ttl)) $data["ttl"] = $ttl;
+                
+                $accessTokenId = $this->UserAccessTokenModel->create($data);
+                $accessToken = $this->UserAccessTokenModel->findById($accessTokenId);
+                
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$accessToken
+                    ), REST_Controller::HTTP_OK); 
 
             } catch (Exception $e) {
                 $this->response(array(

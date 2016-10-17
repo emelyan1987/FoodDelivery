@@ -64,6 +64,10 @@
             return $result;
         }
 
+        public function findOne($params) {
+            $result = $this->find($params);
+            return $result&&count($result)>0?$result[0]:null;
+        }
         public function findById($id){
             $this->db->select('*');
             $this->db->where('id',$id);

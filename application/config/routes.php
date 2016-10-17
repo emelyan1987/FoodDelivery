@@ -472,5 +472,6 @@ $route['api/users/(:num)'] = '/api/UserController/index/$1';
 $route['api/users/(:num)(\.)([a-zA-Z0-9_-]+)(.*)'] = 'api/UserController/$1/format/$3$4'; 
 $route['api/users/(:num)/send_sms_code'] = '/api/UserController/sendSmsCode/$1'; 
 $route['api/users/(:num)/verify_sms_code'] = '/api/UserController/verifySmsCode/$1'; 
+$route['api/login'] = '/api/UserController/login'; 
 
 

@@ -20,3 +20,4 @@ $lang['delete_success'] = 'Deleted successfully.';
 $lang['parameter_incorrect'] = 'Parameters incorrect.';
 $lang['code_invalid'] = 'Code invalid.';
 $lang['code_expired'] = 'Code expired.';
+$lang['credential_invalid'] = 'Credential invalid.';
