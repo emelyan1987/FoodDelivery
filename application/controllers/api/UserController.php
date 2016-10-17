@@ -2,6 +2,12 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
     // This can be removed if you use __autoload() in config.php OR use Modular Extensions
     require APPPATH . '/libraries/REST_Controller.php';
+
+    require APPPATH . '/libraries/Twilio/autoload.php';
+
+    // Use the REST API Client to make requests to the Twilio REST API
+    use Twilio\Rest\Client;
+
     /**
     * This is an example of a few basic user interaction methods you could use
     * all done with a hardcoded array
@@ -28,7 +34,10 @@
             $this->load->model('UserModel');
             $this->lang->load('api');
 
-            $this->load->helper("http_helper");
+            $this->load->helper("http");
+            $this->load->helper("utils");
+
+            $this->load->config('twilio');
         } 
 
         private function validate() {
@@ -69,7 +78,7 @@
                 if ($id === NULL)
                 {
                     $users = $this->UserModel->find(null);                     
-                    
+
                     $resource = array();
                     foreach($users as $user) {
                         $resource[] = $this->UserModel->getPublicFields($user);    
@@ -83,12 +92,16 @@
 
                 if(!$resource) {
                     throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_NOT_FOUND); 
-                }
-
+                }  
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,
                     "resource"=>$resource
                     ), REST_Controller::HTTP_OK);
+                    
+                    
+
+
+                
             } catch (Exception $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
@@ -100,7 +113,16 @@
 
         public function index_post()
         {
-            try {
+            try {                 
+
+                $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token'));
+                $client->messages->create(
+                    '+8613844351939',
+                    array(
+                        'from' => $this->config->item('twilio_phone_number'),
+                        'body' => "Mataam register verification code! ".generateRandomCode(6)
+                    )
+                );
                 if(!$this->validate()) {
                     throw new Exception(implode(",", $this->messages), RESULT_ERROR_PARAMS_INVALID);
                 }
@@ -118,13 +140,13 @@
                     throw new Exception($this->lang->line('mobile_no_duplicated'), RESULT_ERROR_PARAMS_INVALID);
                 }
 
-                
+
                 $data = array();
-                
+
                 $hasher = new PasswordHash(
-                       $this->config->item('phpass_hash_strength', 'tank_auth'),
-                       $this->config->item('phpass_hash_portable', 'tank_auth'));
-                       
+                    $this->config->item('phpass_hash_strength', 'tank_auth'),
+                    $this->config->item('phpass_hash_portable', 'tank_auth'));
+
                 $data["mobile_no"] = $this->post('mobile_no');
                 $data["first_name"] = $this->post('first_name');
                 $data["last_name"] = $this->post('last_name');
@@ -132,7 +154,7 @@
                 if($this->post('email')) {                                        
                     $data["email"] = $this->post('email');
                 }
-                
+
                 $id = $this->UserModel->create($data);
 
                 $user = $this->UserModel->findById($id);
@@ -140,7 +162,7 @@
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,
                     "resource"=>$this->UserModel->getPublicFields($user)   
-                    ), REST_Controller::HTTP_CREATED);
+                    ), REST_Controller::HTTP_CREATED); 
 
             } catch (Exception $e) {
                 $this->response(array(
