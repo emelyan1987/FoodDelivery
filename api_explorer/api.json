@@ -396,6 +396,120 @@
           }
         }
       }
+    } ,
+    "/users/{id}/send_sms_code": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for sending SMS verification code",
+        "operationId": "sendSmsCode",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "allowMultiple": false,
+            "required": false,
+            "in": "path",
+            "description": "User id",
+            "type": "integer"
+          }, {
+            "in": "formData",
+            "name": "mobile_no",
+            "description": "Mobile number",
+            "required": true,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    } ,
+    "/users/{id}/verify_sms_code": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for verifying SMS code",
+        "operationId": "verifySmsCode",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "allowMultiple": false,
+            "required": false,
+            "in": "path",
+            "description": "User id",
+            "type": "integer"
+          }, {
+            "in": "formData",
+            "name": "mobile_no",
+            "description": "Mobile number",
+            "required": true,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          }, {
+            "in": "formData",
+            "name": "code",
+            "description": "Verify code",
+            "required": true,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

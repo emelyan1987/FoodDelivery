@@ -32,6 +32,7 @@
 
             $this->load->library('form_validation');
             $this->load->model('UserModel');
+            $this->load->model('UserSmsModel');
             $this->lang->load('api');
 
             $this->load->helper("http");
@@ -91,17 +92,17 @@
                 }
 
                 if(!$resource) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_NOT_FOUND); 
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
                 }  
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,
                     "resource"=>$resource
                     ), REST_Controller::HTTP_OK);
-                    
-                    
 
 
-                
+
+
+
             } catch (Exception $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
@@ -113,16 +114,7 @@
 
         public function index_post()
         {
-            try {                 
-
-                $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token'));
-                $client->messages->create(
-                    '+8613844351939',
-                    array(
-                        'from' => $this->config->item('twilio_phone_number'),
-                        'body' => "Mataam register verification code! ".generateRandomCode(6)
-                    )
-                );
+            try { 
                 if(!$this->validate()) {
                     throw new Exception(implode(",", $this->messages), RESULT_ERROR_PARAMS_INVALID);
                 }
@@ -232,11 +224,93 @@
 
                 $user = $this->UserModel->findById($id);
                 if(!$user) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_NOT_FOUND);
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
                 }
                 $this->UserModel->delete($id);
 
                 $this->response(array("code"=>RESULT_SUCCESS), REST_Controller::HTTP_ACCEPTED);
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), getHttpErrorStatus($e->getCode()));
+            } 
+        }
+
+        public function sendSmsCode_post($user_id) {
+            try { 
+                $mobile_no = $this->post('mobile_no');
+                if(!$user_id || !isset($mobile_no)) {
+                    throw new Exception($this->lang->line('parameter_incorrect'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $user = $this->UserModel->find(array(
+                    'id'=>$user_id,
+                    'mobile_no'=>$mobile_no
+                ));        
+
+                if(!$user) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
+                }
+
+                $code = generateRandomCode(6);
+                $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token'));
+                $client->messages->create(
+                    $mobile_no,
+                    array(
+                        'from' => $this->config->item('twilio_phone_number'),
+                        'body' => "Mataam register verification code! ".$code
+                    )
+                );
+
+
+                $data["user_id"] = $user_id;
+                $data["mobile_no"] = $mobile_no;
+                $data["code"] = $code;
+
+
+                $id = $this->UserSmsModel->create($data);
+
+                $this->response(array("code"=>RESULT_SUCCESS), REST_Controller::HTTP_CREATED); 
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), getHttpErrorStatus($e->getCode()));
+            } 
+        }
+
+        public function verifySmsCode_post($user_id) {
+            try { 
+                $mobile_no = $this->post('mobile_no');
+                $code = $this->post('code');
+                if(!$user_id || !isset($mobile_no) || !isset($code)) {
+                    throw new Exception($this->lang->line('parameter_incorrect'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $user = $this->UserSmsModel->findOne(array(
+                    'user_id'=>$user_id,
+                    'mobile_no'=>$mobile_no
+                ));        
+
+                if(!$user) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
+                }
+                
+                if($user->code != $code) {
+                    throw new Exception($this->lang->line('code_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                if(strtotime($user->expires_at) < time()) {
+                    throw new Exception($this->lang->line('code_expired'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $data["sms_verified"] = true;
+                $this->UserModel->update($user_id, $data);
+
+                $this->response(array("code"=>RESULT_SUCCESS), REST_Controller::HTTP_ACCEPTED); 
+
             } catch (Exception $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),

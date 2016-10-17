@@ -17,3 +17,6 @@ $lang['email_duplicated'] = 'The email duplicated.';
 $lang['resource_not_found'] = 'Could not found the resource.';
 $lang['id_required'] = 'The id required.';
 $lang['delete_success'] = 'Deleted successfully.';
+$lang['parameter_incorrect'] = 'Parameters incorrect.';
+$lang['code_invalid'] = 'Code invalid.';
+$lang['code_expired'] = 'Code expired.';
