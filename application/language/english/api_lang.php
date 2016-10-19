@@ -21,3 +21,7 @@ $lang['parameter_incorrect'] = 'Parameters incorrect.';
 $lang['code_invalid'] = 'Code invalid.';
 $lang['code_expired'] = 'Code expired.';
 $lang['credential_invalid'] = 'Credential invalid.';
+$lang['access_token_invalid'] = 'Access token invalid.';
+$lang['access_token_expired'] = 'Access token expired.';
+$lang['access_token_required'] = 'Access token required.';
+$lang['user_invalid'] = 'User invalid.';

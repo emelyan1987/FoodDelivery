@@ -64,106 +64,6 @@
         }
       }
     },
-    "/registration/confirm": {
-      "get": {
-        "tags": [
-          "registration"
-        ],
-        "description": "This API is responsible for user registration confirmation(Not implemented yet)",
-        "operationId": "registrationConfirm",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "access_token",
-            "description": "User access token for authorized requests",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "query",
-            "name": "verify_token",
-            "description": "User temporary token for confirm registration",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful response",
-            "schema": {
-              "$ref": "#/definitions/userModel"
-            }
-          },
-          "400": {
-            "description": "Invalid json/ invalid dataset",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          },
-          "401": {
-            "description": "Invalid credentials",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          },
-          "403": {
-            "description": "Token expired",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          }
-        }
-      }
-    },
-    "/registration/repeat_confirm": {
-      "post": {
-        "tags": [
-          "registration"
-        ],
-        "description": "This API send email with new confirm link(Not implemented yet.)",
-        "operationId": "registrationRepeatConfirm",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "access_token",
-            "description": "User access token for authorized requests",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful response",
-            "schema": {
-              "$ref": "#/definitions/userModel"
-            }
-          },
-          "400": {
-            "description": "Invalid json/ invalid dataset",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          },
-          "401": {
-            "description": "Invalid credentials",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          }
-        }
-      }
-    },
     "/users": {
       "get": {
         "tags": [
@@ -177,7 +77,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }],
         "responses": {
           "200": {
             "description": "successful response",
@@ -217,7 +123,7 @@
             "name": "body",
             "description": "JSON body",
             "required": true,
-            "schema": {      
+            "schema": {
               "$ref": "#/definitions/userCreate"
             }
           }
@@ -257,7 +163,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "id",
             "allowMultiple": false,
@@ -307,6 +219,12 @@
           "application/json"
         ],
         "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },{
             "name": "id",
             "allowMultiple": false,
             "required": true,
@@ -318,7 +236,7 @@
             "name": "body",
             "description": "JSON body",
             "required": true,
-            "schema": {      
+            "schema": {
               "$ref": "#/definitions/userCreate"
             }
           }],
@@ -362,6 +280,12 @@
           "application/json"
         ],
         "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },{
             "name": "id",
             "allowMultiple": false,
             "required": false,
@@ -510,6 +434,204 @@
           }
         }
       }
+    } ,
+    "/users/profile": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for updating user profile",
+        "operationId": "userProfile",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/address": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for updating user address",
+        "operationId": "userAddress",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userAddress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/subscription": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for setting user subscription",
+        "operationId": "userSubscription",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userSubscription"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for getting current user full data",
+        "operationId": "currentUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -574,17 +696,17 @@
       }
     },
     "userModel": {
-      "required": ["mobile_no", "first_name", "last_name", "password"],
+      "required": ["mobile_no", "f_name", "l_name", "password"],
       "properties": {
         "mobile_no": {
           "type": "string"
-        }, 
-        "first_name": {
+        },
+        "f_name": {
           "type": "string"
-        }, 
-        "last_name": {
+        },
+        "l_name": {
           "type": "string"
-        }, 
+        },
         "email": {
           "type": "string"
         },
@@ -600,22 +722,91 @@
       }
     },
     "userCreate": {
-      "required": ["mobile_no", "first_name", "last_name", "password"],
+      "required": ["mobile_no", "f_name", "l_name", "password"],
       "properties": {
         "mobile_no": {
           "type": "string"
-        }, 
-        "first_name": {
+        },
+        "f_name": {
           "type": "string"
-        }, 
-        "last_name": {
+        },
+        "l_name": {
           "type": "string"
-        }, 
+        },
         "email": {
           "type": "string"
         },
         "password": {
           "type": "string"
+        }
+      }
+    },
+    "userProfile": {
+      "properties": {
+        "f_name": {
+          "type": "string"
+        },
+        "l_name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "mobile_no": {
+          "type": "string"
+        },
+        "home_number": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "boolean"
+        },
+        "birthdate": {
+          "type": "date"
+        }
+      }
+    },
+    "userAddress": {
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "area": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "block": {
+          "type": "string"
+        },
+        "house_name": {
+          "type": "string"
+        },
+        "floor": {
+          "type": "string"
+        },
+        "appartment": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string"
+        }
+      }
+    } ,
+    "userSubscription": {
+      "properties": {
+        "notification_subscription": {
+          "type": "boolean"
+        },
+        "sms_subscription": {
+          "type": "boolean"
+        },
+        "email_subscription": {
+          "type": "boolean"
         }
       }
     }

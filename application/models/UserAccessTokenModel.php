@@ -19,8 +19,8 @@
                 }
 
             }
-            
-            
+
+
             return $model;
         }
         public function create($data)
@@ -72,6 +72,17 @@
             return $this->db->get('user_access_tokens')->row();
         }         
 
+        public function findByToken($token){   
+            $this->db->select('*');
+            $this->db->from('user_access_tokens');   
+
+             $this->db->where('access_token', $token);
+               
+            $this->db->order_by('created_at', 'desc');
+            $result = $this->db->get()->result();
+
+            return $result&&count($result)>0? $result[0] : null;
+        }
 
 
         public function delete($id){
@@ -81,5 +92,5 @@
 
             return $ret;
         }   
-       
+
 }
