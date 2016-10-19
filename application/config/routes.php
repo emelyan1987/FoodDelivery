@@ -477,5 +477,6 @@ $route['api/users/me'] = '/api/UserController/me';
 $route['api/users/profile'] = '/api/UserController/profile'; 
 $route['api/users/address'] = '/api/UserController/address'; 
 $route['api/users/subscription'] = '/api/UserController/subscription'; 
+$route['api/users/change_mobile_no'] = '/api/UserController/change_mobile_no'; 
 
 

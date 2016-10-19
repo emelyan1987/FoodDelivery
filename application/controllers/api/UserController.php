@@ -410,7 +410,7 @@
                         throw new Exception($this->lang->line('mobile_no_duplicated'), RESULT_ERROR_PARAMS_INVALID);
                     }
                 } 
-                        
+
                 $user = array();
                 if(isset($email) && $this->user->email!=$email) {
                     $user["email"] = $email;
@@ -513,6 +513,45 @@
 
 
                 $this->UserModel->update($this->user->id, $settings);                                                 
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$this->UserModel->findById($this->user->id)
+                    ), REST_Controller::HTTP_OK); 
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            } 
+        }
+
+        public function change_mobile_no_post() {
+            try { 
+                $this->validateAccessToken();
+
+                $old_mobile_no = $this->post('old_mobile_no'); 
+                $new_mobile_no = $this->post('new_mobile_no'); 
+
+
+                // Check duplicate
+                if(!isset($old_mobile_no) || !isset($new_mobile_no)) {
+                    throw new Exception($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }  
+
+                if($old_mobile_no != $this->user->mobile_no) {
+                    throw new Exception($this->lang->line('mobile_no_not_matched'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $users = $this->UserModel->find(array("mobile_no"=>$new_mobile_no));
+                if(count($users) && $users[0]->id!=$this->user->id) {                        
+                    throw new Exception($this->lang->line('mobile_no_duplicated'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $this->UserModel->update($this->user->id, array(
+                    "mobile_no"=>$new_mobile_no
+                ));
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,

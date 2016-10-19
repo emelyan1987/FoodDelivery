@@ -18,8 +18,7 @@
             $this->lang->load('api');
 
             $this->load->helper("http");
-            $this->load->helper("utils");
-            $this->load->helper("acl");  
+            $this->load->helper("utils");   
             
             $this->load->model('UserModel');
             $this->load->model('UserAccessTokenModel');      

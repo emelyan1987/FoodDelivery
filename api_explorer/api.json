@@ -459,7 +459,7 @@
             "in": "body",
             "name": "body",
             "description": "JSON body",
-            "required": true,
+            "required": false,
             "schema": {
               "$ref": "#/definitions/userProfile"
             }
@@ -511,7 +511,7 @@
             "in": "body",
             "name": "body",
             "description": "JSON body",
-            "required": true,
+            "required": false,
             "schema": {
               "$ref": "#/definitions/userAddress"
             }
@@ -620,6 +620,66 @@
           },
           "400": {
             "description": "Invalid request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/change_mobile_no": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for changing user mobile number",
+        "operationId": "userSubscription",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "formData",
+            "name": "old_mobile_no",
+            "description": "Old mobile number",
+            "required": true,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          } , {
+            "in": "formData",
+            "name": "new_mobile_no",
+            "description": "New mobile number",
+            "required": true,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
             "schema": {
               "$ref": "#/definitions/error"
             }
