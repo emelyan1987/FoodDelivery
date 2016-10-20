@@ -27,3 +27,4 @@ $lang['access_token_expired'] = 'Access token expired.';
 $lang['access_token_required'] = 'Access token required.';
 $lang['user_invalid'] = 'User invalid.';
 $lang['mobile_no_not_matched'] = 'The mobile_no not matched.';
+$lang['password_not_matched'] = 'The password not matched.';

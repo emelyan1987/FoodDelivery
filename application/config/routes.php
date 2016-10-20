@@ -473,10 +473,13 @@ $route['api/users/(:num)(\.)([a-zA-Z0-9_-]+)(.*)'] = 'api/UserController/$1/form
 $route['api/users/(:num)/send_sms_code'] = '/api/UserController/sendSmsCode/$1'; 
 $route['api/users/(:num)/verify_sms_code'] = '/api/UserController/verifySmsCode/$1'; 
 $route['api/login'] = '/api/UserController/login'; 
+$route['api/check_token'] = '/api/UserController/check_token'; 
 $route['api/users/me'] = '/api/UserController/me'; 
 $route['api/users/profile'] = '/api/UserController/profile'; 
 $route['api/users/address'] = '/api/UserController/address'; 
-$route['api/users/subscription'] = '/api/UserController/subscription'; 
+$route['api/users/language'] = '/api/UserController/language'; 
+$route['api/users/subscription'] = '/api/UserController/subscription';         
 $route['api/users/change_mobile_no'] = '/api/UserController/change_mobile_no'; 
+$route['api/users/change_password'] = '/api/UserController/change_password'; 
 
 

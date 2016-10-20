@@ -498,6 +498,33 @@
                     ), REST_Controller::HTTP_OK);
             } 
         }         
+        
+        public function language_post() {
+            try { 
+                $this->validateAccessToken();
+
+                $language = $this->post('language'); 
+
+                $profile = array();
+                if(isset($language)) $profile["language"] = $language;  
+
+                $profile["user_id"] = $this->user->id;
+                if(!empty($profile))
+                    $this->UserProfileModel->save($this->user->id, $profile);
+
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$this->UserProfileModel->findByUserId($this->user->id)
+                    ), REST_Controller::HTTP_OK); 
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            } 
+        }         
 
         public function subscription_post() {
             try { 
@@ -556,6 +583,60 @@
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,
                     "resource"=>$this->UserModel->findById($this->user->id)
+                    ), REST_Controller::HTTP_OK); 
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            } 
+        }       
+
+        public function change_password_post() {
+            try { 
+                $this->validateAccessToken();
+
+                $old_password = $this->post('old_password'); 
+                $new_password = $this->post('new_password'); 
+
+
+                // Check duplicate
+                if(!isset($old_password) || !isset($new_password)) {
+                    throw new Exception($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }  
+
+                $hasher = new PasswordHash(
+                    $this->config->item('phpass_hash_strength', 'tank_auth'),
+                    $this->config->item('phpass_hash_portable', 'tank_auth'));
+
+                if(!$hasher->CheckPassword($old_password, $this->user->password)) {
+                    throw new Exception($this->lang->line('password_not_matched'), RESULT_ERROR_PARAMS_INVALID);
+                } 
+                               
+
+                $this->UserModel->update($this->user->id, array(
+                    "password"=>$hasher->HashPassword($new_password)
+                ));
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS
+                    ), REST_Controller::HTTP_OK); 
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            } 
+        }       
+        
+        public function check_token_post() {
+            try { 
+                $this->validateAccessToken();                
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS
                     ), REST_Controller::HTTP_OK); 
 
             } catch (Exception $e) {

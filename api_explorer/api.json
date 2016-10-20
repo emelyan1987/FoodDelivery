@@ -11,7 +11,11 @@
   "produces": [
     "application/json"
   ],
-  "tags": [
+  "tags": [ 
+    {
+      "name": "auth",
+      "description": "authorize api"
+    },
     {
       "name": "users",
       "description": "users api"
@@ -23,7 +27,7 @@
         "tags": [
           "auth"
         ],
-        "description": "This API is responsible for login Customer(Not implemented yet)",
+        "description": "This API is responsible for login Customer",
         "operationId": "",
         "consumes": [
           "application/json"
@@ -46,7 +50,7 @@
           "200": {
             "description": "successful response",
             "schema": {
-              "$ref": "#/definitions/userModel"
+              "type": "object"
             }
           },
           "400": {
@@ -64,6 +68,48 @@
         }
       }
     },
+    "/check_token": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "This API is responsible for checking access token",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },  
     "/users": {
       "get": {
         "tags": [
@@ -539,6 +585,58 @@
         }
       }
     },
+    "/users/language": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for updating user language",
+        "operationId": "userLanguage",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "formData",
+            "name": "language",
+            "description": "Language(English, Arabic, ...)",
+            "required": false,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/users/subscription": {
       "post": {
         "tags": [
@@ -639,7 +737,7 @@
           "users"
         ],
         "description": "This API is responsible for changing user mobile number",
-        "operationId": "userSubscription",
+        "operationId": "changeMobileNo",
         "consumes": [
           "application/json"
         ],
@@ -665,6 +763,66 @@
             "in": "formData",
             "name": "new_mobile_no",
             "description": "New mobile number",
+            "required": true,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/change_password": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for changing user password",
+        "operationId": "changePassword",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "formData",
+            "name": "old_password",
+            "description": "Old password",
+            "required": true,
+            "allowMultiple": false,
+            "type": "string",
+            "paramType": "formData"
+          } , {
+            "in": "formData",
+            "name": "new_password",
+            "description": "New password",
             "required": true,
             "allowMultiple": false,
             "type": "string",
@@ -754,7 +912,7 @@
           "type": "integer"
         }
       }
-    },
+    }, 
     "userModel": {
       "required": ["mobile_no", "f_name", "l_name", "password"],
       "properties": {
