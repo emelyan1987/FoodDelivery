@@ -482,4 +482,13 @@ $route['api/users/subscription'] = '/api/UserController/subscription';
 $route['api/users/change_mobile_no'] = '/api/UserController/change_mobile_no'; 
 $route['api/users/change_password'] = '/api/UserController/change_password'; 
 
+$route['api/location/cities'] = '/api/LocationController/cities'; 
+$route['api/location/areas'] = '/api/LocationController/areas'; 
+
+$route['api/type/cuisines'] = '/api/TypeController/cuisines'; 
+$route['api/type/food_types'] = '/api/TypeController/food_types'; 
+$route['api/type/restro_categories'] = '/api/TypeController/restro_categories'; 
+
+
+
 

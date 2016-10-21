@@ -19,6 +19,14 @@
     {
       "name": "users",
       "description": "users api"
+    },
+    {
+      "name": "location",
+      "description": "location related api"
+    },
+    {
+      "name": "type",
+      "description": "cuisine, food type, restaurant category api"
     }
   ],
   "paths": {
@@ -827,6 +835,268 @@
             "allowMultiple": false,
             "type": "string",
             "paramType": "formData"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/location/cities": {
+      "get": {
+        "tags": [
+          "location"
+        ],
+        "description": "This API is responsible for getting city list",
+        "operationId": "cities",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "query",
+            "name": "keyword",
+            "description": "Keyword to search(optional)",
+            "required": false,
+            "allowMultiple": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/location/areas": {
+      "get": {
+        "tags": [
+          "location"
+        ],
+        "description": "This API is responsible for getting area list",
+        "operationId": "areas",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "query",
+            "name": "city_id",
+            "description": "City Id",
+            "required": true,
+            "allowMultiple": false,
+            "type": "integer"
+          }, {
+            "in": "query",
+            "name": "keyword",
+            "description": "Keyword to search(optional)",
+            "required": false,
+            "allowMultiple": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/type/cuisines": {
+      "get": {
+        "tags": [
+          "type"
+        ],
+        "description": "This API is responsible for getting cuisine list",
+        "operationId": "areas",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "query",
+            "name": "keyword",
+            "description": "Keyword to search(optional)",
+            "required": false,
+            "allowMultiple": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/type/food_types": {
+      "get": {
+        "tags": [
+          "type"
+        ],
+        "description": "This API is responsible for getting food type list",
+        "operationId": "areas",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "query",
+            "name": "keyword",
+            "description": "Keyword to search(optional)",
+            "required": false,
+            "allowMultiple": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/type/restro_categories": {
+      "get": {
+        "tags": [
+          "type"
+        ],
+        "description": "This API is responsible for getting restaurant category list",
+        "operationId": "areas",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "query",
+            "name": "keyword",
+            "description": "Keyword to search(optional)",
+            "required": false,
+            "allowMultiple": false,
+            "type": "string"
           }
         ],
         "responses": {

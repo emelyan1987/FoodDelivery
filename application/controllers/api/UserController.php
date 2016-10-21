@@ -80,13 +80,15 @@
                     $users = $this->UserModel->find(null);                     
 
                     $resource = array();
-                    foreach($users as $user) {
-                        $resource[] = $this->UserModel->getPublicFields($user);    
+                    foreach($users as $user) {                        
+                        $user->profile = $this->UserProfileModel->findByUserId($user->id);
+                        $resource[] = $user;//$this->UserModel->getPublicFields($user);    
                     }
                 } else {                         
                     $user = $this->UserModel->findById($id);                    
                     if($user) {
-                        $resource = $this->UserModel->getPublicFields($user);
+                        $user->profile = $this->UserProfileModel->findByUserId($user->id);
+                        $resource = $user;//$this->UserModel->getPublicFields($user);
                     }
                 }
 
@@ -352,7 +354,8 @@
 
                 $accessTokenId = $this->UserAccessTokenModel->create($data);
                 $accessToken = $this->UserAccessTokenModel->findById($accessTokenId);
-
+                
+                
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,
                     "resource"=>$accessToken
