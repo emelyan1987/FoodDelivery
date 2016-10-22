@@ -21,12 +21,12 @@
       "description": "users api"
     },
     {
-      "name": "location",
-      "description": "location related api"
+      "name": "data",
+      "description": "basic data api"
     },
     {
-      "name": "type",
-      "description": "cuisine, food type, restaurant category api"
+      "name": "restaurants",
+      "description": "restaurants api"
     }
   ],
   "paths": {
@@ -859,13 +859,13 @@
         }
       }
     },
-    "/location/cities": {
+    "/data/cities": {
       "get": {
         "tags": [
-          "location"
+          "data"
         ],
         "description": "This API is responsible for getting city list",
-        "operationId": "cities",
+        "operationId": "getCities",
         "consumes": [
           "application/json"
         ],
@@ -910,13 +910,13 @@
         }
       }
     },
-    "/location/areas": {
+    "/data/areas": {
       "get": {
         "tags": [
-          "location"
+          "data"
         ],
         "description": "This API is responsible for getting area list",
-        "operationId": "areas",
+        "operationId": "getAreas",
         "consumes": [
           "application/json"
         ],
@@ -934,7 +934,7 @@
             "in": "query",
             "name": "city_id",
             "description": "City Id",
-            "required": true,
+            "required": false,
             "allowMultiple": false,
             "type": "integer"
           }, {
@@ -968,13 +968,13 @@
         }
       }
     },
-    "/type/cuisines": {
+    "/data/cuisines": {
       "get": {
         "tags": [
-          "type"
+          "data"
         ],
         "description": "This API is responsible for getting cuisine list",
-        "operationId": "areas",
+        "operationId": "getCuisines",
         "consumes": [
           "application/json"
         ],
@@ -1019,13 +1019,13 @@
         }
       }
     },
-    "/type/food_types": {
+    "/data/food_types": {
       "get": {
         "tags": [
-          "type"
+          "data"
         ],
         "description": "This API is responsible for getting food type list",
-        "operationId": "areas",
+        "operationId": "getFoodTypes",
         "consumes": [
           "application/json"
         ],
@@ -1070,13 +1070,13 @@
         }
       }
     },
-    "/type/restro_categories": {
+    "/data/restro_categories": {
       "get": {
         "tags": [
-          "type"
+          "data"
         ],
         "description": "This API is responsible for getting restaurant category list",
-        "operationId": "areas",
+        "operationId": "getRestroCategories",
         "consumes": [
           "application/json"
         ],
@@ -1114,6 +1114,135 @@
           },
           "401": {
             "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/restaurants": {
+      "get": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for getting restaurants",
+        "operationId": "getRestaurants",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },{
+            "in": "query",
+            "name": "area",
+            "description": "area id to filter",
+            "required": false,
+            "allowMultiple": false,
+            "type": "integer"
+          },{
+            "in": "query",
+            "name": "cuisine",
+            "description": "cuisine id to filter",
+            "required": false,
+            "allowMultiple": false,
+            "type": "integer"
+          },{
+            "in": "query",
+            "name": "food_type",
+            "description": "food type id to filter",
+            "required": false,
+            "allowMultiple": false,
+            "type": "integer"
+          },{
+            "in": "query",
+            "name": "restro_category",
+            "description": "restaurant category id to filter",
+            "required": false,
+            "allowMultiple": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/{id}": {
+      "get": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for getting an restaurant with specific ID",
+        "operationId": "getRestaurant",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "allowMultiple": false,
+            "required": false,
+            "in": "path",
+            "description": "Restaurant id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "$ref": "#/definitions/userModel"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "404": {
+            "description": "Not found resource",
             "schema": {
               "$ref": "#/definitions/error"
             }
