@@ -43,7 +43,7 @@
         }*/
 
         public function find($params){ 
-            $this->db->select('r.id AS restro_id, r.restro_name, l.id AS location_id, l.location_name, l.telephones, l.latitude, l.longitude, ct.city_name AS city, a.name AS area, l.block, l.street, l.building, s.open_status, s.open_from, s.open_to, p.method_type AS payments, w.min_order, (w.order_days*24*60+w.order_hour*60+w.order_minitue) AS order_time');
+            $this->db->select('r.id AS restro_id, r.restro_name, l.id AS location_id, l.location_name, l.telephones, l.latitude, l.longitude, ct.city_name AS city, a.name AS area, l.block, l.street, l.building, s.open_status, s.open_from, s.open_to, p.method_type AS payments, w.min_order, (w.order_days*24*60+w.order_hour*60+w.order_minitue) AS order_time, w.monday_from, w.monday_to, w.tuesday_from, w.tuesday_to, w.wednesday_from, w.wednesday_to, w.thursday_from, w.thursday_to, w.friday_from, w.friday_to, w.saturday_from, w.saturday_to, w.sunday_from, w.sunday_to');
             $this->db->from('restro_info AS r');  
             $this->db->join('restro_location AS l', 'l.restro_id=r.id');   
             $this->db->join('restro_cuisine_ids AS c', 'c.restro_id=r.id');
