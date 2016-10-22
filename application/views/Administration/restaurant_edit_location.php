@@ -763,7 +763,36 @@
         var delivery_sunday_to=$("#delivery_sunday_to").val();
         var location_id=$("#location_id").val();
         
-        var data = {delivery_id:delivery_id,dordert_days:dordert_days,dordert_hour:dordert_hour,dordert_minitue:dordert_minitue,dordert_second:dordert_second,delivery_min_order:delivery_min_order,delivery_delivery_charge:delivery_delivery_charge,delivery_city:delivery_city,delivery_area:delivery_area,delivery_user_id:delivery_user_id,delivery_restro_id:delivery_restro_id,delivery_payment:delivery_payment, delivery_monday_from:delivery_monday_from,delivery_monday_to:delivery_monday_to,delivery_tuesday_from:delivery_tuesday_from,delivery_tuesday_to:delivery_tuesday_to,delivery_wednesday_from:delivery_wednesday_from,delivery_wednesday_to:delivery_wednesday_to,delivery_thursday_from:delivery_thursday_from,delivery_thursday_to:delivery_thursday_to,delivery_friday_from:delivery_friday_from,delivery_friday_to:delivery_friday_to,delivery_saturday_from:delivery_saturday_from,delivery_saturday_to:delivery_saturday_to,delivery_sunday_from:delivery_sunday_from,delivery_sunday_to:delivery_sunday_to,location_id:location_id,delivery_price:delivery_price};
+        var data = {
+            delivery_id:delivery_id,
+            dordert_days:dordert_days,
+            dordert_hour:dordert_hour,
+            dordert_minitue:dordert_minitue,
+            dordert_second:dordert_second,
+            delivery_min_order:delivery_min_order,
+            delivery_delivery_charge:delivery_delivery_charge,
+            delivery_city:delivery_city,
+            delivery_area:delivery_area,
+            delivery_user_id:delivery_user_id,
+            delivery_restro_id:delivery_restro_id,
+            delivery_payment:delivery_payment, 
+            delivery_monday_from:delivery_monday_from,
+            delivery_monday_to:delivery_monday_to,
+            delivery_tuesday_from:delivery_tuesday_from,
+            delivery_tuesday_to:delivery_tuesday_to,
+            delivery_wednesday_from:delivery_wednesday_from,
+            delivery_wednesday_to:delivery_wednesday_to,
+            delivery_thursday_from:delivery_thursday_from,
+            delivery_thursday_to:delivery_thursday_to,
+            delivery_friday_from:delivery_friday_from,
+            delivery_friday_to:delivery_friday_to,
+            delivery_saturday_from:delivery_saturday_from,
+            delivery_saturday_to:delivery_saturday_to,
+            delivery_sunday_from:delivery_sunday_from,
+            delivery_sunday_to:delivery_sunday_to,
+            location_id:location_id,
+            delivery_price:delivery_price
+        };
         //console.log(data);
         $.ajax({
             method:"post",

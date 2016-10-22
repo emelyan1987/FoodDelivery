@@ -1150,22 +1150,29 @@
             "type": "integer"
           },{
             "in": "query",
-            "name": "cuisine",
-            "description": "cuisine id to filter",
+            "name": "cuisines",
+            "description": "cuisine ids string delimitted by comma(,) to filter",
             "required": false,
             "allowMultiple": false,
-            "type": "integer"
+            "type": "string"
           },{
             "in": "query",
-            "name": "food_type",
-            "description": "food type id to filter",
+            "name": "food_types",
+            "description": "food type ids string delimitted by comma(,) to filter",
             "required": false,
             "allowMultiple": false,
-            "type": "integer"
+            "type": "string"
           },{
             "in": "query",
-            "name": "restro_category",
-            "description": "restaurant category id to filter",
+            "name": "restro_categories",
+            "description": "restaurant category ids string delimitted by comma(,) to filter",
+            "required": false,
+            "allowMultiple": false,
+            "type": "string"
+          },{
+            "in": "query",
+            "name": "service_type",
+            "description": "service type(1:Deliver, 2:Catering, 3:Reservation, 4:Pickup)",
             "required": false,
             "allowMultiple": false,
             "type": "integer"

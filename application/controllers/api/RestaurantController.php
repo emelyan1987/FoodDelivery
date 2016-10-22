@@ -66,10 +66,11 @@
                 {               
                     $params = array();
                     if($this->get('area')) $params["area"] = $this->get('area');                                    // Single Id
-                    if($this->get('cuisine')) $params["cuisine"] = $this->get('cuisine');                           // Multiple Ids
-                    if($this->get('foot_type')) $params["foot_type"] = $this->get('foot_type');                     // Multiple Ids
-                    if($this->get('restro_category')) $params["restro_category"] = $this->get('restro_category');   // Multiple Ids                  
-
+                    if($this->get('cuisines')) $params["cuisines"] = explode(',', $this->get('cuisines'));                           // Multiple Ids
+                    if($this->get('food_types')) $params["food_types"] = explode(',', $this->get('food_types'));                     // Multiple Ids
+                    if($this->get('restro_categories')) $params["restro_categories"] = explode(',', $this->get('restro_categories'));   // Multiple Ids                  
+                    if($this->get('service_type')) $params["service_type"] = $this->get('service_type');   // Service Type
+                    
                     $resource = $this->RestaurantModel->find($params); 
                 } else {                         
                     $resource = $this->RestaurantModel->findById($id); 
@@ -79,7 +80,7 @@
                     throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
                 }  
                 $this->response(array(
-                    "code"=>RESULT_SUCCESS,
+                    "code"=>RESULT_SUCCESS,    
                     "resource"=>$resource
                     ), REST_Controller::HTTP_OK);
 
