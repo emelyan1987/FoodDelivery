@@ -66,9 +66,9 @@
                 {               
                     $params = array();
                     if($this->get('area')) $params["area"] = $this->get('area');                                    // Single Id
-                    if($this->get('cuisines')) $params["cuisines"] = explode(',', $this->get('cuisines'));                           // Multiple Ids
-                    if($this->get('food_types')) $params["food_types"] = explode(',', $this->get('food_types'));                     // Multiple Ids
-                    if($this->get('restro_categories')) $params["restro_categories"] = explode(',', $this->get('restro_categories'));   // Multiple Ids                  
+                    if($this->get('cuisines')) $params["cuisines"] = $this->get('cuisines');                           // Multiple Ids
+                    if($this->get('food_types')) $params["food_types"] = $this->get('food_types');                     // Multiple Ids
+                    if($this->get('restro_categories')) $params["restro_categories"] = $this->get('restro_categories');   // Multiple Ids                  
                     if($this->get('service_type')) $params["service_type"] = $this->get('service_type');   // Service Type
                     
                     $resource = $this->RestaurantModel->find($params); 

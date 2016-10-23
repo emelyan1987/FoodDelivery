@@ -1173,7 +1173,7 @@
             "in": "query",
             "name": "service_type",
             "description": "service type(1:Deliver, 2:Catering, 3:Reservation, 4:Pickup)",
-            "required": false,
+            "required": true,
             "allowMultiple": false,
             "type": "integer"
           }
