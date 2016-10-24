@@ -153,7 +153,8 @@
                 if(!isset($quantity) || $quantity<=0) {
                     throw new Exception("quantity ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 } 
-
+                $variation_ids = $this->post('variation_ids');
+                
                 $item = $this->RestroItemModel->findById($product_id);
 
                 $params = array();
@@ -166,7 +167,7 @@
                 $params["restro_id"] = $item->restro_id;
 
                 $params["spacial_request"] = $this->post('spacial_request');
-                $params["variation_ids"] = $this->post('variation_ids');    // variation ids string delimited by comma(,)
+                $params["variation_ids"] = isset($variation_ids) ? $variation_ids : 0;    // variation ids string delimited by comma(,)
                 $params["date"] = date("Y-m-d H:i:s");
 
                 $insert_id = $this->CartModel->create($service_type, $params);

@@ -28,8 +28,8 @@
         public function find($params=null){   
             $this->db->select('restro_coupons.*, restro_info.restro_name as restro, restro_location.location_name as location');
             $this->db->from('restro_coupons');
-            $this->db->join('restro_info', 'restro_info.id = restro_coupons.restro_id');
-            $this->db->join('restro_location', 'restro_location.id = restro_coupons.location_id');
+            $this->db->join('restro_info', 'restro_info.id = restro_coupons.restro_id', 'left');
+            $this->db->join('restro_location', 'restro_location.id = restro_coupons.location_id', 'left');
 
             if(isset($params)) {
                 if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('restro_coupons.restro_id', $params["restro_id"]);                

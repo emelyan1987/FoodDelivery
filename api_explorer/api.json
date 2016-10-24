@@ -1838,6 +1838,14 @@
             "required": false,
             "description": "restaurant id",
             "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "coupon_code",
+            "allowMultiple": false,
+            "required": false,
+            "description": "coupon code",
+            "type": "integer"
           }
         ],
         "responses": {
