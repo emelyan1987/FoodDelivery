@@ -27,6 +27,10 @@
     {
       "name": "restaurants",
       "description": "restaurants api"
+    },
+    {
+      "name": "orders",
+      "description": "orders api"
     }
   ],
   "paths": {
@@ -251,12 +255,6 @@
             "schema": {
               "$ref": "#/definitions/error"
             }
-          },
-          "404": {
-            "description": "Not found resource",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
           }
         }
       },
@@ -312,12 +310,6 @@
             "schema": {
               "$ref": "#/definitions/error"
             }
-          },
-          "404": {
-            "description": "Not found resource",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
           }
         }
       },
@@ -362,12 +354,6 @@
           },
           "401": {
             "description": "Invalid credentials",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          },
-          "404": {
-            "description": "Not found resource",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -1233,7 +1219,7 @@
           "200": {
             "description": "successful response",
             "schema": {
-              "$ref": "#/definitions/userModel"
+              "type": "object"
             }
           },
           "400": {
@@ -1247,9 +1233,628 @@
             "schema": {
               "$ref": "#/definitions/error"
             }
+          }
+        }
+      }
+    },
+    "/restaurants/ratings": {
+      "get": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for getting rating list for specific restaurant",
+        "operationId": "getRatings",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
           },
-          "404": {
-            "description": "Not found resource",
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "Location id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for setting rating for specific restaurant",
+        "operationId": "setRating",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",    
+            "required": true,
+            "description": "Json body object for rating",
+            "schema": {
+                "$ref": "#/definitions/ratingCreateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/item_categories": {
+      "get": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for getting item category list for specific restaurant",
+        "operationId": "getRestaurantItemCategories",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "Location id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "service_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "Service id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/items": {
+      "get": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for getting item list for specific restaurant item category",
+        "operationId": "getRestaurantItems",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "category_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "Restro item category id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/items/{id}": {
+      "get": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for getting item details for specific restaurant item id",
+        "operationId": "getRestaurantItem",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "path",
+            "name": "id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "Restro item id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/cart": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting cart list for specific user",
+        "operationId": "getCarts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": false,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for creating cart item",
+        "operationId": "createCart",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, 
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          }, 
+          {                         
+            "in": "body",
+            "name": "body",  
+            "required": true,
+            "description": "Cart JSON Object",
+            "schema": {
+                "$ref": "#/definitions/cartCreateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/cart/{id}": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting cart item for specific user",
+        "operationId": "getCart",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "path",
+            "name": "id",  
+            "required": true,
+            "description": "cart id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for updating cart item",
+        "operationId": "updateCart",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, 
+          {                         
+            "in": "path",
+            "name": "id",    
+            "required": true,
+            "description": "cart item id to update",
+            "type": "integer"
+          }, 
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          }, 
+          {                         
+            "in": "body",
+            "name": "body",  
+            "required": true,
+            "description": "Cart JSON Object",
+            "schema": {
+                "$ref": "#/definitions/cartCreateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for deleting cart item",
+        "operationId": "deleteCart",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, 
+          {                         
+            "in": "path",
+            "name": "id",    
+            "required": true,
+            "description": "cart item id to delete",
+            "type": "integer"
+          }, 
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/discount": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting redeem discount amount",
+        "operationId": "getDiscount",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "redeem_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "redeem type(1: Redeem Coupon, 2: Loyalty Points, 3: Mataam Points)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": false,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -1420,7 +2025,7 @@
           "type": "string"
         }
       }
-    } ,
+    },
     "userSubscription": {
       "properties": {
         "notification_subscription": {
@@ -1431,6 +2036,37 @@
         },
         "email_subscription": {
           "type": "boolean"
+        }
+      }
+    },
+    "ratingCreateModel": {
+      "required": ["location_id", "star_value"],
+      "properties": {
+        "location_id": {
+          "type": "integer"
+        },
+        "star_value": {
+          "type": "integer"
+        },
+        "msg": {
+          "type": "string"
+        }
+      }
+    },
+    "cartCreateModel": {
+      "required": ["product_id", "quantity"],
+      "properties": {
+        "product_id": {
+          "type": "integer"
+        },
+        "quantity": {
+          "type": "integer"
+        },
+        "variation_ids": {
+          "type": "string"
+        },
+        "spacial_request": {
+          "type": "string"
         }
       }
     }

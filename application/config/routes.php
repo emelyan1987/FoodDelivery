@@ -490,6 +490,16 @@ $route['api/data/restro_categories'] = '/api/DataController/restro_categories';
 
 $route['api/restaurants'] = '/api/RestaurantController'; 
 $route['api/restaurants/(:num)'] = '/api/RestaurantController/index/$1'; 
+$route['api/restaurants/ratings'] = '/api/RestaurantController/ratings'; 
+$route['api/restaurants/item_categories'] = '/api/RestaurantController/item_categories'; 
+$route['api/restaurants/items'] = '/api/RestaurantController/items'; 
+$route['api/restaurants/items/(:num)'] = '/api/RestaurantController/items/$1'; 
+
+
+$route['api/orders'] = '/api/OrderController'; 
+$route['api/orders/cart'] = '/api/OrderController/cart'; 
+$route['api/orders/cart/(:num)'] = '/api/OrderController/cart/$1'; 
+$route['api/orders/discount'] = '/api/OrderController/discount'; 
 
 
 

@@ -44,9 +44,9 @@
 
         public function find($params){
             if(!$params || !isset($params["service_type"])) return null;              
-            
+
             $service_type = $params["service_type"];
-            
+
             $where = '1=1';                      
             if(isset($params["area"])) { 
                 $where .= " AND l.area=" . $params["area"];
@@ -87,9 +87,9 @@
             GROUP BY l.id
             ) AS a 
             LEFT JOIN restro_rating AS rt
-            ON rt.restro_id=a.restro_id
+            ON rt.location_id=a.location_id
             LEFT JOIN restro_promotion AS pt
-                ON pt.location_id=a.location_id AND pt.service_id=$service_type
+            ON pt.location_id=a.location_id AND pt.service_id=$service_type
             GROUP BY a.location_id";
 
 

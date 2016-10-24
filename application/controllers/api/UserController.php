@@ -567,7 +567,7 @@
 
                 // Check duplicate
                 if(!isset($old_mobile_no) || !isset($new_mobile_no)) {
-                    throw new Exception($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new Exception("old_mobile_no and new_mobile_no ".$this->lang->line('parameters_required'), RESULT_ERROR_PARAMS_INVALID);
                 }  
 
                 if($old_mobile_no != $this->user->mobile_no) {
@@ -606,7 +606,7 @@
 
                 // Check duplicate
                 if(!isset($old_password) || !isset($new_password)) {
-                    throw new Exception($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new Exception("old_password and new_password ".$this->lang->line('parameters_required'), RESULT_ERROR_PARAMS_INVALID);
                 }  
 
                 $hasher = new PasswordHash(

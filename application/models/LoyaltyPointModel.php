@@ -25,12 +25,12 @@
             $this->db->update('restro_loyalty_points', $data);
         }
 
-        public function find($params){   
+        public function find($params = null){   
             $this->db->select('restro_loyalty_points.*, restro_info.restro_name as restro, restro_location.location_name as location, restro_services.cat_name as service');
             $this->db->from('restro_loyalty_points');
-            $this->db->join('restro_info', 'restro_info.id = restro_loyalty_points.restro_id');
-            $this->db->join('restro_location', 'restro_location.id = restro_loyalty_points.location_id');
-            $this->db->join('restro_services', 'restro_services.id = restro_loyalty_points.service_id');
+            $this->db->join('restro_info', 'restro_info.id = restro_loyalty_points.restro_id', 'left');
+            $this->db->join('restro_location', 'restro_location.id = restro_loyalty_points.location_id', 'left');
+            $this->db->join('restro_services', 'restro_services.id = restro_loyalty_points.service_id', 'left');
 
             if(isset($params)) {
                 if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('restro_loyalty_points.restro_id', $params["restro_id"]);                
@@ -42,6 +42,11 @@
             $result = $this->db->get()->result();
 
             return $result;
+        }
+        
+        public function findOne($params = null) {
+            $result = $this->find($params);
+            return $result && count($result) ? $result[0] : null;
         }
 
         public function findById($id){
