@@ -360,7 +360,7 @@
           }
         }
       }
-    } ,
+    },
     "/users/{id}/send_sms_code": {
       "post": {
         "tags": [
@@ -474,7 +474,7 @@
           }
         }
       }
-    } ,
+    },
     "/users/profile": {
       "post": {
         "tags": [
@@ -503,6 +503,58 @@
             "schema": {
               "$ref": "#/definitions/userProfile"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/upload_image": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for uploading user profile picture",
+        "operationId": "uploadUserImage",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "profile_pic",
+            "description": "user profile image",
+            "required": true,
+            "allowMultiple": false,
+            "type": "file"
           }
         ],
         "responses": {

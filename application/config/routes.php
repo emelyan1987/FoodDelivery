@@ -482,6 +482,7 @@ $route['api/users/language'] = '/api/UserController/language';
 $route['api/users/subscription'] = '/api/UserController/subscription';         
 $route['api/users/change_mobile_no'] = '/api/UserController/change_mobile_no'; 
 $route['api/users/change_password'] = '/api/UserController/change_password'; 
+$route['api/users/upload_image'] = '/api/UserController/upload_image'; 
 
 $route['api/data/cities'] = '/api/DataController/cities'; 
 $route['api/data/areas'] = '/api/DataController/areas';    

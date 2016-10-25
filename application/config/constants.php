@@ -87,6 +87,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 /* =============  RESOURCE RETURN CODE ============== */
 defined('RESULT_SUCCESS')        OR define('RESULT_SUCCESS', 0); // no errors
+defined('RESULT_ERROR')        OR define('RESULT_ERROR', 4000); 
 defined('RESULT_ERROR_RESOURCE_NOT_FOUND')        OR define('RESULT_ERROR_RESOURCE_NOT_FOUND', 4001); 
 defined('RESULT_ERROR_ID_REQUIRED')        OR define('RESULT_ERROR_ID_REQUIRED', 4002); 
 defined('RESULT_ERROR_PARAMS_INVALID')        OR define('RESULT_ERROR_PARAMS_INVALID', 4003); 
