@@ -64,7 +64,11 @@
             try {                
                 $this->validateAccessToken();
 
-
+                $service_type = $this->get('service_type');
+                if(!isset($service_type)) {
+                    throw new Exception('service_type '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+                
                 if ($id === NULL)
                 {               
                     $params = array();
@@ -72,11 +76,19 @@
                     if($this->get('cuisines')) $params["cuisines"] = $this->get('cuisines');                           // Multiple Ids
                     if($this->get('food_types')) $params["food_types"] = $this->get('food_types');                     // Multiple Ids
                     if($this->get('restro_categories')) $params["restro_categories"] = $this->get('restro_categories');   // Multiple Ids                  
-                    if($this->get('service_type')) $params["service_type"] = $this->get('service_type');   // Service Type
+                    $params["service_type"] = $service_type;   // Service Type
 
                     $resource = $this->RestaurantModel->find($params); 
-                } else {                         
-                    $resource = $this->RestaurantModel->findById($id); 
+                } else {     
+                    $location_id = $this->get('location_id');
+                    if(!isset($location_id)) {
+                        throw new Exception('location_id '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    }
+                                        
+                    $restro = $this->RestaurantModel->findByRestroLocationService($id, $location_id, $service_type); 
+                    $restro->reviews = $this->RatingModel->find(array('restro_id'=>$id));
+                    
+                    $resource = $restro;
                 }
 
                 if(!$resource) {

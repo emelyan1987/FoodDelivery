@@ -1261,9 +1261,25 @@
           {
             "name": "id",
             "allowMultiple": false,
-            "required": false,
+            "required": true,
             "in": "path",
             "description": "Restaurant id",
+            "type": "integer"
+          },
+          {
+            "name": "location_id",
+            "allowMultiple": false,
+            "required": true,
+            "in": "query",
+            "description": "Location id",
+            "type": "integer"
+          },
+          {
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "in": "query",
+            "description": "Service type",
             "type": "integer"
           }
         ],

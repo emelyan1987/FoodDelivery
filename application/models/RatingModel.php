@@ -45,7 +45,7 @@
         public function find($params=null, $fields=array()){   
             $this->db->select((empty($fields)?'r.*':implode(',',$fields)).', CONCAT(p.f_name," ", p.l_name) AS user_name');
             $this->db->from('restro_rating AS r');   
-            $this->db->join('user_profiles AS p', 'r.user_id=p.user_id');
+            $this->db->join('user_profiles AS p', 'r.user_id=p.user_id', 'left');
             if(isset($params)) {
                 if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('r.user_id', $params["user_id"]);
                 if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('r.restro_id', $params["restro_id"]);
