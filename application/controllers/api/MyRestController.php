@@ -22,6 +22,7 @@
             
             $this->load->model('UserModel');
             $this->load->model('UserAccessTokenModel');      
+            $this->load->model('UserProfileModel');      
         } 
         
         function validateAccessToken() {
@@ -47,6 +48,7 @@
                 throw new Exception($this->lang->line('user_invalid'), RESULT_ERROR_USER_INVALID);
             }
             
+            $user->profile = $this->UserProfileModel->findByUserId($user->id);
             $this->user = $user;
         }                     
                        

@@ -477,6 +477,7 @@ $route['api/check_token'] = '/api/UserController/check_token';
 $route['api/users/me'] = '/api/UserController/me'; 
 $route['api/users/profile'] = '/api/UserController/profile'; 
 $route['api/users/address'] = '/api/UserController/address'; 
+$route['api/users/sub_address'] = '/api/UserController/sub_address'; 
 $route['api/users/language'] = '/api/UserController/language'; 
 $route['api/users/subscription'] = '/api/UserController/subscription';         
 $route['api/users/change_mobile_no'] = '/api/UserController/change_mobile_no'; 
@@ -497,6 +498,7 @@ $route['api/restaurants/items/(:num)'] = '/api/RestaurantController/items/$1';
 
 
 $route['api/orders'] = '/api/OrderController'; 
+$route['api/orders/(:num)/details'] = '/api/OrderController/details/$1'; 
 $route['api/orders/cart'] = '/api/OrderController/cart'; 
 $route['api/orders/cart/(:num)'] = '/api/OrderController/cart/$1'; 
 $route['api/orders/discount'] = '/api/OrderController/discount'; 

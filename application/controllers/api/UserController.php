@@ -32,7 +32,7 @@
             $this->methods['users_delete']['limit'] = 50; // 50 requests per hour per user/key  
 
             $this->load->model('UserSmsModel');
-            $this->load->model('UserProfileModel');
+            $this->load->model('RestroCustomerAddressModel');
 
 
             $this->load->config('twilio');
@@ -377,6 +377,7 @@
 
                 $user = $this->user;
                 $user->profile = $profile;
+                $user->addresses = $this->RestroCustomerAddressModel->find(array("user_id"=>$this->user->id));
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,
@@ -500,7 +501,61 @@
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             } 
-        }         
+        }        
+
+        public function sub_address_post() {
+            try { 
+                $this->validateAccessToken();
+
+                $billing_full_name = $this->post('billing_full_name'); 
+                $billing_addres_1 = $this->post('billing_addres_1'); 
+                $billing_address_2 = $this->post('billing_address_2'); 
+                $billing_city = $this->post('billing_city'); 
+                $billing_state = $this->post('billing_state'); 
+                $billing_zip_code = $this->post('billing_zip_code'); 
+                $billing_phoneno = $this->post('billing_phoneno'); 
+                $shipping_full_name = $this->post('shipping_full_name'); 
+                $shipping_address_1 = $this->post('shipping_address_1'); 
+                $shipping_address_2 = $this->post('shipping_address_2'); 
+                $shipping_city = $this->post('shipping_city'); 
+                $shipping_state = $this->post('shipping_state'); 
+                $shipping_zip_code = $this->post('shipping_zip_code'); 
+                $shipping_phoneno = $this->post('shipping_phoneno'); 
+
+                $data = array();
+                if(isset($billing_full_name)) $data["billing_full_name"] = $billing_full_name; 
+                if(isset($billing_addres_1)) $data["billing_addres_1"] = $billing_addres_1;                  
+                if(isset($billing_address_2)) $data["billing_address_2"] = $billing_address_2;                  
+                if(isset($billing_city)) $data["billing_city"] = $billing_city;
+                if(isset($billing_state)) $data["billing_state"] = $billing_state;
+                if(isset($billing_zip_code)) $data["billing_zip_code"] = $billing_zip_code;
+                if(isset($billing_phoneno)) $data["billing_phoneno"] = $billing_phoneno;
+                if(isset($shipping_full_name)) $data["shipping_full_name"] = $shipping_full_name;
+                if(isset($shipping_address_1)) $data["shipping_address_1"] = $shipping_address_1;
+                if(isset($shipping_address_2)) $data["shipping_address_2"] = $shipping_address_2;
+                if(isset($shipping_city)) $data["shipping_city"] = $shipping_city;
+                if(isset($shipping_state)) $data["shipping_state"] = $shipping_state;
+                if(isset($shipping_zip_code)) $data["shipping_zip_code"] = $shipping_zip_code;
+                if(isset($shipping_phoneno)) $data["shipping_phoneno"] = $shipping_phoneno;
+
+                $data["user_id"] = $this->user->id;
+                if(!empty($data))
+                    $insert_id = $this->RestroCustomerAddressModel->create($data);
+
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$this->RestroCustomerAddressModel->findById($insert_id)
+                    ), REST_Controller::HTTP_OK); 
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            } 
+        }        
+                                     
         
         public function language_post() {
             try { 

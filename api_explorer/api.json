@@ -579,6 +579,58 @@
         }
       }
     },
+    "/users/sub_address": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for inserting user sub address",
+        "operationId": "userAddress",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, {
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/userSubAddress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/users/language": {
       "post": {
         "tags": [
@@ -1499,6 +1551,198 @@
         }
       }
     },
+    "/orders": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting order list for specific user",
+        "operationId": "getOrders",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for creating order item",
+        "operationId": "createOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          }, 
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "area_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "area id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "restaurant id",
+            "type": "integer"
+          }, 
+          {                         
+            "in": "body",
+            "name": "body",  
+            "required": true,
+            "description": "Cart JSON Object",
+            "schema": {
+                "$ref": "#/definitions/orderCreateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}/details": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting details for specific order",
+        "operationId": "getOrderDetails",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "path",
+            "name": "id",  
+            "required": true,
+            "description": "order id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/orders/cart": {
       "get": {
         "tags": [
@@ -2034,6 +2278,52 @@
         }
       }
     },
+    "userSubAddress": {
+      "properties": {
+        "billing_full_name": {
+          "type": "string"
+        },
+        "billing_addres_1": {
+          "type": "string"
+        },
+        "billing_address_2": {
+          "type": "string"
+        },
+        "billing_city": {
+          "type": "string"
+        },
+        "billing_state": {
+          "type": "string"
+        },
+        "billing_zip_code": {
+          "type": "string"
+        },
+        "billing_phoneno": {
+          "type": "string"
+        },
+        "shipping_full_name": {
+          "type": "string"
+        },
+        "shipping_address_1": {
+          "type": "string"
+        },
+        "shipping_address_2": {
+          "type": "string"
+        },
+        "shipping_city": {
+          "type": "string"
+        },
+        "shipping_state": {
+          "type": "string"
+        },
+        "shipping_zip_code": {
+          "type": "string"
+        },
+        "shipping_phoneno": {
+          "type": "string"
+        }
+      }
+    },
     "userSubscription": {
       "properties": {
         "notification_subscription": {
@@ -2075,6 +2365,44 @@
         },
         "spacial_request": {
           "type": "string"
+        }
+      }
+    },
+    "orderCreateModel": {
+      "required": ["product_id", "quantity"],
+      "properties": {
+        "redeem_type": {
+          "type": "integer"
+        },
+        "coupon_code": {
+          "type": "string"
+        },
+        "used_points": {
+          "type": "float"
+        },
+        "schedule_date": {
+          "type": "string"
+        },
+        "schedule_time": {
+          "type": "string"
+        },
+        "total_price": {
+          "type": "float"
+        },
+        "charge_price": {
+          "type": "float"
+        },
+        "payment_method": {
+          "type": "integer"
+        },
+        "address_id": {
+          "type": "integer"
+        },
+        "extra_direction": {
+          "type": "string"
+        },
+        "order_points": {
+          "type": "float"
         }
       }
     }
