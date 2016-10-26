@@ -58,7 +58,7 @@
         {                 
             try {                
                 $this->validateAccessToken();
-                
+
                 $service_type = $this->get('service_type');
                 if(!isset($service_type)) {
                     throw new Exception('service_type '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
@@ -68,7 +68,7 @@
                 {               
                     $params = array();
                     $params["user_id"] = $this->user->id;
-                    
+
                     $resource = $this->OrderModel->find($service_type, $params); 
                 } else {                         
                     $resource = $this->OrderModel->findById($service_type, $id); 
@@ -89,17 +89,17 @@
                     ), REST_Controller::HTTP_OK);
             }
         }
-         
+
         public function details_get($id)
         {                 
             try {                
                 $this->validateAccessToken();
-                
+
                 $service_type = $this->get('service_type');
                 if(!isset($service_type)) {
                     throw new Exception('service_type '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
-                
+
                 if(!isset($id)) {
                     throw new Exception('id '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
@@ -142,8 +142,9 @@
 
                 $redeem_type = $this->post('redeem_type');
                 $coupon_code = $this->post('coupon_code');
-                    
-                $discount_amount = $this->calculate_discount($service_type, $restro_id, $redeem_type, $coupon_code);
+
+                $price = $this->getPriceInfo($service_type, $restro_id, $redeem_type, $coupon_code);
+                $discount_amount = $discount["discount_amount"];
 
                 $order['coupon_point_apply'] = $redeem_type;
                 $order['discount_amount'] = $discount_amount;
@@ -154,17 +155,11 @@
                     }
                     $order['coupon_code'] = $coupon_code;
                 } else if($redeem_type == 2) {  // Loyalty Points
-                    $used_points = $this->post('used_points');
-                    if(!isset($used_points)) {
-                        throw new Exception('used_points '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                    }
-                    $order['used_points'] = $hd_used_points;
+                    $used_points = $discount["used_points"];                    
+                    $order['used_points'] = $used_points;
                 } else if($redeem_type == 3) {  // Mataam Points
-                    $used_points = $this->post('used_points');
-                    if(!isset($used_points)) {
-                        throw new Exception('used_points '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                    }
-                    $order['used_points'] = $hd_used_points;
+                    $used_points = $discount["used_points"];
+                    $order['used_points'] = $used_points;
                 }
 
                 $schedule_date = $this->post('schedule_date');
@@ -253,16 +248,15 @@
                 $order = $this->OrderModel->findById($service_type, $order_id);
                 $order->details = $this->OrderDetailModel->find($service_type, array('order_id'=>$order_id));
 
-                // Update user points balance
-                if($redeem_type == 2) {  // Loyalty Points                    
-                    // Update user loyalty points on profile
-                    $remain_points = $this->user->profile->points - $used_points;
-                    $this->UserProfileModel->save($this->user->id, array('points'=>$remain_points));
-                } else if($redeem_type == 3) {  // Mataam Points
-                    // Update user mataam points on profile
-                    $remain_points = $this->user->profile->mataam_points - $used_points;
-                    $this->UserProfileModel->save($this->user->id, array('mataam_points'=>$remain_points));
-                }
+                // Update user loyalty points on profile
+                $gained_points = $discount["gained_points"];
+                $remain_points = $this->user->profile->points - $used_points + $gained_points;
+                // Update user mataam points on profile
+                $gained_mataam_points = 
+                $remain_points = $this->user->profile->mataam_points - $used_points + $gained_points;
+                $this->UserProfileModel->save($this->user->id, array('mataam_points'=>$remain_points));
+                $this->UserProfileModel->save($this->user->id, array('points'=>$remain_points));
+
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$order
@@ -466,29 +460,29 @@
             }
         }         
 
-        public function discount_get()
+        public function sum_get()
         {                 
             try {                
                 $this->validateAccessToken();
 
                 $service_type = $this->get('service_type');                 
+                if(!isset($service_type)) {
+                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
 
                 $restro_id = $this->get('restro_id');
                 if(!isset($restro_id)) {
                     throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
 
-                $redeem_type = $this->get('redeem_type');
-                if(!isset($redeem_type)) {
-                    throw new Exception('redeem_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                $area_id = $this->get('area_id');
+                if(!isset($area_id)) {
+                    throw new Exception('area_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
-                $coupon_code = $this->get('coupon_code');
-
-                $resource = array("discount_amount"=>$this->calculate_discount($service_type, $restro_id, $redeem_type, $coupon_code)); 
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
-                    "resource"=>$resource
+                    "resource"=>$this->getSum($this->user->id, $service_type, $restro_id, $area_id)
                     ), REST_Controller::HTTP_OK);
 
             } catch (Exception $e) {
@@ -499,36 +493,216 @@
             }
         } 
 
-        public function calculate_discount($service_type, $restro_id, $redeem_type, $coupon_code) {
-            $params = array();
-            $params["user_id"] = $this->user->id; 
-            $params["restro_id"] = $restro_id;
+        public function discount_get()
+        {                 
+            try {                
+                $this->validateAccessToken();
 
-            if(isset($service_type)) {
-                $carts = $this->CartModel->find($service_type, $params);
-            } else {
-                $carts = array_merge($this->CartModel->find(1, $params), $this->CartModel->find(2, $params), $this->CartModel->find(3, $params), $this->CartModel->find(4, $params));                        
-            }       
+                $redeem_type = $this->get('redeem_type');                 
+                if(!isset($redeem_type)) {
+                    throw new Exception('redeem_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $service_type = $this->get('service_type');                 
+                if(!isset($service_type)) {
+                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $restro_id = $this->get('restro_id');
+                if(!isset($restro_id)) {
+                    throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $location_id = $this->get('location_id');
+                if(!isset($restro_id)) {
+                    throw new Exception('location_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $coupon_code = $this->get('coupon_code');
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$this->getDiscount($redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code)
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        } 
+
+        public function point_get()
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $service_type = $this->get('service_type');                 
+                if(!isset($service_type)) {
+                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $restro_id = $this->get('restro_id');
+                if(!isset($restro_id)) {
+                    throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $location_id = $this->get('location_id');
+                if(!isset($restro_id)) {
+                    throw new Exception('location_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$this->getPoint($this->user->id, $service_type, $restro_id, $location_id)
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        } 
+
+        public function getPoint($user_id, $service_type, $restro_id, $location_id) {                       
+
+            $carts = $this->CartModel->find($service_type, array(
+                "user_id"   => $user_id, 
+                "restro_id" => $restro_id
+            ));       
 
             if(!$carts) {
                 throw new Exception('Cart list ' . $this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
             }
 
-            $total_price = 0; $total_point = 0;
+            $total_amount = 0; 
+            $loyalty_gained_points = 0;
             foreach($carts as $cart) {
-                $total_price += $cart->price * $cart->quantity;
+                $total_amount += $cart->price * $cart->quantity;
 
                 $item = $this->RestroItemModel->findById($cart->product_id);    
-                $total_point += $item->redeem_point * $cart->quantity;
+                $loyalty_gained_points += $item->redeem_point * $cart->quantity;
             }
 
+            // Calculate Loyalty Point 
+            $user_loyalty_points = $this->user->profile->points;
 
-            if($redeem_type == 1) { // Redeem Coupon
-                if(!isset($coupon_code)) {
-                    throw new Exception('coupon_code ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+            $loyalty_point = $this->LoyaltyPointModel->findOne(array(
+                "restro_id"     => $restro_id,
+                "location_id"   => $location_id,
+                "service_id"    => $service_type
+            ));
+
+            $loyalty_discount = 0; $loyalty_used_points = 0;  
+            if($loyalty_point) {
+                if($user_loyalty_points >= $loyalty_point->from1) {
+                    $loyalty_discount = $loyalty_point->discount1;
+                    $loyalty_used_points = $loyalty_point->from1;
                 }
+                if($user_loyalty_points >= $loyalty_point->from2 && $loyalty_discount < $loyalty_point->discount2) {
+                    $loyalty_discount = $loyalty_point->discount2;
+                    $loyalty_used_points = $loyalty_point->from2;
+                }
+                if($user_loyalty_points >= $loyalty_point->from3 && $loyalty_discount < $loyalty_point->discount3) {
+                    $loyalty_discount = $loyalty_point->discount3;
+                    $loyalty_used_points = $loyalty_point->from3;
+                }
+            }
 
-                $coupon = $this->CouponModel->findOne(array("coupon_code"=>$coupon_code));
+            $loyalty_discount_amount = $total_amount * $loyalty_discount / 100;
+
+
+            // Calculate Mataam Point
+            $user_mataam_points = $this->user->profile->mataam_points;
+
+            $mataam_point = $this->MataamPointModel->findByServiceId($service_type);                    
+
+            $mataam_discount = 0; $mataam_used_points = 0; $mataam_gained_points = 0;
+
+            if($mataam_point) {                
+                if($user_mataam_points >= $mataam_point->from) {
+                    $mataam_discount = $mataam_point->discount;
+                    $mataam_used_points = $mataam_point->from;    
+                }
+                if($mataam_point->amount > 0) {
+                    $mataam_gained_points = ($total_amount / $mataam_point->amount) * $mataam_point->point;
+                }
+            }
+
+            $mataam_discount_amount = ($total_amount * $mataam_discount) / 100;
+
+
+            $result = array(
+                'loyalty'=>array(
+                    'gained_points'     => $loyalty_gained_points, 
+                    'used_points'       => $loyalty_used_points,
+                    'discount_amount'   => $loyalty_discount_amount,
+                    'balance'           => $user_loyalty_points
+                ), 
+                'mataam'=>array(
+                    'gained_points'     => $mataam_gained_points, 
+                    'used_points'       => $mataam_used_points,
+                    'discount_amount'   => $mataam_discount_amount,
+                    'balance'           => $user_mataam_points
+                )
+            );
+
+            return $result;
+        }
+
+        public function getSum($user_id, $service_type, $restro_id, $area_id=null) {                       
+
+            $params = array();
+            $params["user_id"] = $user_id; 
+            $params["restro_id"] = $restro_id;
+
+            $carts = $this->CartModel->find($service_type, array(
+                'user_id'   => $user_id,
+                'restro_id' => $restro_id
+            ));       
+
+            if(!$carts) {
+                throw new Exception('Cart list ' . $this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+            }
+
+            $total_amount = 0; 
+            foreach($carts as $cart) {
+                $total_amount += $cart->price * $cart->quantity;
+            }
+
+            $result = array('total_amount'=>$total_amount);
+            if(($service_type==1 || $service_type==2) && $area_id) { // service type is "DELIVERY" or "CATERING"      
+                throw new Exception('Cart list ' . $this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);        
+                $charge_amount = $this->RestroCityAreaModel->getCharge($restro_id, $area_id, $service_type);
+                $result = array_merge($result, array('charge_amount'=>$charge_amount));
+            }
+
+            return $result;
+        }
+
+        public function getDiscount($redeem_type, $user_id, $service_type, $restro_id, $location_id, $coupon_code) {
+            $carts = $this->CartModel->find($service_type, array(
+                "user_id"   => $user_id, 
+                "restro_id" => $restro_id
+            ));     
+
+            if(!$carts) {
+                throw new Exception('Cart list ' . $this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+            }
+
+            $total_amount = 0; 
+            foreach($carts as $cart) {
+                $total_amount += $cart->price * $cart->quantity;
+            }
+
+            if($redeem_type == 1) { // Coupon
+                $coupon = $this->CouponModel->findOne(array(
+                    "coupon_code"   => $coupon_code, 
+                    "location_id"   => $location_id, 
+                    "restro_id"     => $restro_id
+                ));
                 if(!$coupon) {
                     throw new Exception($this->lang->line('coupon_code_invalid'), RESULT_ERROR_PARAMS_INVALID);
                 }
@@ -537,53 +711,54 @@
                     $today = date('Y-m-d');
                     if($today >= $coupon->from_date && $today <= $coupon->to_date)
                     {                                 
-                        return ($total_price * $coupon->discount) / 100;
+                        return array('discount_amount'=>($total_amount * $coupon->discount) / 100);
                     } else {
                         throw new Exception($this->lang->line('coupon_code_expired'), RESULT_ERROR_PARAMS_INVALID);
                     }
                 } else {
                     throw new Exception($this->lang->line('coupon_code_invalid'), RESULT_ERROR_PARAMS_INVALID);
-                } 
-            } else if($redeem_type == 2) {  // Loyalty Points
-                if(!isset($service_type)) {
-                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
-                $params["service_id"] = $service_type;
-                $loyalty_point = $this->LoyaltyPointModel->findOne($params);
+            } else if($redeem_type == 2) {  // Loyalty Point
+                // Calculate Loyalty Point 
+                $user_points = $this->user->profile->points;
 
-                if(!$loyalty_point) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
+                $loyalty_point = $this->LoyaltyPointModel->findOne(array(
+                    "restro_id"     => $restro_id,
+                    "location_id"   => $location_id,
+                    "service_id"    => $service_type
+                ));
+
+                $discount = 0;  
+                if($loyalty_point) {
+                    if($user_points >= $loyalty_point->from1) {
+                        $discount = $loyalty_point->discount1;
+                    }
+                    if($user_points >= $loyalty_point->from2 && $discount < $loyalty_point->discount2) {
+                        $discount = $loyalty_point->discount2;
+                    }
+                    if($user_points >= $loyalty_point->from3 && $discount < $loyalty_point->discount3) {
+                        $discount = $loyalty_point->discount3;
+                    }
                 }
 
-                $discount = 0;
-                if($total_point >= $loyalty_point->from1 && $total_point <= $loyalty_point->to1) {
-                    $discount = $loyalty_point->discount1;
-                } else if($total_point >= $loyalty_point->from2 && $total_point <= $loyalty_point->to2) {
-                    $discount = $loyalty_point->discount2;
-                } else if($total_point >= $loyalty_point->from3 && $total_point <= $loyalty_point->to3) {
-                    $discount = $loyalty_point->discount3;
-                }
+                return array('discount_amount'=>($total_amount * $discount) / 100);
+            } else if($redeem_type == 3) {  // Mataam Point
+                // Calculate Mataam Point
+                $user_points = $this->user->profile->mataam_points;
 
-                return ($total_price * $discount) / 100;
-            } else if($redeem_type == 3) {  // Mataam Points
-                if(!isset($service_type)) {
-                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                }
                 $mataam_point = $this->MataamPointModel->findByServiceId($service_type);                    
 
-                if(!$mataam_point) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
-                } 
+                $discount = 0; 
 
-                $discount = 0;
-                if($total_point >= $mataam_point->from && $total_point <= $mataam_point->to) {
-                    $discount = $mataam_point->discount;
+                if($mataam_point) {                
+                    if($user_points >= $mataam_point->from) {
+                        $discount = $mataam_point->discount;   
+                    }
                 }
 
-                return ($total_price * $discount) / 100;
+                return array('discount_amount'=>($total_amount * $discount) / 100);
             }
-            
-            return 0;
+
         }
 
 }

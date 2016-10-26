@@ -2107,12 +2107,146 @@
         }
       }
     },
+    "/orders/sum": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for calculating sum amount",
+        "operationId": "getSum",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": false,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "area_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "area id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/point": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for calculating point",
+        "operationId": "getPoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "allowMultiple": false,
+            "required": false,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "location id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/orders/discount": {
       "get": {
         "tags": [
           "orders"
         ],
-        "description": "This API is responsible for getting redeem discount amount",
+        "description": "This API is responsible for calculating discount amount",
         "operationId": "getDiscount",
         "consumes": [
           "application/json"
@@ -2131,8 +2265,8 @@
             "in": "query",
             "name": "redeem_type",
             "allowMultiple": false,
-            "required": true,
-            "description": "redeem type(1: Redeem Coupon, 2: Loyalty Points, 3: Mataam Points)",
+            "required": false,
+            "description": "redeem type(1:Coupon, 2:Loyalty Point, 3:Mataam Point)",
             "type": "integer"
           },
           {                         
@@ -2153,11 +2287,19 @@
           },
           {                         
             "in": "query",
+            "name": "location_id",
+            "allowMultiple": false,
+            "required": false,
+            "description": "location id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
             "name": "coupon_code",
             "allowMultiple": false,
             "required": false,
-            "description": "coupon code",
-            "type": "integer"
+            "description": "coupon id",
+            "type": "string"
           }
         ],
         "responses": {

@@ -92,5 +92,36 @@
             //echo $this->db->last_query();
         }
 
+        public function getCharge($restro_id, $area_id, $service_id){
+            $where = "FIND_IN_SET('".$area_id."',area) AND service_id = '".$service_id."'";
+
+            $this->db->select('area, delivery_price');
+            $this->db->from('restro_city_area'); 
+            $this->db->where($where);
+            $this->db->where('restro_id', $restro_id);  
+            $this->db->group_by("id");  
+            $this->db->order_by("id", "desc"); 
+            $query = $this->db->get();
+            //echo $this->db->last_query();
+            if($query->num_rows() > 0)
+            {
+                $query = $query->result();
+                foreach($query as $qr => $qm){
+                    $ex_arr = explode(',',$qm->area); 
+                    $exprice = explode(',',$qm->delivery_price); 
+
+
+                    $indexId = array_search($location_id,$ex_arr);
+
+                    return $myPrice =  $exprice[$indexId];
+                }
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
 
 }
