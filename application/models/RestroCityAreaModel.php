@@ -111,7 +111,7 @@
                     $exprice = explode(',',$qm->delivery_price); 
 
 
-                    $indexId = array_search($location_id,$ex_arr);
+                    $indexId = array_search($area_id,$ex_arr);
 
                     return $myPrice =  $exprice[$indexId];
                 }

@@ -1720,6 +1720,14 @@
             "required": true,
             "description": "restaurant id",
             "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "location id",
+            "type": "integer"
           }, 
           {                         
             "in": "body",
@@ -2579,7 +2587,7 @@
       }
     },
     "orderCreateModel": {
-      "required": ["product_id", "quantity"],
+      "required": ["schedule_date", "schedule_time", "payment_method", "address_id"],
       "properties": {
         "redeem_type": {
           "type": "integer"
@@ -2587,20 +2595,11 @@
         "coupon_code": {
           "type": "string"
         },
-        "used_points": {
-          "type": "float"
-        },
         "schedule_date": {
           "type": "string"
         },
         "schedule_time": {
           "type": "string"
-        },
-        "total_price": {
-          "type": "float"
-        },
-        "charge_price": {
-          "type": "float"
         },
         "payment_method": {
           "type": "integer"
@@ -2610,9 +2609,6 @@
         },
         "extra_direction": {
           "type": "string"
-        },
-        "order_points": {
-          "type": "float"
         }
       }
     }

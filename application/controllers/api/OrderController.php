@@ -135,32 +135,49 @@
                 if(!isset($area_id)) {
                     throw new Exception("area_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
+
                 $restro_id = $this->input->get('restro_id');
                 if(!isset($restro_id)) {
                     throw new Exception("restro_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
 
+                $location_id = $this->input->get('location_id');
+                if(!isset($location_id)) {
+                    throw new Exception("location_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
                 $redeem_type = $this->post('redeem_type');
                 $coupon_code = $this->post('coupon_code');
 
-                $price = $this->getPriceInfo($service_type, $restro_id, $redeem_type, $coupon_code);
-                $discount_amount = $discount["discount_amount"];
+                $sum = $this->getSum($this->user->id, $service_type, $restro_id, $area_id);
 
-                $order['coupon_point_apply'] = $redeem_type;
-                $order['discount_amount'] = $discount_amount;
+                $order['total'] = $sum['total_amount'];
+                $order['delivery_charges'] = $sum['charge_amount'];;
 
-                if($redeem_type == 1) { //  Redeem Coupon
-                    if(!isset($coupon_code)) {
-                        throw new Exception('coupon_code '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                    }
-                    $order['coupon_code'] = $coupon_code;
-                } else if($redeem_type == 2) {  // Loyalty Points
-                    $used_points = $discount["used_points"];                    
-                    $order['used_points'] = $used_points;
-                } else if($redeem_type == 3) {  // Mataam Points
-                    $used_points = $discount["used_points"];
-                    $order['used_points'] = $used_points;
-                }
+                if(isset($redeem_type)) {
+
+                    $discount = $this->getDiscount($redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code);
+                    $order['discount_amount'] = $discount['discount_amount'];
+
+                    $order['coupon_point_apply'] = $redeem_type;                
+
+                    $point = $this->getPoint($this->user->id, $service_type, $restro_id, $location_id);                
+
+                    if($redeem_type == 1) { //  Redeem Coupon
+                        if(!isset($coupon_code)) {
+                            throw new Exception('coupon_code '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                        }
+                        $order['coupon_code'] = $coupon_code;
+                    } else if($redeem_type == 2) {
+                        $order['used_points'] = $point['loyalty']['used_points'];
+                    } else if($redeem_type == 3) {
+                        $order['used_points'] = $point['mataam']['used_points'];
+                    }   
+                }  
+
+                $order['order_points'] = $point['loyalty']['gained_points'];       
+
+
 
                 $schedule_date = $this->post('schedule_date');
                 if(!isset($schedule_date)) {
@@ -178,17 +195,6 @@
                 $order['date'] = $schedule_date;  // Y-m-d
                 $order['time'] = $schedule_time;  // H:i:s
 
-                $total_price = $this->post('total_price');
-                if(!isset($total_price)) {
-                    throw new Exception('total_price '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                }                    
-                $order['total'] = $total_price;
-
-                $charge_price = $this->post('charge_price');
-                if(!isset($charge_price)) {
-                    throw new Exception('charge_price '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                }                                    
-                $order['delivery_charges'] = $charge_price;
 
                 $order['user_id'] = $this->user->id;
 
@@ -208,11 +214,7 @@
 
                 $order['extra_direction'] = $this->post('extra_direction'); 
 
-                $order_points = $this->post('order_points');
-                if(!isset($order_points)) {
-                    throw new Exception('order_points '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                }
-                $order['order_points'] = $order_points;
+
 
                 $location = $this->RestroCityAreaModel->getRestroOrderLocation($restro_id, $service_type, $area_id);
                 if($location['location_id'] != '')
@@ -220,6 +222,7 @@
                     $order['restro_location_id'] = $location['location_id'];
                 }
 
+                $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
                 $order_id = $this->OrderModel->create($service_type, $order);
 
                 $this->OrderModel->update($service_type, $order_id, array("order_no"=>$this->config->item('Start_order_id').$order_id));
@@ -627,7 +630,7 @@
                     $mataam_used_points = $mataam_point->from;    
                 }
                 if($mataam_point->amount > 0) {
-                    $mataam_gained_points = ($total_amount / $mataam_point->amount) * $mataam_point->point;
+                    $mataam_gained_points = round(($total_amount / $mataam_point->amount) * $mataam_point->point);
                 }
             }
 
@@ -674,7 +677,7 @@
 
             $result = array('total_amount'=>$total_amount);
             if(($service_type==1 || $service_type==2) && $area_id) { // service type is "DELIVERY" or "CATERING"      
-                throw new Exception('Cart list ' . $this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);        
+                //throw new Exception('Cart list ' . $this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);        
                 $charge_amount = $this->RestroCityAreaModel->getCharge($restro_id, $area_id, $service_type);
                 $result = array_merge($result, array('charge_amount'=>$charge_amount));
             }
