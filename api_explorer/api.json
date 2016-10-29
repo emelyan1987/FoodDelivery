@@ -2331,6 +2331,134 @@
           }
         }
       }
+    },
+    "/orders/times": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting time slots for reservation",
+        "operationId": "getTimeSlots",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "restaurant id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "allowMultiple": false,
+            "required": true,
+            "description": "location id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "reserve_time",
+            "allowMultiple": false,
+            "required": true,
+            "description": "reservation time(2016-10-28 13:00)",
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "people_number",
+            "allowMultiple": false,
+            "required": true,
+            "description": "Number of persons",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/reserve": {
+      "post": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for making reservation",
+        "operationId": "makeReservation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "body",
+            "name": "body",
+            "allowMultiple": true,
+            "required": true,
+            "description": "Reservation JSON object body",
+            "schema": {
+                "$ref": "#/definitions/reserveCreateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -2609,6 +2737,26 @@
         },
         "extra_direction": {
           "type": "string"
+        }
+      }
+    },
+    "reserveCreateModel": {
+      "required": ["restro_id", "location_id", "reserve_date", "reserve_time", "people_number"],
+      "properties": {
+        "restro_id": {
+          "type": "integer"
+        },
+        "location_id": {
+          "type": "integer"
+        },
+        "reserve_date": {
+          "type": "string"
+        },
+        "reserve_time": {
+          "type": "string"
+        },
+        "people_number": {
+          "type": "integer"
         }
       }
     }

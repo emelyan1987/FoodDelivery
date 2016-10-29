@@ -20,6 +20,10 @@
             $this->load->model('RestroCityAreaModel'); 
             $this->load->model('OrderModel'); 
             $this->load->model('OrderDetailModel'); 
+            $this->load->model('RestroSeatingHourModel'); 
+            $this->load->model('RestroTableOrderModel'); 
+
+            $this->load->helper('utils');
         } 
 
         private function validate() {
@@ -251,14 +255,131 @@
                 $order = $this->OrderModel->findById($service_type, $order_id);
                 $order->details = $this->OrderDetailModel->find($service_type, array('order_id'=>$order_id));
 
-                // Update user loyalty points on profile
-                $gained_points = $discount["gained_points"];
-                $remain_points = $this->user->profile->points - $used_points + $gained_points;
-                // Update user mataam points on profile
-                $gained_mataam_points = 
-                $remain_points = $this->user->profile->mataam_points - $used_points + $gained_points;
-                $this->UserProfileModel->save($this->user->id, array('mataam_points'=>$remain_points));
-                $this->UserProfileModel->save($this->user->id, array('points'=>$remain_points));
+                // Update user points on profile
+
+                $user_loyalty_points = $this->user->profile->points; $user_mataam_points = $this->user->profile->mataam_points;
+                if($redeem_type == 2) {
+                    $user_loyalty_points -= $point['loyalty']['used_points'];
+                } else if ($redeem_type == 3) {
+                    $user_mataam_points -= $point['mataam']['used_points'];
+                }
+
+                $user_loyalty_points += $point['loyalty']['gained_points'];
+                $user_mataam_points += $point['mataam']['gained_points'];
+
+                $this->UserProfileModel->save($this->user->id, array(
+                    'points'=>$user_loyalty_points,
+                    'mataam_points'=>$$user_mataam_points
+                ));
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$order
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        } 
+        public function reserve_post()
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $restro_id = $this->post('restro_id');
+                if(!isset($restro_id)) {
+                    throw new Exception("restro_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $location_id = $this->post('location_id');
+                if(!isset($location_id)) {
+                    throw new Exception("location_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $people_number = $this->post('people_number');
+                if(!isset($people_number)) {
+                    throw new Exception("people_number ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $reserve_date = $this->post('reserve_date');
+                if(!isset($reserve_date)) {
+                    throw new Exception("reserve_date ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $reserve_time = $this->post('reserve_time');
+                if(!isset($reserve_time)) {
+                    throw new Exception("reserve_time ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+
+                $weekday = strtolower(date('l', strtotime($reserve_date)));
+
+                $seating_infos = $this->RestroSeatingHourModel->find(array(
+                    'restro_id'     => $restro_id,
+                    'location_id'   => $location_id   
+                ));
+
+                $seating_info = null;
+                foreach($seating_infos as $item) {
+                    $from_time = $item->{$weekday.'_from'};
+                    $to_time = $item->{$weekday.'_to'};
+
+                    if($reserve_time>=$from_time && $reserve_time<=$to_time) {
+
+                        $seating_info = array(
+                            'from'=>$item->{$weekday.'_from'},
+                            'to'=>$item->{$weekday.'_to'},
+                            'max_cover'=>$item->{$weekday.'_max_cover'},
+                            'largest_party_size'=>$item->{$weekday.'_largest_party_size'},
+                            'booking_limit'=>$item->{$weekday.'_booking_limit'},
+                            'cover_count'=>$item->{$weekday.'_cover_count'}
+                        );
+
+                        break;  
+                    }
+                }
+
+                if($seating_info === null || !$this->isAvailableTime($reserve_date, $reserve_time, $seating_info, $people_number, $restro_id, $location_id))  {
+                    throw new Exception($this->lang->line('time_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $largest_party_size = $seating_info['largest_party_size'];
+                if($largest_party_size > 0) {             
+                    $order_table_count = floor($people_number / $largest_party_size) + 1;   
+                } else {
+                    $order_table_count = 1;
+                }
+
+                $order['table_count'] = $order_table_count;
+                
+                $order['restro_id'] = $restro_id;
+                $order['location_id'] = $location_id;
+
+                $order['date'] = $reserve_date;  // Y-m-d
+                $order['time'] = $reserve_time;  // H:i
+
+
+                $order['user_id'] = $this->user->id;
+
+                /*$payment_method = $this->post('payment_method');
+                if(!isset($payment_method)) {
+                throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                } 
+                $order['payment_method'] = $payment_method;*/
+
+                $order['status'] = 1;                
+
+                $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
+                $order_id = $this->RestroTableOrderModel->create($order);
+
+                $this->RestroTableOrderModel->update($order_id, array("order_no"=>$this->config->item('Start_order_id').$order_id));
+
+                $order_details['order_id'] = $order_id;
+
+                $order = $this->RestroTableOrderModel->findById($order_id);
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
@@ -569,6 +690,129 @@
             }
         } 
 
+        public function times_get()
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $restro_id = $this->get('restro_id');
+                if(!isset($restro_id)) {
+                    throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $location_id = $this->get('location_id');
+                if(!isset($restro_id)) {
+                    throw new Exception('location_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $people_number = $this->get('people_number');
+                if(!isset($people_number)) {
+                    throw new Exception('people_number ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $reserve_time = $this->get('reserve_time');
+                if(!isset($reserve_time)) {
+                    throw new Exception('reserve_time ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $reserve_time = strtotime($reserve_time);
+
+                $weekday = strtolower(date('l', $reserve_time));
+
+                $seating_infos = $this->RestroSeatingHourModel->find(array(
+                    'restro_id'     => $restro_id,
+                    'location_id'   => $location_id   
+                ));
+
+                $times = array();
+                foreach($seating_infos as $item) {
+                    $from_time = $item->{$weekday.'_from'};
+                    $to_time = $item->{$weekday.'_to'};
+
+                    if($from_time!=''&&$to_time!='') {
+
+                        $from_time = strtotime($from_time);
+                        $to_time = strtotime($to_time);
+
+                        $interval = $item->{$weekday.'_booking_limit'}?$item->{$weekday.'_booking_limit'}:30;
+
+                        $min = $interval * 60;
+                        if($from_time % $min>0) $from_time += ($min - $from_time % $min);
+                        if($to_time % $min>0) $to_time -= ($min - $to_time % $min);
+
+                        for($t=$from_time; $t<=$to_time; $t+=$min) {
+                            $times[] = array(
+                                'time'=>$t,
+                                'seating_info'=>array(
+                                    'from'=>$item->{$weekday.'_from'},
+                                    'to'=>$item->{$weekday.'_to'},
+                                    'max_cover'=>$item->{$weekday.'_max_cover'},
+                                    'largest_party_size'=>$item->{$weekday.'_largest_party_size'},
+                                    'booking_limit'=>$item->{$weekday.'_booking_limit'},
+                                    'cover_count'=>$item->{$weekday.'_cover_count'}
+                                )
+                            );
+                        }   
+                    }
+                }
+
+                $time_cnt = count($times);
+
+                if($time_cnt == 0) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
+                }
+
+
+                array_sort_by_column($times, 'time');
+
+                $selected_times = array();
+                if($time_cnt <= 5) {                        
+                    $selected_times = $times;
+                } else {
+                    $closest = null; $index = null;
+                    foreach ($times as $i=>$t) {
+                        if ($closest === null || abs($reserve_time - $closest) > abs($t['time'] - $reserve_time)) {
+                            $closest = $t['time'];
+                            $index = $i;
+                        }
+                    }                   
+
+                    if($index < 2) $index = 0;
+                    else if($index >= $time_cnt-2) $index = $time_cnt-5;
+                        else $index -= 2;
+
+                    for($i=$index; $i<$index+5; $i++) {
+                        $selected_times[] = $times[$i];
+                    }
+                }
+
+                $time_slots = array();
+                foreach($selected_times as $t) {
+                    $time_slots[] = array(
+                        'time'=>date('H:i', $t['time']),
+                        'available'=>$this->isAvailableTime(date('Y-m-d', $reserve_time), date('H:i', $t['time']), $t['seating_info'], $people_number, $restro_id, $location_id),
+                        'seating_info'=>$t['seating_info']
+                    );
+                }
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>array(
+                        'weekday'=>$weekday, 
+                        'reservation_date'=>date('Y-m-d', $reserve_time), 
+                        'reservation_time'=>date('H:i', $reserve_time), 
+                        //'index'=>$index, 
+                        'slots'=>$time_slots, 
+                        //'closest'=>$closest
+                    )), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        } 
+
         public function getPoint($user_id, $service_type, $restro_id, $location_id) {                       
 
             $carts = $this->CartModel->find($service_type, array(
@@ -764,4 +1008,39 @@
 
         }
 
+        public function isAvailableTime($date, $time, $seating_info, $people_number, $restro_id, $location_id) {
+
+            $orders = $this->RestroTableOrderModel->find(array(
+                'restro_id'=>$restro_id,
+                'location_id'=>$location_id,
+                'date'=>$date,
+                'from_time'=>$seating_info['from'],
+                'to_time'=>$seating_info['to']
+            ));
+
+            $table_count = 0; $cover_count = 0;
+            foreach($orders as $order) {
+                $table_count += $order->table_count;
+
+                if($order->time == $time) {
+                    $cover_count += $order->table_count;
+                }
+            }
+
+            if($table_count >= $seating_info['max_cover']) return false;
+
+            if($cover_count >= $seating_info['cover_count']) return false;
+
+            $largest_party_size = $seating_info['largest_party_size'];
+            if($largest_party_size > 0) {             
+                $order_table_count = ($people_number / $largest_party_size) + 1;    
+            } else {
+                $order_table_count = 1;
+            }
+
+
+            if($cover_count+$order_table_count > $seating_info['cover_count']) return false;
+
+            return true;
+        }
 }

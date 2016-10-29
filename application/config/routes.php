@@ -505,6 +505,8 @@ $route['api/orders/cart/(:num)'] = '/api/OrderController/cart/$1';
 $route['api/orders/sum'] = '/api/OrderController/sum'; 
 $route['api/orders/point'] = '/api/OrderController/point'; 
 $route['api/orders/discount'] = '/api/OrderController/discount'; 
+$route['api/orders/times'] = '/api/OrderController/times'; 
+$route['api/orders/reserve'] = '/api/OrderController/reserve'; 
 
 
 
