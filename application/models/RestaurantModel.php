@@ -47,7 +47,7 @@
 
             $service_type = $params["service_type"];
 
-            $where = '1=1';                      
+            $where = 'trash != 1';                      
             if(isset($params["area"])) { 
                 $where .= " AND l.area=" . $params["area"];
             }   
@@ -63,7 +63,7 @@
 
             $query = "SELECT a.*, AVG(rt.star_value) AS rating, pt.id AS promo_id FROM 
             (
-            SELECT r.id AS restro_id, r.restro_name, l.id AS location_id, l.location_name, l.telephones, l.latitude, l.longitude, ct.city_name AS city, a.name AS area, l.block, l.street, l.building, s.open_status, s.open_from, s.open_to, p.method_type AS payments, w.min_order, w.order_days*24*60+w.order_hour*60+w.order_minitue AS order_time, w.monday_from, w.monday_to, w.tuesday_from, w.tuesday_to, w.wednesday_from, w.wednesday_to, w.thursday_from, w.thursday_to, w.friday_from, w.friday_to, w.saturday_from, w.saturday_to, w.sunday_from, w.sunday_to 
+            SELECT r.id AS restro_id, r.restro_name, r.restaurant_logo AS restro_logo, r.assign_featured, l.id AS location_id, l.location_name, l.telephones, l.latitude, l.longitude, ct.city_name AS city, a.name AS area, l.block, l.street, l.building, s.open_status, s.open_from, s.open_to, p.method_type AS payments, w.min_order, w.order_days*24*60+w.order_hour*60+w.order_minitue AS order_time, w.monday_from, w.monday_to, w.tuesday_from, w.tuesday_to, w.wednesday_from, w.wednesday_to, w.thursday_from, w.thursday_to, w.friday_from, w.friday_to, w.saturday_from, w.saturday_to, w.sunday_from, w.sunday_to 
             FROM restro_info AS r 
             INNER JOIN restro_location AS l ON l.restro_id=r.id
             INNER JOIN restro_cuisine_ids AS c ON c.restro_id=r.id
