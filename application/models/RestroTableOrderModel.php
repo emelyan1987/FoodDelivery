@@ -47,6 +47,7 @@
             $this->db->from('restro_table_order');   
 
             if(isset($params)) {
+                if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
                 if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('restro_id', $params["restro_id"]);
                 if(isset($params["location_id"]) && $params["location_id"]!="") $this->db->where('location_id', $params["location_id"]);
                 if(isset($params["date"]) && $params["date"]!="") $this->db->where('date', $params["date"]);

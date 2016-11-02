@@ -40,7 +40,7 @@
           "auth"
         ],
         "description": "This API is responsible for login Customer",
-        "operationId": "",
+        "operationId": "login",
         "consumes": [
           "application/json"
         ],
@@ -86,7 +86,7 @@
           "auth"
         ],
         "description": "This API is responsible for checking access token",
-        "operationId": "",
+        "operationId": "checkToken",
         "consumes": [
           "application/json"
         ],
@@ -230,7 +230,6 @@
           },
           {
             "name": "id",
-            "allowMultiple": false,
             "required": false,
             "in": "path",
             "description": "User id",
@@ -278,7 +277,6 @@
             "type": "string"
           },{
             "name": "id",
-            "allowMultiple": false,
             "required": true,
             "in": "path",
             "description": "User id",
@@ -333,7 +331,6 @@
             "type": "string"
           },{
             "name": "id",
-            "allowMultiple": false,
             "required": false,
             "in": "path",
             "description": "User id",
@@ -377,7 +374,6 @@
         "parameters": [
           {
             "name": "id",
-            "allowMultiple": false,
             "required": false,
             "in": "path",
             "description": "User id",
@@ -387,9 +383,7 @@
             "name": "mobile_no",
             "description": "Mobile number",
             "required": true,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           }
         ],
         "responses": {
@@ -430,7 +424,6 @@
         "parameters": [
           {
             "name": "id",
-            "allowMultiple": false,
             "required": false,
             "in": "path",
             "description": "User id",
@@ -440,17 +433,13 @@
             "name": "mobile_no",
             "description": "Mobile number",
             "required": true,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           }, {
             "in": "formData",
             "name": "code",
             "description": "Verify code",
             "required": true,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           }
         ],
         "responses": {
@@ -553,7 +542,6 @@
             "name": "profile_pic",
             "description": "user profile image",
             "required": true,
-            "allowMultiple": false,
             "type": "file"
           }
         ],
@@ -708,9 +696,7 @@
             "name": "language",
             "description": "Language(English, Arabic, ...)",
             "required": false,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           }
         ],
         "responses": {
@@ -854,17 +840,13 @@
             "name": "old_mobile_no",
             "description": "Old mobile number",
             "required": true,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           } , {
             "in": "formData",
             "name": "new_mobile_no",
             "description": "New mobile number",
             "required": true,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           }
         ],
         "responses": {
@@ -914,17 +896,13 @@
             "name": "old_password",
             "description": "Old password",
             "required": true,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           } , {
             "in": "formData",
             "name": "new_password",
             "description": "New password",
             "required": true,
-            "allowMultiple": false,
-            "type": "string",
-            "paramType": "formData"
+            "type": "string"
           }
         ],
         "responses": {
@@ -974,7 +952,6 @@
             "name": "keyword",
             "description": "Keyword to search(optional)",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           }
         ],
@@ -1025,14 +1002,12 @@
             "name": "city_id",
             "description": "City Id",
             "required": false,
-            "allowMultiple": false,
             "type": "integer"
           }, {
             "in": "query",
             "name": "keyword",
             "description": "Keyword to search(optional)",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           }
         ],
@@ -1083,7 +1058,6 @@
             "name": "keyword",
             "description": "Keyword to search(optional)",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           }
         ],
@@ -1134,7 +1108,6 @@
             "name": "keyword",
             "description": "Keyword to search(optional)",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           }
         ],
@@ -1185,7 +1158,6 @@
             "name": "keyword",
             "description": "Keyword to search(optional)",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           }
         ],
@@ -1236,35 +1208,30 @@
             "name": "area",
             "description": "area id to filter",
             "required": false,
-            "allowMultiple": false,
             "type": "integer"
           },{
             "in": "query",
             "name": "cuisines",
             "description": "cuisine ids string delimitted by comma(,) to filter",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           },{
             "in": "query",
             "name": "food_types",
             "description": "food type ids string delimitted by comma(,) to filter",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           },{
             "in": "query",
             "name": "restro_categories",
             "description": "restaurant category ids string delimitted by comma(,) to filter",
             "required": false,
-            "allowMultiple": false,
             "type": "string"
           },{
             "in": "query",
             "name": "service_type",
             "description": "service type(1:Deliver, 2:Catering, 3:Reservation, 4:Pickup)",
             "required": true,
-            "allowMultiple": false,
             "type": "integer"
           }
         ],
@@ -1312,7 +1279,6 @@
           },
           {
             "name": "id",
-            "allowMultiple": false,
             "required": true,
             "in": "path",
             "description": "Restaurant id",
@@ -1320,7 +1286,6 @@
           },
           {
             "name": "location_id",
-            "allowMultiple": false,
             "required": true,
             "in": "query",
             "description": "Location id",
@@ -1328,7 +1293,6 @@
           },
           {
             "name": "service_type",
-            "allowMultiple": false,
             "required": true,
             "in": "query",
             "description": "Service type",
@@ -1380,7 +1344,6 @@
           {                         
             "in": "query",
             "name": "location_id",
-            "allowMultiple": false,
             "required": true,
             "description": "Location id",
             "type": "integer"
@@ -1481,7 +1444,6 @@
           {                         
             "in": "query",
             "name": "location_id",
-            "allowMultiple": false,
             "required": true,
             "description": "Location id",
             "type": "integer"
@@ -1489,7 +1451,6 @@
           {                         
             "in": "query",
             "name": "service_id",
-            "allowMultiple": false,
             "required": true,
             "description": "Service id",
             "type": "integer"
@@ -1540,7 +1501,6 @@
           {                         
             "in": "query",
             "name": "category_id",
-            "allowMultiple": false,
             "required": true,
             "description": "Restro item category id",
             "type": "integer"
@@ -1591,7 +1551,6 @@
           {                         
             "in": "path",
             "name": "id",
-            "allowMultiple": false,
             "required": true,
             "description": "Restro item id",
             "type": "integer"
@@ -1643,15 +1602,13 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
-            "required": true,
+            "required": false,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
           },
           {                         
             "in": "query",
             "name": "restro_id",
-            "allowMultiple": false,
             "required": false,
             "description": "restaurant id",
             "type": "integer"
@@ -1700,7 +1657,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": true,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -1708,7 +1664,6 @@
           {                         
             "in": "query",
             "name": "area_id",
-            "allowMultiple": false,
             "required": false,
             "description": "area id",
             "type": "integer"
@@ -1716,7 +1671,6 @@
           {                         
             "in": "query",
             "name": "restro_id",
-            "allowMultiple": false,
             "required": true,
             "description": "restaurant id",
             "type": "integer"
@@ -1724,7 +1678,6 @@
           {                         
             "in": "query",
             "name": "location_id",
-            "allowMultiple": false,
             "required": true,
             "description": "location id",
             "type": "integer"
@@ -1791,7 +1744,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": true,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -1842,7 +1794,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": false,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -1850,7 +1801,6 @@
           {                         
             "in": "query",
             "name": "restro_id",
-            "allowMultiple": false,
             "required": false,
             "description": "restaurant id",
             "type": "integer"
@@ -1899,7 +1849,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": true,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -1966,7 +1915,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": true,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -2022,7 +1970,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": true,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -2087,7 +2034,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": true,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -2138,7 +2084,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": false,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -2146,7 +2091,6 @@
           {                         
             "in": "query",
             "name": "restro_id",
-            "allowMultiple": false,
             "required": false,
             "description": "restaurant id",
             "type": "integer"
@@ -2154,7 +2098,6 @@
           {                         
             "in": "query",
             "name": "area_id",
-            "allowMultiple": false,
             "required": false,
             "description": "area id",
             "type": "integer"
@@ -2205,7 +2148,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": false,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -2213,7 +2155,6 @@
           {                         
             "in": "query",
             "name": "restro_id",
-            "allowMultiple": false,
             "required": false,
             "description": "restaurant id",
             "type": "integer"
@@ -2221,7 +2162,6 @@
           {                         
             "in": "query",
             "name": "location_id",
-            "allowMultiple": false,
             "required": false,
             "description": "location id",
             "type": "integer"
@@ -2272,7 +2212,6 @@
           {                         
             "in": "query",
             "name": "redeem_type",
-            "allowMultiple": false,
             "required": false,
             "description": "redeem type(1:Coupon, 2:Loyalty Point, 3:Mataam Point)",
             "type": "integer"
@@ -2280,7 +2219,6 @@
           {                         
             "in": "query",
             "name": "service_type",
-            "allowMultiple": false,
             "required": false,
             "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
@@ -2288,7 +2226,6 @@
           {                         
             "in": "query",
             "name": "restro_id",
-            "allowMultiple": false,
             "required": false,
             "description": "restaurant id",
             "type": "integer"
@@ -2296,7 +2233,6 @@
           {                         
             "in": "query",
             "name": "location_id",
-            "allowMultiple": false,
             "required": false,
             "description": "location id",
             "type": "integer"
@@ -2304,7 +2240,6 @@
           {                         
             "in": "query",
             "name": "coupon_code",
-            "allowMultiple": false,
             "required": false,
             "description": "coupon id",
             "type": "string"
@@ -2355,7 +2290,6 @@
           {                         
             "in": "query",
             "name": "restro_id",
-            "allowMultiple": false,
             "required": true,
             "description": "restaurant id",
             "type": "integer"
@@ -2363,7 +2297,6 @@
           {                         
             "in": "query",
             "name": "location_id",
-            "allowMultiple": false,
             "required": true,
             "description": "location id",
             "type": "integer"
@@ -2371,7 +2304,6 @@
           {                         
             "in": "query",
             "name": "reserve_time",
-            "allowMultiple": false,
             "required": true,
             "description": "reservation time(2016-10-28 13:00)",
             "type": "string"
@@ -2379,7 +2311,6 @@
           {                         
             "in": "query",
             "name": "people_number",
-            "allowMultiple": false,
             "required": true,
             "description": "Number of persons",
             "type": "integer"
@@ -2408,6 +2339,61 @@
       }
     },
     "/orders/reserve": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting reservation list for specific user",
+        "operationId": "getReservations",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "required": false,
+            "description": "Restaurant location id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "orders"
@@ -2430,7 +2416,6 @@
           {                         
             "in": "body",
             "name": "body",
-            "allowMultiple": true,
             "required": true,
             "description": "Reservation JSON object body",
             "schema": {
@@ -2478,7 +2463,8 @@
           "type": "integer"
         },
         "code": {
-          "type": "float"
+          "type": "number",
+          "format": "float"
         },
         "details": {
           "type": "string"
@@ -2589,7 +2575,8 @@
           "type": "boolean"
         },
         "birthdate": {
-          "type": "date"
+          "type": "string",
+          "format": "date"
         }
       }
     },

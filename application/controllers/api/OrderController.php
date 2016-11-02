@@ -64,16 +64,22 @@
                 $this->validateAccessToken();
 
                 $service_type = $this->get('service_type');
-                if(!isset($service_type)) {
-                    throw new Exception('service_type '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                }
 
                 if ($id === NULL)
                 {               
+                    $offset = $this->get('offset') ? $this->get('offset') : 0;
+                    $limit = $this->get('limit') ? $this->get('limit') : 50;
+
                     $params = array();
                     $params["user_id"] = $this->user->id;
+                    $params["offset"] = $offset;
+                    $params["limit"] = $limit;
 
-                    $resource = $this->OrderModel->find($service_type, $params); 
+                    if(isset($service_type)) {                     
+                        $resource = $this->OrderModel->find($service_type, $params);    
+                    } else {
+                        $resource = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(3, $params), $this->OrderModel->find(4, $params)); 
+                    }
                 } else {                         
                     $resource = $this->OrderModel->findById($service_type, $id); 
                 }
@@ -269,7 +275,7 @@
 
                 $this->UserProfileModel->save($this->user->id, array(
                     'points'=>$user_loyalty_points,
-                    'mataam_points'=>$$user_mataam_points
+                    'mataam_points'=>$user_mataam_points
                 ));
 
                 $this->response(array(
@@ -354,7 +360,7 @@
                 }
 
                 $order['table_count'] = $order_table_count;
-                
+
                 $order['restro_id'] = $restro_id;
                 $order['location_id'] = $location_id;
 
@@ -380,6 +386,35 @@
                 $order_details['order_id'] = $order_id;
 
                 $order = $this->RestroTableOrderModel->findById($order_id);
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$order
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        }         
+        
+        public function reserve_get()
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $restro_id = $this->get('restro_id');
+                $location_id = $this->get('location_id');
+                
+                $params = array();
+                $params['user_id'] = $this->user->id;
+                
+                if(isset($restro_id)) $params['restro_id'] = $restro_id;
+                if(isset($location_id)) $params['location_id'] = $location_id;
+
+                $order = $this->RestroTableOrderModel->find($params);
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
