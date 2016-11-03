@@ -573,7 +573,7 @@
           "users"
         ],
         "description": "This API is responsible for updating user address",
-        "operationId": "userAddress",
+        "operationId": "saveUserAddress",
         "consumes": [
           "application/json"
         ],
@@ -617,38 +617,26 @@
             }
           }
         }
-      }
-    },
-    "/users/sub_address": {
-      "post": {
+      },
+      "get": {
         "tags": [
           "users"
         ],
-        "description": "This API is responsible for inserting user sub address",
-        "operationId": "userAddress",
+        "description": "This API is responsible for getting user address list",
+        "operationId": "getUserAddresses",
         "consumes": [
           "application/json"
         ],
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "in": "query",
             "name": "access_token",
             "description": "User access token for authorized requests",
             "required": true,
             "type": "string"
-          }, {
-            "in": "body",
-            "name": "body",
-            "description": "JSON body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/userSubAddress"
-            }
-          }
-        ],
+          }],
         "responses": {
           "200": {
             "description": "successful response",
@@ -657,7 +645,7 @@
             }
           },
           "400": {
-            "description": "Invalid json/ invalid dataset",
+            "description": "Invalid request",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -2582,14 +2570,17 @@
     },
     "userAddress": {
       "properties": {
-        "address": {
+        "id": {
+          "type": "integer"
+        },
+        "address_name": {
           "type": "string"
         },
-        "city": {
-          "type": "string"
+        "city_id": {
+          "type": "integer"
         },
-        "area": {
-          "type": "string"
+        "area_id": {
+          "type": "integer"
         },
         "street": {
           "type": "string"
@@ -2597,7 +2588,7 @@
         "block": {
           "type": "string"
         },
-        "house_name": {
+        "house": {
           "type": "string"
         },
         "floor": {
@@ -2606,7 +2597,7 @@
         "appartment": {
           "type": "string"
         },
-        "direction": {
+        "extra_directions": {
           "type": "string"
         }
       }

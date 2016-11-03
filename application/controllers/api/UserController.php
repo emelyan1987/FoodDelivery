@@ -33,7 +33,7 @@
 
         $this->load->model('UserSmsModel');
         $this->load->model('RestroCustomerAddressModel');
-
+        $this->load->model('UserAddressModel');
 
         $this->load->config('twilio');
     } 
@@ -464,35 +464,75 @@
         try { 
             $this->validateAccessToken();
 
-            $address = $this->post('address'); 
-            $city = $this->post('city'); 
-            $area = $this->post('area'); 
+            $id = $this->post('id'); 
+            $address_name = $this->post('address_name'); 
+            if(!isset($address_name)) {
+                throw new Exception('address_name ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+            }
+            $city_id = $this->post('city_id');             
+            if(!isset($city_id)) {
+                throw new Exception('city_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+            }
+            $area_id = $this->post('area_id');             
+            if(!isset($area_id)) {
+                throw new Exception('area_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+            } 
             $street = $this->post('street'); 
             $block = $this->post('block'); 
-            $house_name = $this->post('house_name'); 
+            $house = $this->post('house'); 
             $floor = $this->post('floor'); 
             $appartment = $this->post('appartment'); 
-            $direction = $this->post('direction'); 
+            $extra_directions = $this->post('extra_directions'); 
 
-            $profile = array();
-            if(isset($address)) $profile["address"] = $address; 
-            if(isset($city)) $profile["city"] = $city;                  
-            if(isset($area)) $profile["area"] = $area;
-            if(isset($street)) $profile["street"] = $street;
-            if(isset($block)) $profile["block"] = $block;
-            if(isset($house_name)) $profile["house_name"] = $house_name;
-            if(isset($floor)) $profile["floor"] = $floor;
-            if(isset($appartment)) $profile["appartment"] = $appartment;
-            if(isset($direction)) $profile["direction"] = $direction;
-
-            $profile["user_id"] = $this->user->id;
-            if(!empty($profile))
-                $this->UserProfileModel->save($this->user->id, $profile);
+            $data = array();
+            $data["address_name"] = $address_name; 
+            $data["city_id"] = $city_id;                  
+            $data["area_id"] = $area_id;
+            if(isset($street)) $data["street"] = $street;
+            if(isset($block)) $data["block"] = $block;
+            if(isset($house)) $data["house"] = $house;
+            if(isset($floor)) $data["floor"] = $floor;
+            if(isset($appartment)) $data["appartment"] = $appartment;
+            if(isset($extra_directions)) $data["extra_directions"] = $extra_directions;
+            $data["user_id"] = $this->user->id;
+            
+            if(isset($id)) {
+                $this->UserAddressModel->update($id, $data);
+            } else {
+                $id = $this->UserAddressModel->create($data);
+            }
 
 
             $this->response(array(
                 "code"=>RESULT_SUCCESS,
-                "resource"=>$this->UserProfileModel->findByUserId($this->user->id)
+                "resource"=>$this->UserAddressModel->findById($id)
+                ), REST_Controller::HTTP_OK); 
+
+        } catch (Exception $e) {
+            $this->response(array(
+                "code"=>$e->getCode(),
+                "message"=>$e->getMessage()
+                ), REST_Controller::HTTP_OK);
+        } 
+    } 
+     
+    public function address_get($id=null) {
+        try { 
+            $this->validateAccessToken();
+
+            $id = $this->get('id'); 
+            
+            
+            if($id === null) {
+                $resource = $this->UserAddressModel->find(array('user_id'=>$this->user->id));
+            } else {
+                $resource = $this->UserAddressModel->findById($id);
+            }
+
+
+            $this->response(array(
+                "code"=>RESULT_SUCCESS,
+                "resource"=>$resource
                 ), REST_Controller::HTTP_OK); 
 
         } catch (Exception $e) {
