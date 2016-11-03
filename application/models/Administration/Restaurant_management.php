@@ -274,11 +274,17 @@
 
         }
 
-        public function  add_reservation_service($payment, $workingInfo)
+        public function  add_reservation_service($payment, $workingInfo, $seatingInfos=null)
         {
 
             $this->db->insert("restro_payments_method",$payment);
             $this->db->insert("restro_working_hour",$workingInfo);  
+
+            if(isset($seatingInfos)) {
+                foreach($seatingInfos as $info) {
+                    $this->db->insert("restro_seating_hours", $info);
+                }   
+            }
             return "yes";
 
 
@@ -479,6 +485,9 @@
         }
         public function clear_pickup_working_hour($restro_id,$location_id,$service_id){
             $this->db->delete('restro_working_hour', array('restro_id' => $restro_id,'location_id' => $location_id,'service_id' => $service_id)); 
+        }
+        public function clear_seating_hours($restro_id, $location_id){
+            $this->db->delete('restro_seating_hours', array('restro_id' => $restro_id,'location_id' => $location_id)); 
         }
         public function clear_restroCityArea($restro_id,$location_id,$service_id){
             $this->db->delete('restro_city_area', array('restro_id' => $restro_id,'location_id' => $location_id,'service_id' => $service_id)); 

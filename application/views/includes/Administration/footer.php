@@ -206,4 +206,3 @@
     <script src="<?PHP echo base_url();  ?>assets/Administration/dist/js/app.min.js"></script>
     
     <script src="<?PHP echo base_url();  ?>assets/Administration/dist/js/demo.js"></script>
-    

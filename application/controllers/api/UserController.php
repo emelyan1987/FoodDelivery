@@ -377,7 +377,7 @@
 
             $user = $this->user;
             $user->profile = $profile;
-            $user->addresses = $this->RestroCustomerAddressModel->find(array("user_id"=>$this->user->id));
+            $user->addresses = $this->UserAddressModel->find(array("user_id"=>$this->user->id));
 
             $this->response(array(
                 "code"=>RESULT_SUCCESS,

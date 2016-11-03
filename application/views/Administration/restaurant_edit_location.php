@@ -7,16 +7,16 @@
         $ReservationPaymentMethod = explode(',', $ReservationCommisionData['method_type']); 
         $CateringPaymentMethod = explode(',', $CateringCommisionData['method_type']);   
     ?>
-    
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <!-- Main content -->
         <form method="post">
             <section class="content">
-            <?php
-                echo validation_errors();
-            ?>
+                <?php
+                    echo validation_errors();
+                ?>
                 <div class="row">
                     <div class="col-md-12">
                         <?PHP
@@ -762,7 +762,7 @@
         var delivery_sunday_from=$("#delivery_sunday_from").val();
         var delivery_sunday_to=$("#delivery_sunday_to").val();
         var location_id=$("#location_id").val();
-        
+
         var data = {
             delivery_id:delivery_id,
             dordert_days:dordert_days,
@@ -863,59 +863,95 @@
                     </table>
                 </div>
                 <div class="clear_h10"></div>
-                <h4 class="border_bottom">Happy Hours:</h4>
+                <h4 class="border_bottom" style="width:100%;">Working Hours:</h4>
                 <div class="table-responsive">
                     <div style="width:80%; background:#f8f8f8;">
-                        <table class="table bg-gray-light tbl" style="width:60%;">
-                            <tbody><tr>
-                                    <td>From </td>
-                                    <td><input type="text" id="res_happy_from" name="happy_from"  value="<?php if ($ReservationCommisionData['happy_from'] != '') {echo $ReservationCommisionData['happy_from'];} else {echo '00:00 00';}
-                                        ?>"> </td>
-                                    <td>to </td>
-                                    <td><input type="text" id="res_happy_to" name="happy_to"  value="<?php if ($ReservationCommisionData['happy_to'] != '') {echo $ReservationCommisionData['happy_to'];} else {echo '00:00 00';}
-                                        ?>"> </td>
-                                </tr>
-                            </tbody>
+                        <table class="table bg-gray-light tbl" style="width:100%;">
+                            <tr><td></td><td>From</td><td>To</td></tr>
+                            <tr>
+                                <td>Monday:</td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['monday_from'];?>" id="reservation_monday_from"></td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['monday_to'];?>" id="reservation_monday_to" ></td>
+                            </tr>
+                            <tr>
+                                <td>Tuesday:</td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['tuesday_from'];?>" id="reservation_tuesday_from" ></td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['tuesday_to'];?>" id="reservation_tuesday_to" ></td></tr>
+                            <tr><td>Wednesday:</td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['wednesday_from'];?>"  id="reservation_wednesday_from"  ></td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['wednesday_to'];?>" id="reservation_wednesday_to"  ></td></tr>
+                            <tr><td>Thursday:</td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['thursday_from'];?>" id="reservation_thursday_from"  ></td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['thursday_to'];?>" id="reservation_thursday_to"   ></td></tr>
+                            <tr><td>Friday:</td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['friday_from'];?>" id="reservation_friday_from"   ></td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['friday_to'];?>" id="reservation_friday_to"   ></td></tr>
+                            <tr><td>Saturady:</td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['saturday_from'];?>" id="reservation_saturday_from" ></td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['saturday_to'];?>" id="reservation_saturday_to"   ></td>
+                            </tr>
+                            <tr><td>Sunday:</td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['sunday_from'];?>" id="reservation_sunday_from" ></td>
+                                <td><input type="text" value="<?php echo $ReservationCommisionData['sunday_to'];?>" id="reservation_sunday_to" ></td>
+                            </tr>
                         </table>
-                        <h4 class="border_bottom" style="width:100%;">Working Hours:</h4>
-                        <div class="table-responsive">
-                            <div style="width:80%; background:#f8f8f8;">
-                                <table class="table bg-gray-light tbl" style="width:100%;">
-                                    <tr><td></td><td>From</td><td>To</td></tr>
-                                    <tr>
-                                        <td>Monday:</td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['monday_from'];?>" id="reservation_monday_from"></td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['monday_to'];?>" id="reservation_monday_to" ></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tuesday:</td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['tuesday_from'];?>" id="reservation_tuesday_from" ></td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['tuesday_to'];?>" id="reservation_tuesday_to" ></td></tr>
-                                    <tr><td>Wednesday:</td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['wednesday_from'];?>"  id="reservation_wednesday_from"  ></td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['wednesday_to'];?>" id="reservation_wednesday_to"  ></td></tr>
-                                    <tr><td>Thursday:</td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['thursday_from'];?>" id="reservation_thursday_from"  ></td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['thursday_to'];?>" id="reservation_thursday_to"   ></td></tr>
-                                    <tr><td>Friday:</td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['friday_from'];?>" id="reservation_friday_from"   ></td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['friday_to'];?>" id="reservation_friday_to"   ></td></tr>
-                                    <tr><td>Saturady:</td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['saturday_from'];?>" id="reservation_saturday_from" ></td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['saturday_to'];?>" id="reservation_saturday_to"   ></td>
-                                    </tr>
-                                    <tr><td>Sunday:</td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['sunday_from'];?>" id="reservation_sunday_from" ></td>
-                                        <td><input type="text" value="<?php echo $ReservationCommisionData['sunday_to'];?>" id="reservation_sunday_to" ></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="clear_h20"></div>
-                        <a href="javascript:void(0)" onClick="add_reservation_services()" class="btn bg-green">Save</a>
-                        <a href="#" type="button" data-dismiss="modal" class="btn btn-danger">Close</a>
                     </div>
                 </div>
+                <h4 class="border_bottom" style="width:100%;">Seating Hours:</h4>
+                <div class="table-responsive">
+                    <div style="width:100%; background:#f8f8f8;">                   
+                        <table class="table bg-gray-light tbl" style="width:100%;">
+                            <tr><td></td><td>Category</td><td>From</td><td>To</td><td>Max Cover</td><td>Largest Party Size</td><td>Booking Limit</td><td>Cover Count</td><td>Points</td></tr>
+
+                            <?php
+                                $weekdays = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+
+                                foreach($weekdays as $weekday) {
+                            ?>
+                            <tr><td colspan="9" style="border-top:1px solid;"></td></tr>
+                            <tr>
+                                <td><?php echo ucfirst($weekday); ?>:</td>
+                                <td>Breakfast</td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_from"]:"";?>" id="seating_info_<?php echo $weekday;?>_from1" class="timepicker"></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_to"]:"";?>" id="seating_info_<?php echo $weekday;?>_to1"  class="timepicker"></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_max_cover"]:"";?>" id="seating_info_<?php echo $weekday;?>_max_cover1" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_largest_party_size"]:"";?>" id="seating_info_<?php echo $weekday;?>_largest_party_size1" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit1" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count1" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point1" ></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Lunch</td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_from"]:"";?>" id="seating_info_<?php echo $weekday;?>_from2" class="timepicker"></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_to"]:"";?>" id="seating_info_<?php echo $weekday;?>_to2"  class="timepicker"></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_max_cover"]:"";?>" id="seating_info_<?php echo $weekday;?>_max_cover2" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_largest_party_size"]:"";?>" id="seating_info_<?php echo $weekday;?>_largest_party_size2" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit2" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count2" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point2" ></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Dinner</td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_from"]:"";?>" id="seating_info_<?php echo $weekday;?>_from3" class="timepicker"></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_to"]:"";?>" id="seating_info_<?php echo $weekday;?>_to3"  class="timepicker"></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_max_cover"]:"";?>" id="seating_info_<?php echo $weekday;?>_max_cover3" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_largest_party_size"]:"";?>" id="seating_info_<?php echo $weekday;?>_largest_party_size3" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit3" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count3" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point3" ></td>
+                            </tr>
+                            <?php
+                                }
+                            ?>
+                            
+                        </table>
+                    </div>
+                </div>
+                <div class="clear_h20"></div>
+                <a href="javascript:void(0)" onClick="add_reservation_services()" class="btn bg-green">Save</a>
+                <a href="#" type="button" data-dismiss="modal" class="btn btn-danger">Close</a>
             </section>
         </div><!-- /.content-wrapper -->
     </div>
@@ -927,7 +963,7 @@
         $('input[id="reservation_payment"]:checked').each(function() {
             reservation_payment_method.push(this.value);
         });
-        
+
         var reservation_id=$("#reservation_id").val();
         var reservation_user_id=$("#user_id_reservation").val();
         var reservation_restro_id=$("#restro_id_reservation").val();
@@ -948,10 +984,35 @@
         var location_id=$("#location_id").val();
         var happy_from = $("#res_happy_from").val();
         var happy_to = $("#res_happy_to").val();
-        
+
         var data = {reservation_id:reservation_id,reservation_restro_id:reservation_restro_id,reservation_user_id:reservation_user_id, reservation_monday_from:reservation_monday_from,reservation_monday_to:reservation_monday_to,reservation_tuesday_from:reservation_tuesday_from,reservation_tuesday_to:reservation_tuesday_to,reservation_wednesday_from:reservation_wednesday_from,reservation_wednesday_to:reservation_wednesday_to,reservation_thursday_from:reservation_thursday_from,reservation_thursday_to:reservation_thursday_to,reservation_friday_from:reservation_friday_from,reservation_friday_to:reservation_friday_to,reservation_saturday_from:reservation_saturday_from,reservation_saturday_to:reservation_saturday_to,reservation_sunday_from:reservation_sunday_from,reservation_sunday_to:reservation_sunday_to,location_id:location_id,happy_from:happy_from,happy_to:happy_to,reservation_payment:reservation_payment_method};
+
+        // Seating Info Handle
+        var seatingInfos = [];
+        for(var cat = 1; cat <= 3; cat ++) {
+            var weekdays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+            var info = {
+                restro_id: reservation_restro_id,
+                location_id: location_id,
+                category: cat
+            };
+            
+            weekdays.forEach(function(weekday){
+                var from = $("#seating_info_"+weekday+"_from"+cat).val(),
+                    to = $("#seating_info_"+weekday+"_to"+cat).val();
+               info[weekday+'_from'] = from.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]/)?moment(from,'h:mma').format('H:mm'):null; 
+               info[weekday+'_to'] = to.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]/)?moment(to,'h:mma').format('H:mm'):null; 
+               info[weekday+'_max_cover'] = $("#seating_info_"+weekday+"_max_cover"+cat).val(); 
+               info[weekday+'_largest_party_size'] = $("#seating_info_"+weekday+"_largest_party_size"+cat).val(); 
+               info[weekday+'_booking_limit'] = $("#seating_info_"+weekday+"_booking_limit"+cat).val(); 
+               info[weekday+'_cover_count'] = $("#seating_info_"+weekday+"_cover_count"+cat).val(); 
+               info[weekday+'_point'] = $("#seating_info_"+weekday+"_point"+cat).val(); 
+            });
+            
+            seatingInfos.push(info);            
+        }
+        data.seating_infos = seatingInfos; 
         
-        //console.log(data);
         $.ajax({
             method:"post",
             url:"/add_reservation_service/",
@@ -1544,6 +1605,8 @@
         $('#catering_sunday_to').timepicker();
         $('#res_happy_from').timepicker();
         $('#res_happy_to').timepicker();
+        
+        $('input.timepicker').timepicker();
     });
 </script>
 <script>

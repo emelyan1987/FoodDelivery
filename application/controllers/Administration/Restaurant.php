@@ -20,6 +20,7 @@
             $this->load->model('Administration/Smtp_management');
             $this->load->library('email');
             $this->load->model("Restaurant_Owner/Restro_Owner_Model");
+            $this->load->model("RestroSeatingHourModel");
 
             //$this->load->model('Model');
 
@@ -672,13 +673,14 @@
             $this->Restaurant_management->add_delivery_service($payment, $workingInfo);
 
             echo $this->Restaurant_management->add_delivery_area($areaInfo);
-            
+
         }
 
         public function add_reservation_service() {
 
             $user_id = $this->input->post("reservation_user_id");
             $restro_id = $this->input->post("reservation_restro_id");
+            $location_id = $this->input->post("location_id");
             //-----------------------------------------------------------------------------------------------
             $payment['method_type'] = implode($this->input->post("reservation_payment"), ",");
 
@@ -706,13 +708,16 @@
             $workingInfo['location_id'] = $this->input->post("location_id");
             $workingInfo['user_id'] = $user_id;
             $workingInfo['restro_id'] = $restro_id;
-            $workingInfo['happy_from'] = $this->input->post("happy_from");
-            $workingInfo['happy_to'] = $this->input->post("happy_to");
+            //$workingInfo['happy_from'] = $this->input->post("happy_from");
+            //$workingInfo['happy_to'] = $this->input->post("happy_to");
 
+            $seatingInfos = $this->input->post("seating_infos");
+            
             $this->Restaurant_management->clear_pickup_payment($payment['restro_id'], $payment['location_id'], $payment['service_type']);
             $this->Restaurant_management->clear_pickup_working_hour($workingInfo['restro_id'], $workingInfo['location_id'], $workingInfo['service_id']);
+            $this->Restaurant_management->clear_seating_hours($restro_id, $location_id);
             //-----------------------------------------------------------------------------------------------
-            echo $this->Restaurant_management->add_reservation_service($payment, $workingInfo);
+            echo $this->Restaurant_management->add_reservation_service($payment, $workingInfo, $seatingInfos);
 
         }
 
@@ -1161,6 +1166,11 @@
             $data['ReservationCommisionData'] = $this->Restaurant_management->getCommisionData($restro_id, $location_id, 3);
             $data['CateringCommisionData'] = $this->Restaurant_management->getCommisionData($restro_id, $location_id, 2);
             $data['CateringCityArea'] = $this->Restaurant_management->getRestroCityArea($restro_id, $location_id, 2);
+
+            $data['SeatingInfo'] = $this->RestroSeatingHourModel->find(array(
+                'restro_id'     => $restro_id,
+                'location_id'   => $location_id   
+            ), true);
 
             $this->load->view("Administration/restaurant_edit_location", $data);
         }

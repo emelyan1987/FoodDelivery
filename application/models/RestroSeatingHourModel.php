@@ -42,7 +42,7 @@
             $this->db->trans_complete();
         }
 
-        public function find($params){   
+        public function find($params, $toArray=false){   
             $this->db->select('*');
             $this->db->from('restro_seating_hours');   
 
@@ -56,7 +56,12 @@
                 }
 
             }  
-            $result = $this->db->get()->result();
+
+            if($toArray) {
+                $result = $this->db->get()->result_array();
+            } else {
+                $result = $this->db->get()->result();    
+            }
 
             return $result;
         }
