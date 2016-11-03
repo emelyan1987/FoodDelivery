@@ -76,12 +76,19 @@
                     $params["limit"] = $limit;
 
                     if(isset($service_type)) {                     
-                        $resource = $this->OrderModel->find($service_type, $params);    
+                        $orders = $this->OrderModel->find($service_type, $params);    
                     } else {
-                        $resource = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(3, $params), $this->OrderModel->find(4, $params)); 
+                        $orders = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(3, $params), $this->OrderModel->find(4, $params)); 
                     }
+                    
+                    foreach($orders as $order) {
+                        $order->restaurant = $this->RestaurantModel->findById($order->restro_id);
+                    }
+                    $resource = $orders;
                 } else {                         
-                    $resource = $this->OrderModel->findById($service_type, $id); 
+                    $order = $this->OrderModel->findById($service_type, $id); 
+                    $order->restaurant = $this->RestaurantModel->findById($order->restro_id);
+                    $resource = $order;
                 }
 
                 if(!$resource) {
@@ -156,11 +163,14 @@
                     throw new Exception("location_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
 
+                $order['restro_id'] = $restro_id;
+                $order['location_id'] = $location_id;
+                
                 $redeem_type = $this->post('redeem_type');
                 $coupon_code = $this->post('coupon_code');
 
                 $sum = $this->getSum($this->user->id, $service_type, $restro_id, $area_id);
-
+                
                 $order['total'] = $sum['total_amount'];
                 $order['delivery_charges'] = $sum['charge_amount'];;
 
