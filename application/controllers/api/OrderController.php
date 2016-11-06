@@ -78,9 +78,9 @@
                     if(isset($service_type)) {                     
                         $orders = $this->OrderModel->find($service_type, $params);    
                     } else {
-                        $orders = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(3, $params), $this->OrderModel->find(4, $params)); 
+                        $orders = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(4, $params)); 
                     }
-                    
+
                     foreach($orders as $order) {
                         $order->restaurant = $this->RestaurantModel->findById($order->restro_id);
                     }
@@ -90,6 +90,50 @@
                     $order->restaurant = $this->RestaurantModel->findById($order->restro_id);
                     $resource = $order;
                 }
+
+                if(!$resource) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }  
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$resource
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        }
+
+        public function my_points_get()
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $point_type = $this->get('point_type');
+                $service_type = $this->get('service_type');
+
+                $offset = $this->get('offset') ? $this->get('offset') : 0;
+                $limit = $this->get('limit') ? $this->get('limit') : 50;
+
+                $params = array();
+                $params["user_id"] = $this->user->id;
+                if(isset($point_type))$params["coupon_point_apply"] = $point_type;
+                $params["offset"] = $offset;
+                $params["limit"] = $limit;
+
+                if(isset($service_type)) {                     
+                    $orders = $this->OrderModel->find($service_type, $params);    
+                } else {
+                    $orders = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(4, $params)); 
+                }
+
+                foreach($orders as $order) {
+                    $order->restaurant = $this->RestaurantModel->findById($order->restro_id);
+                }
+                $resource = $orders;
 
                 if(!$resource) {
                     throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
@@ -165,12 +209,12 @@
 
                 $order['restro_id'] = $restro_id;
                 $order['location_id'] = $location_id;
-                
+
                 $redeem_type = $this->post('redeem_type');
                 $coupon_code = $this->post('coupon_code');
 
                 $sum = $this->getSum($this->user->id, $service_type, $restro_id, $area_id);
-                
+
                 $order['total'] = $sum['total_amount'];
                 $order['delivery_charges'] = $sum['charge_amount'];;
 
@@ -188,14 +232,15 @@
                             throw new Exception('coupon_code '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                         }
                         $order['coupon_code'] = $coupon_code;
-                    } else if($redeem_type == 2) {
+                    } else if($redeem_type == 2) {  // Loyalty Point
                         $order['used_points'] = $point['loyalty']['used_points'];
-                    } else if($redeem_type == 3) {
+                    } else if($redeem_type == 3) {  // Mataam Point
                         $order['used_points'] = $point['mataam']['used_points'];
                     }   
                 }  
 
                 $order['order_points'] = $point['loyalty']['gained_points'];       
+                $order['mataam_order_points'] = $point['mataam']['gained_points'];       
 
 
 
@@ -351,7 +396,8 @@
                             'max_cover'=>$item->{$weekday.'_max_cover'},
                             'largest_party_size'=>$item->{$weekday.'_largest_party_size'},
                             'booking_limit'=>$item->{$weekday.'_booking_limit'},
-                            'cover_count'=>$item->{$weekday.'_cover_count'}
+                            'cover_count'=>$item->{$weekday.'_cover_count'},
+                            'point'=>$item->{$weekday.'_point'}
                         );
 
                         break;  
@@ -377,8 +423,9 @@
                 $order['date'] = $reserve_date;  // Y-m-d
                 $order['time'] = $reserve_time;  // H:i
 
-
                 $order['user_id'] = $this->user->id;
+
+                $order['order_points'] = $seating_info['point'];
 
                 /*$payment_method = $this->post('payment_method');
                 if(!isset($payment_method)) {
@@ -409,7 +456,7 @@
                     ), REST_Controller::HTTP_OK);
             }
         }         
-        
+
         public function reserve_get()
         {                 
             try {                
@@ -417,10 +464,10 @@
 
                 $restro_id = $this->get('restro_id');
                 $location_id = $this->get('location_id');
-                
+
                 $params = array();
                 $params['user_id'] = $this->user->id;
-                
+
                 if(isset($restro_id)) $params['restro_id'] = $restro_id;
                 if(isset($location_id)) $params['location_id'] = $location_id;
 
@@ -794,7 +841,8 @@
                                     'max_cover'=>$item->{$weekday.'_max_cover'},
                                     'largest_party_size'=>$item->{$weekday.'_largest_party_size'},
                                     'booking_limit'=>$item->{$weekday.'_booking_limit'},
-                                    'cover_count'=>$item->{$weekday.'_cover_count'}
+                                    'cover_count'=>$item->{$weekday.'_cover_count'},
+                                    'point'=>$item->{$weekday.'_point'}
                                 )
                             );
                         }   
@@ -815,8 +863,10 @@
                     $selected_times = $times;
                 } else {
                     $closest = null; $index = null;
+
+                    $r_time = strtotime(date('H:i', $reserve_time));
                     foreach ($times as $i=>$t) {
-                        if ($closest === null || abs($reserve_time - $closest) > abs($t['time'] - $reserve_time)) {
+                        if ($closest === null || abs($r_time - $closest) > abs($t['time'] - $r_time)) {
                             $closest = $t['time'];
                             $index = $i;
                         }
@@ -966,7 +1016,6 @@
 
             $result = array('total_amount'=>$total_amount);
             if(($service_type==1 || $service_type==2) && $area_id) { // service type is "DELIVERY" or "CATERING"      
-                //throw new Exception('Cart list ' . $this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);        
                 $charge_amount = $this->RestroCityAreaModel->getCharge($restro_id, $area_id, $service_type);
                 $result = array_merge($result, array('charge_amount'=>$charge_amount));
             }

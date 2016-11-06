@@ -1653,7 +1653,7 @@
             "in": "query",
             "name": "area_id",
             "required": false,
-            "description": "area id",
+            "description": "customer area id",
             "type": "integer"
           },
           {                         
@@ -2409,6 +2409,64 @@
             "schema": {
                 "$ref": "#/definitions/reserveCreateModel"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/my_points": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting point list for specific user",
+        "operationId": "getMyPoints",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "required": false,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "point_type",
+            "required": false,
+            "description": "point type(2:Loyalty Point,3:Mataam Point)",
+            "type": "integer"
           }
         ],
         "responses": {

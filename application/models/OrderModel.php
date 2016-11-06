@@ -74,10 +74,13 @@
             if(isset($params)) {
                 if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
                 if(isset($params["order_no"]) && $params["order_no"]!="") $this->db->where('order_no', $params["order_no"]);   
+                if($service_type!=3 && isset($params["coupon_point_apply"]) && $params["coupon_point_apply"]!="") $this->db->where('coupon_point_apply', $params["coupon_point_apply"]);   
                 if(isset($params["date"]) && $params["date"]!="") $this->db->where('date', $params["date"]);   
                 if(isset($params["min_date"]) && $params["min_date"]!="") $this->db->where('date <=', $params["min_date"]);   
                 if(isset($params["max_date"]) && $params["max_date"]!="") $this->db->where('date >=', $params["max_date"]);   
             }  
+            
+            $this->db->order_by('created_time DESC');
             $result = $this->db->get()->result();
 
             foreach($result as $item) {
