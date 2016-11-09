@@ -87,8 +87,8 @@
                         if($order->status != -1) {   // Cancelled
                             $now = time();
                             $order_time = strtotime($order->date." ".$order->time);
-                            if($now - $order_time >= $restaurant->order_time) {
-                                $order->status = 2; //Completed
+                            if($restaurant && $now - $order_time >= $restaurant->order_time) {
+                                $order->status = 3; //Completed
                             } else {
                                 $order->status = 1; //Under Process
                             }
@@ -357,7 +357,8 @@
                     ), REST_Controller::HTTP_OK);
             }
         } 
-        
+
+
         public function cancel_post($id)
         {                 
             try {                
@@ -367,13 +368,13 @@
                 if(!isset($service_type)) {
                     throw new Exception("service_type ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
-                
+
                 $order = $this->OrderModel->findById($service_type, $id);
-                                               
+
                 if(!$order) {
                     throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
                 }
-                
+
                 $now = time();
                 $order_time = strtotime($order->date." ".$order->time);
                 if($order->user_id == $this->user->id) {
@@ -386,12 +387,53 @@
                         throw new Exception($this->lang->line('time_expired'), RESULT_ERROR); 
                     }
                 }
-                                
+
                 $this->OrderModel->update($service_type, $id, array("status"=>-1));
 
-                
+
                 $order = $this->OrderModel->findById($service_type, $id);
-                
+
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$order
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        } 
+
+        // Accept customer's reservation
+        public function accept_post($id)
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $service_type = $this->input->get('service_type');
+                if(!isset($service_type)) {
+                    throw new Exception("service_type ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $order = $this->OrderModel->findById($service_type, $id);
+
+                if(!$order) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }
+
+                $restaurant = $this->RestaurantModel->findById($order->restro_id);
+                if($this->user->id != $restaurant->user_id) {
+                    throw new Exception($this->lang->line('user_invalid'), RESULT_ERROR_ACCESS_TOKEN_INVALID); 
+                }
+
+                $this->OrderModel->update($service_type, $id, array("status"=>2));
+
+
+                $order = $this->OrderModel->findById($service_type, $id);
+
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
@@ -438,31 +480,7 @@
 
                 $weekday = strtolower(date('l', strtotime($reserve_date)));
 
-                $seating_infos = $this->RestroSeatingHourModel->find(array(
-                    'restro_id'     => $restro_id,
-                    'location_id'   => $location_id   
-                ));
-
-                $seating_info = null;
-                foreach($seating_infos as $item) {
-                    $from_time = $item->{$weekday.'_from'};
-                    $to_time = $item->{$weekday.'_to'};
-
-                    if($reserve_time>=$from_time && $reserve_time<=$to_time) {
-
-                        $seating_info = array(
-                            'from'=>$item->{$weekday.'_from'},
-                            'to'=>$item->{$weekday.'_to'},
-                            'max_cover'=>$item->{$weekday.'_max_cover'},
-                            'largest_party_size'=>$item->{$weekday.'_largest_party_size'},
-                            'booking_limit'=>$item->{$weekday.'_booking_limit'},
-                            'cover_count'=>$item->{$weekday.'_cover_count'},
-                            'point'=>$item->{$weekday.'_point'}
-                        );
-
-                        break;  
-                    }
-                }
+                $seating_info = $this->getSeatingInfo($restro_id, $location_id, $weekday, $reserve_time);
 
                 if($seating_info === null || !$this->isAvailableTime($reserve_date, $reserve_time, $seating_info, $people_number, $restro_id, $location_id))  {
                     throw new Exception($this->lang->line('time_invalid'), RESULT_ERROR_PARAMS_INVALID);
@@ -493,7 +511,7 @@
                 } 
                 $order['payment_method'] = $payment_method;*/
 
-                $order['status'] = 1;                
+                $order['status'] = 1;                  
 
                 $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
                 $order_id = $this->RestroTableOrderModel->create($order);
@@ -517,6 +535,37 @@
             }
         }         
 
+        public function getSeatingInfo($restro_id, $location_id, $weekday, $reserve_time) {
+            $seating_infos = $this->RestroSeatingHourModel->find(array(
+                'restro_id'     => $restro_id,
+                'location_id'   => $location_id   
+            ));
+
+            $seating_info = null;
+            foreach($seating_infos as $item) {
+                $from_time = $item->{$weekday.'_from'};
+                $to_time = $item->{$weekday.'_to'};
+
+                if($reserve_time>=$from_time && $reserve_time<=$to_time) {
+
+                    $seating_info = array(
+                        'from'=>$item->{$weekday.'_from'},
+                        'to'=>$item->{$weekday.'_to'},
+                        'max_cover'=>$item->{$weekday.'_max_cover'},
+                        'largest_party_size'=>$item->{$weekday.'_largest_party_size'},
+                        'booking_limit'=>$item->{$weekday.'_booking_limit'},
+                        'cover_count'=>$item->{$weekday.'_cover_count'},
+                        'point'=>$item->{$weekday.'_point'},
+                        'deposit'=>$item->{$weekday.'_deposit'}
+                    );
+
+                    return $seating_info;  
+                }
+            }
+            
+            return null;
+        }
+
         public function reserve_get()
         {                 
             try {                
@@ -531,11 +580,25 @@
                 if(isset($restro_id)) $params['restro_id'] = $restro_id;
                 if(isset($location_id)) $params['location_id'] = $location_id;
 
-                $order = $this->RestroTableOrderModel->find($params);
+                $orders = $this->RestroTableOrderModel->find($params);
+
+                foreach($orders as $order) {                       
+                    $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, 3);
+
+                    if($order->status == 2) {   // Accepted or Waiting Payment
+                        $weekday = strtolower(date('l', strtotime($order->date)));
+                        $seating_info = $this->getSeatingInfo($order->restro_id, $order->location_id, $weekday, $order->time);
+                        
+                        if($seating_info['deposit']==0 || ($seating_info['deposit']>0&&$order->pay_done)) {
+                            $order->status = 3;
+                        }
+                    }
+
+                }
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
-                    "resource"=>$order
+                    "resource"=>$orders
                     ), REST_Controller::HTTP_OK);
 
             } catch (Exception $e) {

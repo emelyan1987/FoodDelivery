@@ -55,6 +55,7 @@
                 if(isset($params["from_time"]) && $params["from_time"]!="") $this->db->where('time >=', $params["from_time"]);
                 if(isset($params["to_time"]) && $params["to_time"]!="") $this->db->where('time <=', $params["to_time"]);
             }  
+            $this->db->order_by('updated_time DESC');
             $result = $this->db->get()->result();
 
             return $result;

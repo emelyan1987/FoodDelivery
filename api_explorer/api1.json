@@ -2496,7 +2496,7 @@
         "tags": [
           "orders"
         ],
-        "description": "This API is responsible for cancelling  specific order(Deliver, Catering, Pickup)",
+        "description": "This API is responsible for cancelling specific order. That can be performed by Customer or RestroOwner",
         "operationId": "cancelOrder",
         "consumes": [
           "application/json"
@@ -2522,7 +2522,64 @@
             "in": "query",
             "name": "service_type",
             "required": true,
-            "description": "service type(1:Delivery, 2:Catering, 4:Pickup)",
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}/accept": {
+      "post": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for accepting specific order. That can be performed by only RestroOwner",
+        "operationId": "acceptOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "path",
+            "name": "id",  
+            "required": true,
+            "description": "order id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "required": true,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
             "type": "integer"
           }
         ],
