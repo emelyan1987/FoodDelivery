@@ -352,6 +352,7 @@
             $data["access_token"] = $token;
             if($ttl && $this->form_validation->numeric($ttl)) $data["ttl"] = $ttl;
 
+            $data['ip_address'] = $_SERVER['REMOTE_ADDR'];
             $accessTokenId = $this->UserAccessTokenModel->create($data);
             $accessToken = $this->UserAccessTokenModel->findById($accessTokenId);
 

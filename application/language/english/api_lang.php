@@ -32,3 +32,4 @@ $lang['user_invalid'] = 'User invalid.';
 $lang['mobile_no_not_matched'] = 'The mobile_no not matched.';
 $lang['password_not_matched'] = 'The password not matched.';
 $lang['time_invalid'] = 'The time invalid.';
+$lang['time_expired'] = 'Time expired';

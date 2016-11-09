@@ -58,7 +58,7 @@
             return $valid;
         } 
 
-        public function index_get($id=null)
+        public function  index_get($id=null)
         {                 
             try {                
                 $this->validateAccessToken();
@@ -81,8 +81,20 @@
                         $orders = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(4, $params)); 
                     }
 
-                    foreach($orders as $order) {
-                        $order->restaurant = $this->RestaurantModel->findById($order->restro_id);
+                    foreach($orders as $order) {                       
+                        $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
+
+                        if($order->status != -1) {   // Cancelled
+                            $now = time();
+                            $order_time = strtotime($order->date." ".$order->time);
+                            if($now - $order_time >= $restaurant->order_time) {
+                                $order->status = 2; //Completed
+                            } else {
+                                $order->status = 1; //Under Process
+                            }
+                        }
+
+
                     }
                     $resource = $orders;
                 } else {                         
@@ -253,7 +265,7 @@
                     throw new Exception('schedule_time '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
 
-                if($service_type==1) {                    
+                if($service_type==1 || $service_type==4) {                    
                     $order['delivery_date'] = $schedule_date;  // Y-m-d
                     $order['delivery_time'] = $schedule_time;  // H:i:s
                 }
@@ -332,6 +344,54 @@
                     'points'=>$user_loyalty_points,
                     'mataam_points'=>$user_mataam_points
                 ));
+
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$order
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        } 
+        
+        public function cancel_post($id)
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $service_type = $this->input->get('service_type');
+                if(!isset($service_type)) {
+                    throw new Exception("service_type ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+                
+                $order = $this->OrderModel->findById($service_type, $id);
+                                               
+                if(!$order) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }
+                
+                $now = time();
+                $order_time = strtotime($order->date." ".$order->time);
+                if($order->user_id == $this->user->id) {
+                    if($now-$order_time > 120) {
+                        throw new Exception($this->lang->line('time_expired'), RESULT_ERROR); 
+                    }
+                } else {
+                    $restaurant = $this->RestaurantModel->findById($order->restro_id);
+                    if($this->user->id == $restaurant->user_id && $now-$order_time > 300) {
+                        throw new Exception($this->lang->line('time_expired'), RESULT_ERROR); 
+                    }
+                }
+                                
+                $this->OrderModel->update($service_type, $id, array("status"=>-1));
+
+                
+                $order = $this->OrderModel->findById($service_type, $id);
+                
 
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    

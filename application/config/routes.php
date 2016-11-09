@@ -508,6 +508,7 @@ $route['api/orders/discount'] = '/api/OrderController/discount';
 $route['api/orders/times'] = '/api/OrderController/times'; 
 $route['api/orders/reserve'] = '/api/OrderController/reserve'; 
 $route['api/orders/my_points'] = '/api/OrderController/my_points'; 
+$route['api/orders/(:num)/cancel'] = '/api/OrderController/cancel/$1'; 
 
 
 
