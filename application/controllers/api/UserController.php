@@ -351,8 +351,15 @@
             $token = CryptoLib::randomString(50);
             $data["access_token"] = $token;
             if($ttl && $this->form_validation->numeric($ttl)) $data["ttl"] = $ttl;
-
-            $data['ip_address'] = $_SERVER['REMOTE_ADDR'];
+           
+        
+            if(isset($_SERVER['HTTP_CLIENT_IP'])) $data['ip_address1'] = $_SERVER['HTTP_CLIENT_IP'];
+            if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $data['ip_address2'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            if(isset($_SERVER['HTTP_X_FORWARDED'])) $data['ip_address3'] = $_SERVER['HTTP_X_FORWARDED'];
+            if(isset($_SERVER['HTTP_FORWARDED_FOR'])) $data['ip_address4'] = $_SERVER['HTTP_FORWARDED_FOR'];
+            if(isset($_SERVER['HTTP_FORWARDED'])) $data['ip_address5'] = $_SERVER['HTTP_FORWARDED'];
+            if(isset($_SERVER['REMOTE_ADDR'])) $data['ip_address6'] = $_SERVER['REMOTE_ADDR'];
+            
             $accessTokenId = $this->UserAccessTokenModel->create($data);
             $accessToken = $this->UserAccessTokenModel->findById($accessTokenId);
 
