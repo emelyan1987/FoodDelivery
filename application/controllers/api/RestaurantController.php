@@ -25,6 +25,7 @@
             $this->load->model('RestroItemCategoryModel'); 
             $this->load->model('RestroItemModel'); 
             $this->load->model('RestroItemVariationModel'); 
+            $this->load->model('RestroPromotionModel'); 
         } 
 
         private function validate() {
@@ -266,6 +267,44 @@
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
-        }       
+        }    
+        
+        
+        public function promotions_get()
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $restro_id = $this->input->get('location_id');
+                $location_id = $this->input->get('location_id');
+                
+
+                $params = array();
+
+                if(isset($restro_id))$params["restro_id"] = $restro_id;                    
+                if(isset($location_id))$params["location_id"] = $location_id;    
+
+                $promotions = $this->RestroPromotionModel->find($params);
+                
+                foreach($promotions as $promotion) {
+                    $promotion->restaurant = $this->RestaurantModel->findById($promotion->restro_id);
+                }
+
+                $resource = $promotions;
+                if(!$resource) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }  
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>$resource
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        }   
 
 }

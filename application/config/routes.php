@@ -496,7 +496,7 @@ $route['api/restaurants/ratings'] = '/api/RestaurantController/ratings';
 $route['api/restaurants/item_categories'] = '/api/RestaurantController/item_categories'; 
 $route['api/restaurants/items'] = '/api/RestaurantController/items'; 
 $route['api/restaurants/items/(:num)'] = '/api/RestaurantController/items/$1'; 
-
+$route['api/restaurants/promotions'] = '/api/RestaurantController/promotions';
 
 $route['api/orders'] = '/api/OrderController'; 
 $route['api/orders/(:num)/details'] = '/api/OrderController/details/$1'; 

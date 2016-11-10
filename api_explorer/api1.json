@@ -1566,6 +1566,70 @@
         }
       }
     },
+    "/restaurants/promotions": {
+      "get": {
+        "tags": [
+          "restaurants"
+        ],
+        "description": "This API is responsible for getting promotion list",
+        "operationId": "getRestroPromotions",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "required": false,
+            "description": "Restaurant id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "required": false,
+            "description": "Location id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "service_id",
+            "required": false,
+            "description": "Service id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/orders": {
       "get": {
         "tags": [

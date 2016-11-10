@@ -901,7 +901,7 @@
                 <div class="table-responsive">
                     <div style="width:100%; background:#f8f8f8;">                   
                         <table class="table bg-gray-light tbl" style="width:100%;">
-                            <tr><td></td><td>Category</td><td>From</td><td>To</td><td>Max Cover</td><td>Largest Party Size</td><td>Booking Limit</td><td>Cover Count</td><td>Points</td></tr>
+                            <tr><td></td><td>Category</td><td>From</td><td>To</td><td>Max Cover</td><td>Largest Party Size</td><td>Booking Limit</td><td>Cover Count</td><td>Points</td><td>Deposit Amount</td></tr>
 
                             <?php
                                 $weekdays = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
@@ -919,6 +919,7 @@
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit1" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count1" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point1" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[0][$weekday."_deposit"]:"";?>" id="seating_info_<?php echo $weekday;?>_deposit1" ></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -930,6 +931,7 @@
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit2" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count2" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point2" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[1][$weekday."_deposit"]:"";?>" id="seating_info_<?php echo $weekday;?>_deposit2" ></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -941,6 +943,7 @@
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit3" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count3" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point3" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[2][$weekday."_deposit"]:"";?>" id="seating_info_<?php echo $weekday;?>_deposit3" ></td>
                             </tr>
                             <?php
                                 }
@@ -1007,6 +1010,7 @@
                info[weekday+'_booking_limit'] = $("#seating_info_"+weekday+"_booking_limit"+cat).val(); 
                info[weekday+'_cover_count'] = $("#seating_info_"+weekday+"_cover_count"+cat).val(); 
                info[weekday+'_point'] = $("#seating_info_"+weekday+"_point"+cat).val(); 
+               info[weekday+'_deposit'] = $("#seating_info_"+weekday+"_deposit"+cat).val(); 
             });
             
             seatingInfos.push(info);            
