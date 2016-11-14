@@ -1,8 +1,8 @@
 {
+	"name": "Mataam web project",
 	"description": "The CodeIgniter framework",
-	"name": "codeigniter/framework",
-	"type": "project",
-	"homepage": "https://codeigniter.com",
+    "type": "project",
+	"homepage": "http://mataam.net",
 	"license": "MIT",
 	"support": {
 		"forum": "http://forum.codeigniter.com/",
@@ -11,7 +11,9 @@
 		"source": "https://github.com/bcit-ci/CodeIgniter"
 	},
 	"require": {
-		"php": ">=5.2.4"
+		"php": ">=5.2.4",
+		"workerman/phpsocket.io": "^1.0",
+		"cboden/ratchet": "^0.3.5"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
