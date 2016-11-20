@@ -16,7 +16,9 @@ class Dashboard extends CI_Controller
 		$this->load->model('Administration/Dashboard_management');
 		$this->load->model("Administration/Restaurant_management");
 		$this->load->model("Administration/Area_management");
-		$this->load->model("Administration/Cuisine_management"); 
+        $this->load->model("Administration/Cuisine_management"); 
+        $this->load->model("OrderModel"); 
+		$this->load->model("RestroTableOrderModel"); 
 	}
 
 	function index()
@@ -25,6 +27,47 @@ class Dashboard extends CI_Controller
 		$data['area_list']=$this->Area_management->get_area_list();
 
 		$data['restro_list']=$this->Restaurant_management->get_all_restro_list();
+        
+        $delivery_orders = $this->OrderModel->find(1, array('date'=>date('Y-m-d')));
+        $delivery_amount = 0;
+        foreach($delivery_orders as $order) {
+            $delivery_amount += $order->total;
+        }
+        $data['delivery_info'] = array(
+            "today_amount"=>$delivery_amount,
+            "today_orders"=>count($delivery_orders),
+            "completed_percentage"=>$this->OrderModel->getCompletedPercentage(1)
+        );
+        
+        $catering_orders = $this->OrderModel->find(2, array('date'=>date('Y-m-d')));
+        $catering_amount = 0;
+        foreach($catering_orders as $order) {
+            $catering_amount += $order->total;
+        }
+        $data['catering_info'] = array(
+            "today_amount"=>$catering_amount,
+            "today_orders"=>count($catering_orders),
+            "completed_percentage"=>$this->OrderModel->getCompletedPercentage(2)
+        );
+        
+        $reservation_orders = $this->RestroTableOrderModel->find(array('date'=>date('Y-m-d')));
+        $data['reservation_info'] = array(
+            "today_amount"=>2500,
+            "today_orders"=>count($reservation_orders),
+            "completed_percentage"=>$this->RestroTableOrderModel->getCompletedPercentage()
+        );
+        
+        $pickup_orders = $this->OrderModel->find(4, array('date'=>date('Y-m-d')));
+        $pickup_amount = 0;
+        foreach($pickup_orders as $order) {
+            $pickup_amount += $order->total;
+        }
+        $data['pickup_info'] = array(
+            "today_amount"=>$pickup_amount,
+            "today_orders"=>count($pickup_orders),
+            "completed_percentage"=>$this->OrderModel->getCompletedPercentage(4)
+        );
+        
 		$this->load->view("Administration/dashboard.php",$data);
 	}
 

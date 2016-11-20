@@ -16,8 +16,9 @@
 
                 <div class="small-box-bottom bg-gray-light">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr><td colspan="2">TODAY SALES: KD 1,250</td></tr>
-                            <tr><td colspan="2">TODAY ORDERS: 40</td></tr>
+                        <tbody>
+                            <tr><td colspan="2">Today Sales: KD <?php echo $delivery_info["today_amount"]?></td></tr>
+                            <tr><td colspan="2">Today Orders: <?php echo $delivery_info["today_orders"]?></td></tr>
                         </tbody></table>
                 </div>
             </div>
@@ -38,8 +39,9 @@
 
                 <div class="small-box-bottom bg-gray-light">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr><td colspan="2">TODAY SALES: KD 1,250</td></tr>
-                            <tr><td colspan="2">TODAY ORDERS: 40</td></tr>
+                        <tbody>
+                            <tr><td colspan="2">Today Sales: KD <?php echo $catering_info["today_amount"]?></td></tr>
+                            <tr><td colspan="2">Today Orders: <?php echo $catering_info["today_orders"]?></td></tr>
                         </tbody></table>
                 </div>
             </div>
@@ -60,8 +62,9 @@
 
                 <div class="small-box-bottom bg-gray-light">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr><td colspan="2">TODAY SALES: KD 1,250</td></tr>
-                            <tr><td colspan="2">TODAY ORDERS: 40</td></tr>
+                        <tbody>
+                            <tr><td colspan="2">Today Orders: <?php echo $reservation_info["today_orders"]?></td></tr>
+                            <tr><td>&nbsp;</td></tr>
                         </tbody></table>
                 </div>
             </div>
@@ -82,8 +85,9 @@
 
                 <div class="small-box-bottom bg-gray-light">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tbody><tr><td colspan="2">TODAY SALES: KD 1,250</td></tr>
-                            <tr><td colspan="2">TODAY ORDERS: 40</td></tr>
+                        <tbody>
+                            <tr><td colspan="2">Today Sales: KD <?php echo $pickup_info["today_amount"]?></td></tr>
+                            <tr><td colspan="2">Today Orders: <?php echo $pickup_info["today_orders"]?></td></tr>
                         </tbody></table>
                 </div>
             </div>

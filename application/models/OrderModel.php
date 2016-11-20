@@ -78,8 +78,10 @@
                 if(isset($params["date"]) && $params["date"]!="") $this->db->where('date', $params["date"]);   
                 if(isset($params["min_date"]) && $params["min_date"]!="") $this->db->where('date <=', $params["min_date"]);   
                 if(isset($params["max_date"]) && $params["max_date"]!="") $this->db->where('date >=', $params["max_date"]);   
+                
+                if(isset($params["restro_ids"])) $this->db->where_in('restro_id', $params["restro_ids"]);
             }  
-            
+
             $this->db->order_by('created_time DESC');
             $result = $this->db->get()->result();
 
@@ -117,5 +119,22 @@
 
             return $ret;
         }
+
+        public function getCompletedPercentage($service_type, $params=null){
+            $table_name = $this->tableName($service_type);            
+            if($table_name == null) return null;
+
+            $this->db->select('COUNT(*) as cnt');
+            $this->db->where('status', 3);
+            if(isset($params["restro_ids"])) $this->db->where_in('restro_id', $params["restro_ids"]);
+            
+            $completed_cnt = $this->db->get($table_name)->row()->cnt;
+            
+            $this->db->select('COUNT(*) as cnt');
+            if(isset($params["restro_ids"])) $this->db->where_in('restro_id', $params["restro_ids"]);
+            $all_cnt = $this->db->get($table_name)->row()->cnt;
+            
+            return $all_cnt>0?round(100*$completed_cnt/$all_cnt,2):0; 
+        }         
 
 }

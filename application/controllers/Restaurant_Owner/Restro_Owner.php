@@ -22,15 +22,23 @@ class Restro_Owner extends CI_Controller
 		$this->load->model("Administration/Restaurant_management");
 		$this->load->model("Administration/Order_Management");
 		$this->load->model("Customer_management");
+        
+        $this->load->model('RestaurantModel');
+        $this->load->model('OrderModel');
+        $this->load->model('RestroTableOrderModel');
 	}
 	
 	function dashboard(){
 
 		$data['area_list']=$this->Area_management->get_area_list();
-	$this->load->view("Restaurant_Owner/restro_owner_dashboard",$data);
+        
+        $data = array_merge($data, $this->getOrderInfo());
+        
+	    $this->load->view("Restaurant_Owner/restro_owner_dashboard",$data);
 	
 	}
 
+    
         function profile()
         {
 
@@ -1193,27 +1201,28 @@ class Restro_Owner extends CI_Controller
 		$user_id = $this->tank_auth->get_user_id();
 		$data['order'] = $this->Restro_Owner_Model->all_delivery_restro_order_pending($user_id);
 
+        $data = array_merge($data, $this->getOrderInfo());
 		$this->load->view("Restaurant_Owner/restro_delivery_order",$data);
 	}
 	public function restro_reservation_order(){
 		$data['errors']=array();
 		$user_id = $this->tank_auth->get_user_id();
 		$data['order'] = $this->Restro_Owner_Model->all_reservation_restro_order_pendding($user_id);
-
+        $data = array_merge($data, $this->getOrderInfo());
 		$this->load->view("Restaurant_Owner/restro_reservation_order",$data);
 	}
 	public function restro_pickup_order(){
 		$data['errors']=array();
 		$user_id = $this->tank_auth->get_user_id();
 		$data['order'] = $this->Restro_Owner_Model->all_pickup_restro_order_pendding($user_id);
-		
+		$data = array_merge($data, $this->getOrderInfo());
 		$this->load->view("Restaurant_Owner/restro_pickup_order",$data);
 	}
 	public function restro_catering_order(){
 		$data['errors']=array();
 		$user_id = $this->tank_auth->get_user_id();
 		$data['order'] = $this->Restro_Owner_Model->all_catering_restro_order_pendding($user_id);
-		
+		$data = array_merge($data, $this->getOrderInfo());
 		$this->load->view("Restaurant_Owner/restro_catering_order",$data);
 	}
 
@@ -1931,6 +1940,59 @@ class Restro_Owner extends CI_Controller
 
 		}
 	}
+    
+    function getOrderInfo() {
+        $ownerId =$this->tank_auth->get_user_id();
+        
+        $restaurants = $this->RestaurantModel->findByOwnerId($ownerId);
+        
+        $restroIds = array();
+        foreach($restaurants as $restro) {
+            $restroIds[] = $restro->id;
+        }
+        
+        $delivery_orders = $this->OrderModel->find(1, array('restro_ids'=>$restroIds, 'date'=>date('Y-m-d')));
+        $delivery_amount = 0;
+        foreach($delivery_orders as $order) {
+            $delivery_amount += $order->total;
+        }
+        $data['delivery_info'] = array(
+            "today_amount"=>$delivery_amount,
+            "today_orders"=>count($delivery_orders),
+            "completed_percentage"=>$this->OrderModel->getCompletedPercentage(1 ,array('restro_ids'=>$restroIds))
+        );
+        
+        $catering_orders = $this->OrderModel->find(2, array('restro_ids'=>$restroIds, 'date'=>date('Y-m-d')));
+        $catering_amount = 0;
+        foreach($catering_orders as $order) {
+            $catering_amount += $order->total;
+        }
+        $data['catering_info'] = array(
+            "today_amount"=>$catering_amount,
+            "today_orders"=>count($catering_orders),
+            "completed_percentage"=>$this->OrderModel->getCompletedPercentage(2 ,array('restro_ids'=>$restroIds))
+        );
+        
+        $reservation_orders = $this->RestroTableOrderModel->find(array('restro_ids'=>$restroIds, 'date'=>date('Y-m-d')));
+        $data['reservation_info'] = array(
+            "today_amount"=>2500,
+            "today_orders"=>count($reservation_orders),
+            "completed_percentage"=>$this->RestroTableOrderModel->getCompletedPercentage(array('restro_ids'=>$restroIds))
+        );
+        
+        $pickup_orders = $this->OrderModel->find(4, array('restro_ids'=>$restroIds, 'date'=>date('Y-m-d')));
+        $pickup_amount = 0;
+        foreach($pickup_orders as $order) {
+            $pickup_amount += $order->total;
+        }
+        $data['pickup_info'] = array(
+            "today_amount"=>$pickup_amount,
+            "today_orders"=>count($pickup_orders),
+            "completed_percentage"=>$this->OrderModel->getCompletedPercentage(4 ,array('restro_ids'=>$restroIds))
+        );
+        
+        return $data;
+    }
 
 }
 ?>

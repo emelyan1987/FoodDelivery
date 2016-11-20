@@ -35,8 +35,8 @@ $this->load->view("includes/Administration/sidebar");
         </a>
         <div class="small-box-bottom bg-gray-light">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr><td colspan="2">Today Sales: KD 1,250</td></tr>
-            <tr><td colspan="2">Today Orders: 40</td></tr>
+            <tr><td colspan="2">Today Sales: KD <?php echo $delivery_info["today_amount"]?></td></tr>
+            <tr><td colspan="2">Today Orders: <?php echo $delivery_info["today_orders"]?></td></tr>
           </table>
         </div>
       </div><!-- ./col -->
@@ -54,8 +54,8 @@ $this->load->view("includes/Administration/sidebar");
         </a>
         <div class="small-box-bottom bg-gray-light">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr><td colspan="2">Today Sales: KD 1,250</td></tr>
-            <tr><td colspan="2">Today Orders: 40</td></tr>
+            <tr><td colspan="2">Today Sales: KD <?php echo $catering_info["today_amount"]?></td></tr>
+            <tr><td colspan="2">Today Orders: <?php echo $catering_info["today_orders"]?></td></tr>
           </table>
         </div>
       </div><!-- ./col -->
@@ -73,7 +73,7 @@ $this->load->view("includes/Administration/sidebar");
         </a>
         <div class="small-box-bottom bg-gray-light">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr><td colspan="2">Today Orders: 40</td></tr>
+            <tr><td colspan="2">Today Orders: <?php echo $reservation_info["today_orders"]?></td></tr>
             <tr><td>&nbsp;</td></tr>
           </table>
         </div>
@@ -92,8 +92,8 @@ $this->load->view("includes/Administration/sidebar");
         </a>
         <div class="small-box-bottom bg-gray-light">
           <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr><td colspan="2">Today Sales: KD 1,250</td></tr>
-            <tr><td colspan="2">Today Orders: 40</td></tr>
+            <tr><td colspan="2">Today Sales: KD <?php echo $pickup_info["today_amount"]?></td></tr>
+            <tr><td colspan="2">Today Orders: <?php echo $pickup_info["today_orders"]?></td></tr>
           </table>
         </div>
       </div><!-- ./col -->
@@ -116,19 +116,19 @@ $this->load->view("includes/Administration/sidebar");
           <div class="box-body">
             <div class="row">
               <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                <input type="text" class="knob" value="49" data-width="90" data-height="90" data-fgColor="#7CC424">
+                <input type="text" class="knob" value="<?php echo $delivery_info['completed_percentage']; ?>" data-width="90" data-height="90" data-fgColor="#7CC424">
                 <div class="knob-label">Delivery</div>
               </div><!-- ./col -->
               <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                <input type="text" class="knob" value="73" data-width="90" data-height="90" class="test" data-fgColor="#FF7E00">
+                <input type="text" class="knob" value="<?php echo $catering_info['completed_percentage']; ?>" data-width="90" data-height="90" class="test" data-fgColor="#FF7E00">
                 <div class="knob-label">Catering</div>
               </div><!-- ./col -->
               <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                <input type="text" class="knob" value="0" data-width="90" data-height="90" data-fgColor="#D61D08">
+                <input type="text" class="knob" value="<?php echo $reservation_info['completed_percentage']; ?>" data-width="90" data-height="90" data-fgColor="#D61D08">
                 <div class="knob-label">Reservation</div>
               </div><!-- ./col -->
               <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                <input type="text" class="knob" value="35" data-width="90" data-height="90" data-fgColor="#2993FF">
+                <input type="text" class="knob" value="<?php echo $pickup_info['completed_percentage']; ?>" data-width="90" data-height="90" data-fgColor="#2993FF">
                 <div class="knob-label">Pickup</div>
               </div><!-- ./col -->
             </div><!-- /.row -->

@@ -54,6 +54,7 @@
                 if(isset($params["time"]) && $params["time"]!="") $this->db->where('time', $params["time"]);
                 if(isset($params["from_time"]) && $params["from_time"]!="") $this->db->where('time >=', $params["from_time"]);
                 if(isset($params["to_time"]) && $params["to_time"]!="") $this->db->where('time <=', $params["to_time"]);
+                if(isset($params["restro_ids"])) $this->db->where_in('restro_id', $params["restro_ids"]);
             }  
             $this->db->order_by('updated_time DESC');
             $result = $this->db->get()->result();
@@ -80,4 +81,19 @@
             return $ret;
         }
 
+
+        public function getCompletedPercentage($params=null){
+            $table_name = 'restro_table_order';
+
+            $this->db->select('COUNT(*) as cnt');
+            $this->db->where('status', 3);
+            if(isset($params["restro_ids"])) $this->db->where_in('restro_id', $params["restro_ids"]);
+            $completed_cnt = $this->db->get($table_name)->row()->cnt;
+
+            $this->db->select('COUNT(*) as cnt');
+            if(isset($params["restro_ids"])) $this->db->where_in('restro_id', $params["restro_ids"]);
+            $all_cnt = $this->db->get($table_name)->row()->cnt;
+
+            return $all_cnt>0?round(100*$completed_cnt/$all_cnt,2):0; 
+        } 
 }

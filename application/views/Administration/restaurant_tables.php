@@ -308,12 +308,12 @@
 
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <!--<div class="col-md-6">
                             <div class="form-group">
                                 <label for="priceInput">Deposit Amount for Reservation</label>
                                 <input type="number" class="form-control" id="priceInput" name="price" placeholder="Enter Price" min="0" step="0.1">                                
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="smsInput">SMS Message for Reservation</label>

@@ -122,6 +122,12 @@
 
         }
 
+        public function findByOwnerId($user_id){
+            $this->db->select('*');
+            $this->db->where('user_id',$user_id);
+
+            return $this->db->get('restro_info')->result();
+        } 
 
         /*public function delete($id){
         $this->db->trans_start();
