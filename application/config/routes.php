@@ -512,5 +512,9 @@ $route['api/orders/(:num)/cancel'] = '/api/OrderController/cancel/$1';
 $route['api/orders/(:num)/accept'] = '/api/OrderController/accept/$1'; 
 
 
+$route['api/notifications'] = '/api/PushNotificationController'; 
+$route['api/devices'] = '/api/DeviceController'; 
+
+
 
 

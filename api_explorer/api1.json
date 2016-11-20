@@ -2668,6 +2668,57 @@
           }
         }
       }
+    },
+    "/devices": {
+      "post": {
+        "tags": [
+          "devices"
+        ],
+        "description": "This API is responsible for registering user device token",
+        "operationId": "registerDevice",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },{
+            "in": "body",
+            "name": "body",
+            "description": "JSON body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/deviceCreateModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -2971,6 +3022,20 @@
         },
         "people_number": {
           "type": "integer"
+        }
+      }
+    },
+    "deviceCreateModel": {
+      "required": ["device_id", "device_token", "device_type"],
+      "properties": {
+        "device_id": {
+          "type": "string"
+        },
+        "device_type": {
+          "type": "string"
+        },
+        "device_token": {
+          "type": "string"
         }
       }
     }
