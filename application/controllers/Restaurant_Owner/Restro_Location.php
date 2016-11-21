@@ -29,6 +29,20 @@
             $data['restro_id'] = $restro_id;
 
             $this->load->view("Restaurant_Owner/show_restro_location",$data);
+        }
+
+        public function setup_seating_hours() {            
+            $restro_id = $this->input->post("restro_id");
+            if(!isset($restro_id)) echo "no"; return;
+                        
+            $location_id = $this->input->post("location_id");
+            if(!isset($location_id)) echo "no"; return;
+            
+            $seatingInfos = $this->input->post("seating_infos");
+
+            $this->Restaurant_management->clear_seating_hours($restro_id, $location_id);
+            //-----------------------------------------------------------------------------------------------
+            echo $this->Restaurant_management->add_reservation_service($payment, $workingInfo, $seatingInfos);
 
         }
 

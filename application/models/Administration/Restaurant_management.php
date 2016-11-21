@@ -274,7 +274,7 @@
 
         }
 
-        public function  add_reservation_service($payment, $workingInfo, $seatingInfos=null)
+        public function   add_reservation_service($payment, $workingInfo, $seatingInfos=null)
         {
 
             $this->db->insert("restro_payments_method",$payment);

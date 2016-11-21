@@ -38,7 +38,7 @@
                                     <td><?php getCityName($vs->city);?></td>
                                     <td><?php getAreaName($vs->area);?></td>
                                     <td style="text-align: center;">  
-                                        <?php $services = explode(',', $vs->services); echo in_array(3,$services)?"<a href='/manage_restro_table/".$vs->restro_id."/".$vs->id."'>Table</a>":"&nbsp;" ?>
+                                        <?php $services = explode(',', $vs->services); echo in_array(3,$services)?"<a href='/manage_restro_table/".$vs->restro_id."/".$vs->id."'>Table</a>/<a href='/setup_restro_seating_hours/".$vs->restro_id."/".$vs->id."'>Seating Hours</a>":"&nbsp;" ?>
                                     </td>
 
                                 </tr>
@@ -79,3 +79,5 @@
         });
     });
     </script>
+    
+    

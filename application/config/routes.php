@@ -425,6 +425,7 @@ $route['restro_item_list'] = 'Restaurant_Owner/Restro_Owner/restro_item_list';
 $route['restro_add_menu/(:num)'] = 'Restaurant_Owner/Restro_Owner/restro_add_menu/$i';
 $route['view_my_restro/(:num)'] = 'Restaurant_Owner/Restro_Owner/view_my_restro/$i'; 
 $route['manage_restro_table/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/manage_restro_table/$i/$i'; 
+$route['setup_restro_seating_hours/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/setup_restro_seating_hours/$i/$i'; 
 $route['ajax_edit_restro_table/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/ajax_edit_restro_table/$i/$i'; 
 $route['restro_tables_booking/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/restro_tables_booking/$i/$i';
 $route['tables_booking/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/tables_booking/$i/$i';
@@ -460,6 +461,8 @@ $route['ServiceSetupCatering/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/Se
 $route['ServiceSetupReservation/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/ServiceSetupReservation/$i/$i'; 
 $route['ServiceSetupPickup/(:num)/(:num)'] = 'Restaurant_Owner/Restro_Owner/ServiceSetupPickup/$i/$i';
 $route['manage_restro_location/(:num)'] = 'Restaurant_Owner/Restro_Location/manage_restro_location/$i'; 
+$route['setup_seating_hours'] = 'Restaurant_Owner/Restro_Location/setup_seating_hours'; 
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE; 
 $route['faq_list'] = 'Administration/Dashboard/faq_list'; 

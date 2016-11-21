@@ -931,7 +931,7 @@
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit2" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count2" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point2" ></td>
-                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[1][$weekday."_deposit"]:"";?>" id="seating_info_<?php echo $weekday;?>_deposit2" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[1])?$SeatingInfo[1][$weekday."_deposit"]:"";?>" id="seating_info_<?php echo $weekday;?>_deposit2" ></td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -943,7 +943,7 @@
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_booking_limit"]:"";?>" id="seating_info_<?php echo $weekday;?>_booking_limit3" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_cover_count"]:"";?>" id="seating_info_<?php echo $weekday;?>_cover_count3" ></td>
                                 <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_point"]:"";?>" id="seating_info_<?php echo $weekday;?>_point3" ></td>
-                                <td><input type="text" value="<?php echo isset($SeatingInfo[0])?$SeatingInfo[2][$weekday."_deposit"]:"";?>" id="seating_info_<?php echo $weekday;?>_deposit3" ></td>
+                                <td><input type="text" value="<?php echo isset($SeatingInfo[2])?$SeatingInfo[2][$weekday."_deposit"]:"";?>" id="seating_info_<?php echo $weekday;?>_deposit3" ></td>
                             </tr>
                             <?php
                                 }
