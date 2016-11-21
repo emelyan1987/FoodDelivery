@@ -91,7 +91,7 @@
                                 );                                
                             } else if($device->device_type == 'ios') {
                                 $this->notification->apple_push_notification(
-                                    file_get_contents(APPPATH.'/credentials/MataamPushKeyProd.pem'),
+                                    file_get_contents(APPPATH.'/credentials/pushcert.pem'),
                                     $device->device_token,
                                     array(
                                         // apn payload format
