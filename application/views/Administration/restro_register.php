@@ -23,7 +23,7 @@ echo $this->session->flashdata('updateMsg');?>
 ?>
           <!--<a href='/new_customer/' class="btn bg-gray-light2"><span class="add_sign">+</span> Add New</a>-->
           <br>
-          <h4>RESTAURANT REGISTRATION LIST</h4>
+          <h4>Restaurant Registration List</h4>
           <div class="clear_h10"></div>
           <div class="table-responsive">
             <table class="table table_design table-bordered" id="example2">
@@ -74,10 +74,10 @@ $this->load->view("includes/Administration/footer");
       <script>
         $(function () {
           $("#example1").DataTable({
-            "dom": '<fl<t>ip>'
           });
           $('#example2').DataTable({
             "paging": true,
+            "dom": '<fl<t>ip>',
             "lengthChange": true,
             "searching": true,
             "ordering": true,

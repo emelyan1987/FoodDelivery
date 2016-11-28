@@ -29,9 +29,12 @@
             $this->db->from('resto_items_category_list AS c'); 
             $this->db->join('tbl_item AS i', 'i.id=c.item_id');
             $this->db->join('restro_promotion_item AS p', 'p.item_id=i.id', 'left');
+            $this->db->join('tbl_item_category AS ic', 'ic.id=c.category_id', 'left');
             
             if(isset($params)) { 
                 if(isset($params["category_id"]) && $params["category_id"]!="") $this->db->where('c.category_id', $params["category_id"]);          
+                if(isset($params["location_id"]) && $params["location_id"]!="") $this->db->where('ic.location_id', $params["location_id"]);          
+                if(isset($params["service_id"]) && $params["service_id"]!="") $this->db->where('ic.service_id', $params["service_id"]);          
             }  
             
             $this->db->group_by('i.id');

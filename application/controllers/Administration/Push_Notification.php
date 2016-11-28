@@ -79,7 +79,7 @@
                         foreach($devices as $device){
                             if($device->device_type == 'android') {
                                 $this->notification->google_cloud_messaging(
-                                    'GCM_API_KEY',
+                                    'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY',
                                     $device->device_token,
                                     array(
                                         // With your payload format
@@ -90,8 +90,8 @@
                                     )
                                 );                                
                             } else if($device->device_type == 'ios') {
-                                $this->notification->apple_push_notification(
-                                    file_get_contents(APPPATH.'/credentials/pushcert.pem'),
+                                $result = $this->notification->apple_push_notification(
+                                    file_get_contents(APPPATH.'/credentials/MataamPushKeyProd.pem'),
                                     $device->device_token,
                                     array(
                                         // apn payload format
@@ -102,7 +102,8 @@
                                             )
                                         )
                                     )
-                                );
+                                );                                
+                                //echo json_encode($result);
                             }
                         }
 

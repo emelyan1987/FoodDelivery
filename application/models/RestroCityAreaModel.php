@@ -92,13 +92,13 @@
             //echo $this->db->last_query();
         }
 
-        public function getCharge($restro_id, $area_id, $service_id){
+        public function getCharge($restro_id, $location_id, $area_id, $service_id){
             $where = "FIND_IN_SET('".$area_id."',area) AND service_id = '".$service_id."'";
 
             $this->db->select('area, delivery_price');
             $this->db->from('restro_city_area'); 
             $this->db->where($where);
-            $this->db->where('restro_id', $restro_id);  
+            $this->db->where(array('restro_id'=>$restro_id,'location_id'=>$location_id));  
             $this->db->group_by("id");  
             $this->db->order_by("id", "desc"); 
             $query = $this->db->get();
@@ -113,7 +113,7 @@
 
                     $indexId = array_search($area_id,$ex_arr);
 
-                    return $myPrice =  $exprice[$indexId];
+                    return $myPrice =  (float)$exprice[$indexId];
                 }
             }
             else

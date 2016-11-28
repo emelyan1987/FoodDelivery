@@ -659,6 +659,54 @@
         }
       }
     },
+    "/users/address/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "description": "This API is responsible for getting user specific address",
+        "operationId": "getUserAddress",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },{
+            "in": "path",
+            "name": "id",
+            "description": "user id",
+            "required": true,
+            "type": "integer"
+          }],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/users/language": {
       "post": {
         "tags": [
@@ -1492,6 +1540,20 @@
             "required": true,
             "description": "Restro item category id",
             "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "required": true,
+            "description": "location id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "service_id",
+            "required": true,
+            "description": "service id",
+            "type": "integer"
           }
         ],
         "responses": {
@@ -1856,6 +1918,13 @@
             "required": false,
             "description": "restaurant id",
             "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
           }
         ],
         "responses": {
@@ -1913,6 +1982,63 @@
             "schema": {
                 "$ref": "#/definitions/cartCreateModel"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/cart/count": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting cart list count for specific user",
+        "operationId": "getCartsCount",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "query",
+            "name": "service_type",
+            "required": false,
+            "description": "service type(1:Delivery, 2:Catering, 3:Reservation, 4:Pickup)",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "restro_id",
+            "required": false,
+            "description": "restaurant id",
+            "type": "integer"
           }
         ],
         "responses": {
@@ -2145,6 +2271,13 @@
             "name": "restro_id",
             "required": false,
             "description": "restaurant id",
+            "type": "integer"
+          },
+          {                         
+            "in": "query",
+            "name": "location_id",
+            "required": false,
+            "description": "restaurant location id",
             "type": "integer"
           },
           {                         
@@ -2773,6 +2906,9 @@
       "required": ["mobile_no", "password"],
       "properties": {
         "mobile_no": {
+          "type": "string"
+        },
+        "email": {
           "type": "string"
         },
         "password": {

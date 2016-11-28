@@ -71,10 +71,11 @@ $route['ajax_resrvation_booking_time'] = 'home/ajax_resrvation_booking_time';
 
 
 $route['restaurants'] = 'home/restaurant_list';
+$route['ajax_search_restaurants'] = 'home/ajax_search_restaurants';
 $route['ajax_restaurants_fetch'] = 'home/ajax_restaurants_fetch'; 
 $route['ajax_restaurants_fetch_cuisine'] = 'home/ajax_restaurants_fetch_cuisine'; 
 $route['ajax_show_all_restro'] = 'home/ajax_show_all_restro';
-$route['restaurant_view/(:num)'] = 'home/restaurant_view/$i';  
+$route['restaurant_view/(:num)/(:num)'] = 'home/restaurant_view/$i/$i';  
 $route['ajax_show_item_by_cat'] = 'home/ajax_show_item_by_cat';
 $route['Home_Restro_Filter/(:num)'] = 'home/Home_Restro_Filter/$i';
 
@@ -91,7 +92,7 @@ $route['pickup_restaurant/(:num)'] = 'home/pickup_restaurant_view/$i';
 $route['catering_restaurant/(:num)'] = 'home/catering_restaurant_view/$i';
 $route['view_reservation_restro_table/(:num)/(:num)'] = 'home/view_reservation_restro_table/$i/$i';
 $route['reservation_checkout/(:num)/(:num)'] = 'home/reservation_checkout/$i/$i';
-$route['view_restro_item/(:num)/(:num)'] = 'home/view_restro_item/$i/$i'; 
+$route['view_restro_item/(:num)/(:num)/(:num)'] = 'home/view_restro_item/$i/$i/$i'; 
 $route['checkout'] = 'home/checkout'; 
 $route['about_us'] = 'home/about_us';
 $route['citychange'] = 'home/citychange';
@@ -104,7 +105,7 @@ $route['view_restro_catering/(:num)/(:num)'] = 'home/view_restro_catering/$i/$i'
 $route['pickup_checkout'] = 'home/pickup_checkout'; 
 $route['catering_checkout'] = 'home/catering_checkout'; 
 $route['ajaxaddressFetch'] = 'home/ajaxaddressFetch'; 
-$route['restaurant_rating/(:num)'] = 'Rating/restaurant_rating/$i';
+$route['restaurant_rating/(:num)/(:num)'] = 'Rating/restaurant_rating/$i/$i';
 
 $route['customer_otp'] = 'home/customer_otp/';
 $route['check_otp'] = 'home/check_otp/';
@@ -505,6 +506,7 @@ $route['api/orders'] = '/api/OrderController';
 $route['api/orders/(:num)/details'] = '/api/OrderController/details/$1'; 
 $route['api/orders/cart'] = '/api/OrderController/cart'; 
 $route['api/orders/cart/(:num)'] = '/api/OrderController/cart/$1'; 
+$route['api/orders/cart/count'] = '/api/OrderController/cart_count'; 
 $route['api/orders/sum'] = '/api/OrderController/sum'; 
 $route['api/orders/point'] = '/api/OrderController/point'; 
 $route['api/orders/discount'] = '/api/OrderController/discount'; 

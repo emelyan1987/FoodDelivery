@@ -57,7 +57,13 @@ function getImagePath($img) {
 	$CI = &get_instance();
 
 	$arr = explode('public_html', $img);
-	echo isset($arr[1]) ? $arr[1] : "/profile_images/noimagefound.jpg";
+	echo isset($arr[1]) ? $arr[1] : "/assets/Customer/img/default_item.png";
+}
+function getImageLink($img) {
+	$CI = &get_instance();
+
+	$arr = explode('public_html', $img);
+	echo isset($arr[1]) ? base_url($arr[1]) : base_url("/assets/Customer/img/default_item.png");
 }
 function restroseoCatChk($cID, $rID) {
 	$CI = &get_instance();

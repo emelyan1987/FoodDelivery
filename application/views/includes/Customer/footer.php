@@ -107,15 +107,20 @@
                     </div>
                 </div>
             </div>
+            <style>
+                .fa-white{
+                    color:#fff !important;
+                }
+            </style>
             <div class="copyrightSection">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="pull-left social">
                                 <span><label>Follow Us on : </label></span>
-                                <span><a href="https://www.facebook.com/Mataamapp"><i class="fa fa-facebook"></i></a></span>
+                                <span><a href="https://www.facebook.com/Mataamapp"><i class="fa fa-facebook fa-white"></i></a></span>
                                 <!--<span><i class="fa fa-twitter"></i></span>-->
-                                <span><a href="https://www.instagram.com/mataamapp/"><i class="fa fa-instagram"></i></a></span>
+                                <span><a href="https://www.instagram.com/mataamapp/"><i class="fa fa-instagram fa-white"></i></a></span>
                             </div>
                         </div>
                         <div class="col-md-6">

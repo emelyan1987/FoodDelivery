@@ -141,7 +141,7 @@
             if($this->post('email')) {                                        
                 $data["email"] = $this->post('email');
             }
-
+            $data["user_role"] = 3; //Register as customer role
             $id = $this->UserModel->create($data);
 
             $this->UserProfileModel->save($id, array(
@@ -324,16 +324,22 @@
     public function login_post() {
         try { 
             $mobile_no = $this->post('mobile_no');
+            $email = $this->post('email');
             $password = $this->post('password'); 
             $ttl = $this->post('ttl'); 
 
-            if(!isset($mobile_no) || !isset($password)) {
+            if((!isset($mobile_no) && !isset($email)) || !isset($password)) {
                 throw new Exception($this->lang->line('parameter_incorrect'), RESULT_ERROR_PARAMS_INVALID);
             }
 
-            $user = $this->UserModel->findOne(array(   
-                'mobile_no'=>$mobile_no
-            ));        
+            $params = array();
+            if(isset($mobile_no)) {
+                $params['mobile_no'] = $mobile_no;
+            } 
+            if(isset($email)) {
+                $params['email'] = $email;
+            } 
+            $user = $this->UserModel->findOne($params);        
 
             if(!$user) {
                 throw new Exception($this->lang->line('credential_invalid'), RESULT_ERROR_RESOURCE_NOT_FOUND);
@@ -350,8 +356,7 @@
             $data["user_id"] = $user->id;   
             $token = CryptoLib::randomString(50);
             $data["access_token"] = $token;
-            if($ttl && $this->form_validation->numeric($ttl)) $data["ttl"] = $ttl;
-           
+            if($ttl && $this->form_validation->numeric($ttl)) $data["ttl"] = $ttl;           
         
             if(isset($_SERVER['HTTP_CLIENT_IP'])) $data['ip_address1'] = $_SERVER['HTTP_CLIENT_IP'];
             if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $data['ip_address2'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -527,8 +532,6 @@
     public function address_get($id=null) {
         try { 
             $this->validateAccessToken();
-
-            $id = $this->get('id'); 
             
             
             if($id === null) {

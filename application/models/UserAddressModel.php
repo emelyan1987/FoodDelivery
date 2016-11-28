@@ -46,12 +46,14 @@
         }
 
         public function find($params=null, $fields=array()){   
-            $this->db->select(empty($fields)?'*':implode(',',$fields));
-            $this->db->from('user_addresses');   
+            $this->db->select("u.*, CONCAT(a.name, ' ', c.city_name) AS area_name");
+            $this->db->from('user_addresses AS u');   
+            $this->db->join('area AS a', 'a.id=u.area_id', 'left');
+            $this->db->join('city AS c', 'c.id=a.city_id', 'left');
             if(isset($params)) {
-                if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
-                if(isset($params["city_id"]) && $params["city_id"]!="") $this->db->where('city_id', $params["city_id"]);
-                if(isset($params["area_id"]) && $params["area_id"]!="") $this->db->where('area_id', $params["area_id"]);
+                if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('u.user_id', $params["user_id"]);
+                if(isset($params["city_id"]) && $params["city_id"]!="") $this->db->where('u.city_id', $params["city_id"]);
+                if(isset($params["area_id"]) && $params["area_id"]!="") $this->db->where('u.area_id', $params["area_id"]);
             }  
             $result = $this->db->get()->result();
 
@@ -63,10 +65,13 @@
             return $result&&count($result)>0?$result[0]:null;
         }
         public function findById($id){
-            $this->db->select('*');
+            /*$this->db->select('*');
             $this->db->where('id',$id);
 
-            return $this->db->get('user_addresses')->row();
+            return $this->db->get('user_addresses')->row();*/
+            
+            $result = $this->find(array('id'=>$id));
+            return $result&&count($result)>0?$result[0]:null;
         }         
 
 

@@ -76,10 +76,30 @@
                     if($this->get('area')) $params["area"] = $this->get('area');                                    // Single Id
                     if($this->get('cuisines')) $params["cuisines"] = $this->get('cuisines');                           // Multiple Ids
                     if($this->get('food_types')) $params["food_types"] = $this->get('food_types');                     // Multiple Ids
-                    if($this->get('restro_categories')) $params["restro_categories"] = $this->get('restro_categories');   // Multiple Ids                  
+                    if($this->get('restro_categories')) $params["restro_categories"] = $this->get('restro_categories');   // Multiple Ids      
+                                     
                     $params["service_type"] = $service_type;   // Service Type
 
-                    $resource = $this->RestaurantModel->find($params); 
+                    $restaurants = $this->RestaurantModel->find($params); 
+                    
+                    $kind = $this->get('kind');
+                    if(isset($kind) && $kind != 'all') {
+                        $restros = array();
+                        foreach($restaurants as $restro){
+                            if($kind == 'featured') {
+                                if($restro->assign_featured) $restros[] = $restro;
+                            }
+                            if($kind == 'promotion') {
+                                if($restro->promo_id) $restros[] = $restro;
+                            }
+                            if($kind == 'ratings') {
+                                if($restro->rating && $restro->rating>0) $restros[] = $restro;
+                            }
+                        }
+                        $resource = $restros;
+                    } else {
+                        $resource = $restaurants;
+                    }
                 } else {     
                     $location_id = $this->get('location_id');
                     if(!isset($location_id)) {
@@ -87,7 +107,7 @@
                     }
                                         
                     $restro = $this->RestaurantModel->findByRestroLocationService($id, $location_id, $service_type); 
-                    $restro->reviews = $this->RatingModel->find(array('restro_id'=>$id));
+                    $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
                     
                     $resource = $restro;
                 }
@@ -244,11 +264,13 @@
                     $resource = $item;
                 } else {
                     $category_id = $this->input->get('category_id');
-                    if(!isset($category_id)) {
-                        throw new Exception("category_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
-                    }  
+                    $location_id = $this->input->get('location_id');
+                    $service_id = $this->input->get('service_id');
+                    
                     $params = array();  
-                    $params["category_id"] = $category_id;                   
+                    if(isset($category_id))$params["category_id"] = $category_id;                   
+                    if(isset($location_id))$params["location_id"] = $location_id;                   
+                    if(isset($service_id))$params["service_id"] = $service_id;                   
                     $resource = $this->RestroItemModel->find($params);
 
                 }

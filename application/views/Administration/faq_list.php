@@ -40,7 +40,7 @@ $this->load->view("includes/Administration/sidebar");
                         <td><?php echo $vs->title;?></td>
                         <td><?php echo $vs->description;?></td>
                         <td><?php echo $vs->date;?></td>
-                         <td><?php if ($vs->status) {
+                         <td><?php if ($vs->status == 1) {
 	echo "<span style='color:green'>Active</span>";
 } else {
 	echo "<span style='color:red'>Deactive</span>";
@@ -159,7 +159,7 @@ $this->load->view("includes/Administration/footer");
 						<tr><td>Status</td>
 
                         <td>
-  						  <select id="faq_status">
+  						  <select id="faq_status" name="faq_status">
 						  <option value="1">Active</option>
 						  <option value="0">Deactivated</option>
 

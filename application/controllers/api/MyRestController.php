@@ -26,7 +26,7 @@
         } 
         
         function validateAccessToken() {
-            $token = $this->input->get('access_token');
+            $token = isset($_SESSION['access_token']) ? $_SESSION['access_token'] : $this->input->get('access_token');
             
             if(!isset($token)) {
                 throw new Exception($this->lang->line('access_token_required'), RESULT_ERROR_ACCESS_TOKEN_REQUIRED);

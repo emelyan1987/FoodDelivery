@@ -17,7 +17,25 @@
             $this->load->model("Administration/Advertise_management");
             $this->load->model("Administration/Contact_us_management");
             $this->load->model("Administration/Dashboard_management");
+            $this->load->model('CartModel'); 
+            $this->load->model('UserAddressModel'); 
+            $this->load->model('RestaurantModel'); 
+            $this->load->model('RatingModel'); 
+            $this->load->model('RestroItemCategoryModel'); 
+            $this->load->model('RestroItemModel'); 
+            $this->load->model('UserProfileModel'); 
+            $this->load->model('OrderModel'); 
+            $this->load->model('OrderDetailModel'); 
+            $this->load->model('RestroCityAreaModel'); 
+            $this->load->model('LoyaltyPointModel'); 
+            $this->load->model('MataamPointModel'); 
+            $this->load->model('CouponModel'); 
+            $this->load->model('RestroSeatingHourModel'); 
+            $this->load->model('RestroTableOrderModel'); 
+
             $this->load->helper('captcha');
+            $this->load->helper('utils');
+            $this->load->helper('order');
 
             $this->load->library('tank_auth');
             $this->lang->load('tank_auth');
@@ -522,9 +540,14 @@
 
             $data['errors']=array();
             $restro_id =$this->uri->segment('2');
-            $data['restroInfo'] = $this->Home_Restro->view_delivery_restro_details($restro_id);
-            $data['restroCat'] = $this->Home_Restro->view_restro_cat_filter($restro_id);
-            $data['restro_item'] = $this->Home_Restro->restro_item_list($restro_id);
+            $location_id =$this->uri->segment('3');
+            $service_id = $_SESSION["filter_service"];
+            //$data['restroInfo'] = $this->Home_Restro->view_delivery_restro_details($restro_id);
+            $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_id); 
+            $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
+            $data['restroInfo'] = $restro;
+            $data['restroCat'] = $this->RestroItemCategoryModel->find(array('location_id'=>$location_id,'service_id'=>$service_id));
+            $data['restro_item'] = $this->RestroItemModel->find(array('location_id'=>$location_id,'service_id'=>$service_id));
 
             $this->load->view('restaurant_view',$data);
         }
@@ -694,7 +717,36 @@
 
         function Home_filter(){
             $data['errors']=array();
-            $_SESSION['filter_service'] = 1;
+            
+            $filter_service = $this->input->get('service');
+            $filter_area = $this->input->post('filter_area');
+            $filter_cusines = $this->input->post('filter_cusines');
+
+            if(isset($filter_service)) $_SESSION['filter_service'] = $filter_service;
+            if(isset($filter_area)) $_SESSION['order_area_id'] = $filter_area;
+            
+            if(isset($_SESSION['order_area_id'])) $filter_area = $_SESSION['order_area_id'];
+            
+            $params = array();
+            if(isset($filter_service)) {
+                $params['service_type'] = $filter_service;
+            }
+            if(isset($filter_area)) {
+                $params['area'] = $filter_area;
+            }
+            if(isset($filter_cusines)) {
+                $params['cusines'] = $filter_cusines;
+            } 
+            $data['restro_list'] = $this->RestaurantModel->find($params); 
+            
+            if($filter_service == 3) {
+                $reserve_time = $this->input->post('reserve_time');
+                $people_number = $this->input->post('people_number');
+                $reserve_time = strtotime($reserve_time);
+                foreach($data['restro_list'] as $restro) {
+                    $restro->slots = getTimeSlots($restro->restro_id, $restro->location_id, $reserve_time, $people_number);
+                }
+            }
 
             $data['advt1'] = $this->Advertise_management->GetAdevrtise_limit(0,3);
             $data['advt2'] = $this->Advertise_management->GetAdevrtise_limit(3,3);
@@ -702,86 +754,16 @@
 
             $data['city'] = $this->Home_site->show_all_city();
 
-            $city_id = $this->input->post('filter_city_id');
-            $filter_type =$this->input->post('filter_type');
-            if($filter_type != '')
-            {
-                if($city_id != '')
-                {
-                    $_SESSION['filter_city'] = $city_id;
-                    $_SESSION['filter_service'] = $filter_type;
 
+            $data['service_list']=$this->Home_Restro->all_service();
+            $data['cuisin_list']=$this->Home_Restro->all_cuisin();
 
-                }
-                else{
-                    $_SESSION['filter_city'] = '';
-                }
-            }	
-
-            if($_SESSION['filter_service'] == 1)
-            {
-                if(@$_SESSION['filter_id'] == '')
-                {
-
-
-                    if($_SESSION['filter_city'] != '')
-                    {
-                        $data['retro_list']=$this->Home_Restro->all_restro_by_city($_SESSION['filter_city'],$_SESSION['filter_service']);
-                    }
-                    else
-                    {
-                        $data['retro_list']=$this->Home_Restro->all_restro_by_filter($_SESSION['filter_service']);
-                    }
-                }
-                else
-                {
-
-                    if($_SESSION['filter_id'] == 1)
-                    {
-                        $data['retro_list']=$this->Home_Restro->all_restro();
-                    }
-                    if($_SESSION['filter_id'] == 2)
-                    {
-                        $data['retro_list']=$this->Home_Restro->all_restro_fetured();
-                    }
-                    if($_SESSION['filter_id'] == 3)
-                    {
-                        $data['retro_list']=$this->Home_Restro->all_restro_promo();
-                    }
-                    if($_SESSION['filter_id'] == 4)
-                    {
-                        $data['retro_list']=$this->Home_Restro->all_restro_promo();
-                    }
-
-
-
-
-
-
-                }
-
-
-                $data['service_list']=$this->Home_Restro->all_service();
-                $data['cuisin_list']=$this->Home_Restro->all_cuisin();
-
-
-            }
-
-
+            
             if(isset($_POST['filter_type']))
             {
                 redirect('/filter/');
             }
-
-
-
-
             $this->load->view('restaurant_list',$data);
-
-
-
-
-
         }
         function Home_coupon_filter(){
             $filter_id =$this->input->post('filter_id');
@@ -862,8 +844,6 @@
                     $_SESSION['search_txt'] = NULL;
                 }
             }
-
-
 
             $data['retro_list']=$this->Home_Restro->all_restro_table($_SESSION['filter_service'],$_SESSION['search_txt']);
 
@@ -987,29 +967,22 @@
 
         function view_restro_item(){
             $data['errors']=array();
-            $restro_id =$this->uri->segment('2');
-            $item_id =$this->uri->segment('3');
 
-            $data['restroInfo'] = $this->Home_Restro->view_restro_details($restro_id);
-            $data['restroCat'] = $this->Home_Restro->view_restro_cat_filter($restro_id);
+            $service_id = $_SESSION["filter_service"];
+            $restro_id =$this->uri->segment('2');
+            $location_id =$this->uri->segment('3');            
+            $item_id =$this->uri->segment('4');            
+
+            $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_id); 
+            $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
+            $data['restroInfo'] = $restro;
+            $data['restroCat'] = $this->RestroItemCategoryModel->find(array('location_id'=>$location_id,'service_id'=>$service_id));
             $RestroUserId = $this->Home_Restro->getRestroUserId($restro_id);
             $data['restro_item_info'] = $this->Home_Restro->restro_item_details($RestroUserId,$item_id);
 
+            $cart_item_id = $this->input->get('cart_item_id');
+            if(isset($_POST['btnaddtocart'])){                
 
-            if(isset($_POST['btnaddtocart'])){
-
-
-                $item_id =$this->input->post('item_id');
-
-                $quantity =$this->input->post('quantity'); 
-                $item_name =$this->input->post('item_name');
-                //$item_price =$this->input->post('item_price');
-                $item_price =$this->input->post('last_price');
-                $img =$this->input->post('item_img');
-                $add_size =$this->input->post('add_size');
-                $add_topping =$this->input->post('add_topping');
-                $remove_topping =$this->input->post('remove_topping');
-                $spacial_request =$this->input->post('spacial_request');
                 if($this->input->post('variation_ids') != '')
                 {
                     $variation_ids = implode(',',$this->input->post('variation_ids'));
@@ -1018,71 +991,38 @@
                 {
                     $variation_ids = 0;
                 }
+                $CartArray['product_id'] = $this->input->post('item_id');
+                $CartArray['quantity'] = $this->input->post('quantity');
+                $CartArray['price'] = $this->input->post('last_price'); 
+                $CartArray['restro_id'] = $restro_id;
+                $CartArray['location_id'] = $location_id;
+                $CartArray['user_id'] = $_SESSION['Customer_User_Id'];
+                $CartArray['spacial_request'] = $this->input->post('spacial_request'); 
+                $CartArray['variation_ids'] = $variation_ids;
 
-
-                $data1 = array(
-                    'id'      => $item_id,
-                    'qty'     => $quantity,
-                    'price'   => $item_price,
-                    'name'    => $item_name,
-                    'img'	=> $img,
-                    'restro_id' => $restro_id,
-                    'data' => "ITEM",
-                    'add_size' => $add_size,
-                    'add_topping' => $add_topping,
-                    'remove_topping' => $remove_topping,
-                    'spacial_request' => $spacial_request,
-                    'variation_id' => $variation_ids
-
-                );
-
-                $this->cart->insert($data1);
-
-
-
-
+                if(isset($cart_item_id)) {
+                    $this->CartModel->update($service_id, $cart_item_id, $CartArray);
+                } else {
+                    $this->CartModel->create($service_id, $CartArray);
+                }
             }
 
+            if(isset($cart_item_id)) {
+                $data['cartItem'] = $this->CartModel->findById($service_id, $cart_item_id);
+            }            
 
-            $data['cartData'] = $this->cart->contents();
-
+            $data['cartData'] = $this->CartModel->find($service_id, array(
+                'user_id'=>$_SESSION['Customer_User_Id'],
+                'restro_id'=>$restro_id,
+                'location_id'=>$location_id
+                ), true); 
 
             if(isset($_POST['addtocartbtn']))
             {
-                $notes = $this->input->post('order_notes');
-
-                foreach($data['cartData'] as $Dcart => $dataCart){
-                    if($dataCart['data'] == 'ITEM')
-                    {
-                        if($dataCart['variation_id'] == '')
-                        {
-                            $variation_id = 0;
-                        }
-                        else
-                        {
-                            $variation_id = $dataCart['variation_id'];
-                        }
-
-                        $CartArray['product_id'] = $dataCart['id'];
-                        $CartArray['quantity'] = $dataCart['qty'];
-                        $CartArray['price'] = $dataCart['price']; 
-                        $CartArray['restro_id'] = $dataCart['restro_id'];
-                        $CartArray['notes'] = $notes;
-                        $CartArray['user_id'] = $_SESSION['Customer_User_Id'];
-                        $CartArray['add_size'] = $dataCart['add_size'];
-                        $CartArray['add_topping'] = $dataCart['add_topping'];
-                        $CartArray['remove_topping'] = $dataCart['remove_topping']; 
-                        $CartArray['spacial_request'] = $dataCart['spacial_request']; 
-                        $CartArray['variation_ids'] = $variation_id;
-
-                        $this->Home_Restro->insert_cart($CartArray);
-
-                    }	
-
-                }
-                $this->cart->destroy();
+                $notes = $this->input->post('order_notes');                
 
                 $_SESSION['order_restro_id'] = $restro_id;
+                $_SESSION['order_location_id'] = $location_id;
                 redirect("/checkout/");
             }
             $this->load->view('view_restro_item',$data);
@@ -1091,27 +1031,29 @@
         function checkout(){
             $data['errors']=array();
             $user_id = $_SESSION['Customer_User_Id'];
-            $_SESSION['filter_service'] = 1;
+            $service_type = $_SESSION['filter_service'];
+            $restro_id = $_SESSION['order_restro_id'];
+            $location_id = $_SESSION['order_location_id'];
+            $area_id = $_SESSION['order_area_id'];
 
             $Mnumber = $this->Customer_management->get_user_mobile_number($user_id);
             $mobileNumber = $Mnumber['mobile_no'];
 
             $customer_points = $this->Customer_management->get_customer_points($user_id);
 
-            $data['cust_point'] = $customer_points;
-            $data['cartData'] = $this->Home_Restro->view_my_cart($user_id);
-            $data['addressData'] = $this->Home_Restro->get_customer_address_data($user_id);
+            $data['cust_point'] = $customer_points;                       
+
+            $data['cartData'] = $this->CartModel->find($service_type, array(
+                'user_id'=>$user_id,
+                'restro_id'=>$restro_id,
+                'location_id'=>$location_id,
+                ), true); 
+
+            $data['addressData'] = $this->UserAddressModel->find(array('user_id'=>$user_id));
 
             $data['getPaymentgateways'] = $this->Home_Restro->getPaymentgatewaysByService($_SESSION['order_restro_id'],$_SESSION['filter_service']);
 
             $data['deliveryCharges'] = $this->Home_Restro->getDeliveryChargesbyrestrolocation($_SESSION['order_restro_id'],$_SESSION['filter_service'],$_SESSION['filter_city']);
-
-            $Loc = $this->Home_Restro->getrestroOrderLocationId($_SESSION['order_restro_id'],$_SESSION['filter_service'],$_SESSION['filter_city']);
-
-
-
-
-
 
             if(($data['cartData'] == '') or ($user_id == ''))
             {
@@ -1130,7 +1072,7 @@
             {
 
 
-                $this->form_validation->set_rules('useraddress', 'Address', 'required');
+                $this->form_validation->set_rules('address_id', 'Address', 'required');
                 $this->form_validation->set_rules('hd_orderTime', 'Delivery Time', 'required');
                 $this->form_validation->set_rules('hd_paymentType', 'Payment Option', 'required');
 
@@ -1140,94 +1082,99 @@
                 }
                 else
                 {
+                    $order['restro_id'] = $restro_id;
+                    $order['location_id'] = $location_id;
+                    // Get Sum Info
+                    $sum = getSum($user_id, $service_type, $restro_id, $location_id, $area_id);
+                    $order['total'] = $sum['total_amount'];
+                    $order['delivery_charges'] = $sum['charge_amount'];
 
-                    $hd_total = $this->input->post('hd_total');
-                    $hd_charges = $this->input->post('hd_charges');
-                    $hd_orderTime = $this->input->post('hd_orderTime');
-                    $hd_paymentType = $this->input->post('hd_paymentType'); 
-                    $scheduled_date = $this->input->post('scheduled_date'); 
-                    $scheduled_time = $this->input->post('scheduled_time'); 
-                    $addressid = $this->input->post('useraddress'); 
-                    $extra_direction = $this->input->post('extra_direction'); 
-                    $hd_points = $this->input->post('hd_points');
-                    $discount_type = $this->input->post('discount_opt'); 
-                    $hd_discount = $this->input->post('hd_discount');
-                    $coupon_code = $this->input->post('coupon_code');
-                    $hd_used_points = $this->input->post('hd_used_points');
+                    // Get Discount Amount
+                    $redeem_type = $this->input->post('redeem_type');
+                    $coupon_code = $this->input->post('coupon_code'); 
 
-                    if($discount_type == 1)
-                    {
-                        $order['coupon_point_apply'] = $discount_type;
-                        $order['discount_amount'] = $hd_discount;
-                        $order['coupon_code'] = $coupon_code;
+                    $point = getPoint($user_id, $service_type, $restro_id, $location_id); 
+                    if(isset($redeem_type)) {
+                        $discount = getDiscount($redeem_type, $user_id, $service_type, $restro_id, $location_id, $coupon_code);
+                        $order['discount_amount'] = $discount['discount_amount'];
+                        $order['coupon_point_apply'] = $redeem_type;                  
+                        if($redeem_type == 1) { //  Redeem Coupon
+                            $order['coupon_code'] = $coupon_code;
+                        } else if($redeem_type == 2) {  // Loyalty Point
+                            $order['used_points'] = $point['loyalty']['used_points'];
+                        } else if($redeem_type == 3) {  // Mataam Point
+                            $order['used_points'] = $point['mataam']['used_points'];
+                        }   
+                    }  
+
+                    $order['order_points'] = $point['loyalty']['gained_points'];       
+                    $order['mataam_order_points'] = $point['mataam']['gained_points'];     
+
+
+                    $schedule_date = $this->input->post('schedule_date');
+                    if(!isset($schedule_date)) {
+                        throw new Exception('schedule_date '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                     }
-                    if($discount_type == 2)
-                    {
-                        $order['coupon_point_apply'] = $discount_type; 
-                        $order['discount_amount'] = $hd_discount;
-                        $order['used_points'] = $hd_used_points;
-
-                        $update_points['points'] = $data['cust_point'] - $hd_used_points;
-                        $this->Customer_management->update_customer_points($user_id,$update_points);
-
+                    $schedule_time = $this->input->post('schedule_time');
+                    if(!isset($schedule_time)) {
+                        throw new Exception('schedule_time '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                     }
-
-                    $customer_points = $this->Customer_management->get_customer_points($user_id);
-                    if($hd_orderTime == 1)
-                    {
-                        $order['delivery_date'] = $Mdate;
-                        $order['delivery_time'] = date('H:i:s',strtotime($Mtime));
+                    if($service_type==1 || $service_type==4) {                    
+                        $order['delivery_date'] = $schedule_date;  // Y-m-d
+                        $order['delivery_time'] = $schedule_time;  // H:i:s
                     }
-                    else
-                    {
-                        $order['delivery_date'] = $scheduled_date;
-                        $order['delivery_time'] = date('H:i:s',strtotime($scheduled_time));
-                    }
-                    $order['total'] = $hd_total;
-                    $order['delivery_charges'] = $hd_charges;
-                    $order['date'] = $Mdate;
-                    $order['time'] = date('H:i:s',strtotime($Mtime));
+                    $order['date'] = $schedule_date;  // Y-m-d
+                    $order['time'] = $schedule_time;  // H:i:s
                     $order['user_id'] = $user_id;
-                    $order['payment_method'] = $hd_paymentType;
+
                     $order['status'] = 1; 
-                    $order['address_id'] = $addressid;
-                    $order['extra_direction'] = $extra_direction; 
-                    $order['order_points'] = $hd_points;
-                    if($Loc['location_id'] != '')
-                    {
-                        $order['restro_location_id'] = $Loc['location_id'];
+                    $address_id = $this->input->post('address_id');
+                    if(!isset($address_id)) {
+                        throw new Exception('address_id '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                     }
-
-                    $getId = $this->Home_Restro->add_order($order);
-
-
-                    $orderDetails['order_id'] = $getId;
-
-                    $updatedata['order_no'] = $this->config->item('Start_order_id').$getId;
-
-                    $this->Home_Restro->orderNo_update($updatedata,$getId);
-
-                    foreach($data['cartData'] as $DA => $DA_Cart){
-                        $orderDetails['product_id'] = $DA_Cart->product_id;
-                        $orderDetails['price'] = $DA_Cart->price;
-                        $orderDetails['quantity'] = $DA_Cart->quantity;
-                        $orderDetails['restro_id'] = $DA_Cart->restro_id;
-                        $orderDetails['notes'] = $DA_Cart->notes;
-                        $orderDetails['user_id'] = $DA_Cart->user_id;
-                        $orderDetails['variation_ids'] = $DA_Cart->variation_ids;
-
-                        $this->Home_Restro->add_order_details($orderDetails);
+                    $order['address_id'] = $address_id;
+                    $order['extra_direction'] = $this->input->post('extra_direction'); 
+                    $order['restro_location_id'] = $location_id;
+                    $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
+                    $order_id = $this->OrderModel->create($service_type, $order);
+                    $this->OrderModel->update($service_type, $order_id, array("order_no"=>$this->config->item('Start_order_id').$order_id));
+                    $order_details['order_id'] = $order_id;
+                    $carts = $this->CartModel->find($service_type, array("user_id"=>$user_id, "restro_id"=>$restro_id, "location_id"=>$location_id));
+                    foreach($carts as $cart){
+                        $order_details['product_id'] = $cart->product_id;
+                        $order_details['price'] = $cart->price;
+                        $order_details['quantity'] = $cart->quantity;
+                        $order_details['restro_id'] = $cart->restro_id;
+                        $order_details['location_id'] = $cart->location_id;
+                        $order_details['notes'] = $cart->notes;
+                        $order_details['user_id'] = $cart->user_id;
+                        $order_details['variation_ids'] = $cart->variation_ids;
+                        $this->OrderDetailModel->create($service_type, $order_details);
                     }
+                    $this->CartModel->deleteAll($service_type, array('user_id'=>$user_id,'restro_id'=>$restro_id, 'location_id'=>$location_id));
 
+                    $order = $this->OrderModel->findById($service_type, $order_id);
+                    $order->details = $this->OrderDetailModel->find($service_type, array('order_id'=>$order_id));
 
-                    $updatePoint['points'] = $customer_points+$hd_points;
-                    $this->Customer_management->update_customer_points($user_id,$updatePoint);
+                    // Update user points on profile                    
+                    $user_profile = $this->UserProfileModel->findByUserId($user_id);
+                    $user_loyalty_points = $user_profile->points; $user_mataam_points = $user_profile->mataam_points;
+                    if($redeem_type == 2) {
+                        $user_loyalty_points -= $point['loyalty']['used_points'];
+                    } else if ($redeem_type == 3) {
+                        $user_mataam_points -= $point['mataam']['used_points'];
+                    }
+                    $user_loyalty_points += $point['loyalty']['gained_points'];
+                    $user_mataam_points += $point['mataam']['gained_points'];
+                    $this->UserProfileModel->save($user_id, array(
+                        'points'=>$user_loyalty_points,
+                        'mataam_points'=>$user_mataam_points
+                    ));
 
-                    $this->Home_Restro->empty_my_cart($user_id);
 
                     //order msg send here
 
-                    $orderNumber = $updatedata['order_no'];
+                    $orderNumber = $order->order_no;
                     $otpMSG =urlencode("Your Order Confirmed Successfully done, Your Order ID #$orderNumber");
 
                     $apiData = $this->Customer_management->getApiDetails(1);
@@ -1244,14 +1191,13 @@
                     if($hd_paymentType == 4)
                     {
                         $_SESSION['pay_type'] = 1;
-                        $_SESSION['pay_order_id'] = $getId;
-                        $_SESSION['pay_amount'] = $hd_total+$hd_charges;
+                        $_SESSION['pay_order_id'] = $order_id;
+                        $_SESSION['pay_amount'] = $sum['total_amount'];
                         $_SESSION['pay_method'] = 4;
                         $_SESSION['pay_discount'] = $order['discount_amount'];
                         $_SESSION['pay_order_no'] = $updatedata['order_no'];
 
                         redirect('/Paypal');
-
 
                     }
                     else
@@ -1628,35 +1574,35 @@
             $this->load->view('ajax_cart_table_remove',$data);
         }
 
-        function citychange(){
+        function ajax_search_restaurants(){
             $data['errors']=array();
+            
+            $area = $this->input->post('area');
+            $cusines = $this->input->post('cusines');
+            $area = $this->input->post('area');
+            $area = $this->input->post('area');
+            
+            $area = $_SESSION['order_area_id'] = $this->input->post('filter_area');
+            $service =$this->input->post('filter_service');
 
-            $_SESSION['filter_city'] = $this->input->post('id');
-            $type =$this->input->post('act');
+            $restro_list = $this->RestaurantModel->find(array('service_type'=>$service,'area'=>$area));
 
-
-
-
-            if($type == 'DELIVERY')
+            $data['restro_list'] = $restro_list;
+            if($service == 1)
             {
-                $data['retro_list']=$this->Home_Restro->all_restro_by_city($_SESSION['filter_city'],$_SESSION['filter_service']);
                 $this->load->view('ajax_restaurants_fetch_service',$data);
             }
-            if($type == 'PICKUP')
+            if($service == 2)
             {
-                $data['retro_list']=$this->Home_Restro->all_restro_by_location_city($_SESSION['filter_city'],$_SESSION['filter_service']);
-                $this->load->view('ajax_restaurants_fetch_service_pickup',$data);
+                $this->load->view('ajax_restaurants_fetch_service_catering',$data);    
             }
-            if($type == 'TABLE')
+            if($service == 3)
             {
-
-                $data['retro_list']=$this->Home_Restro->all_tables_by_location_city($_SESSION['filter_city'],$_SESSION['filter_service']);
                 $this->load->view('ajax_restaurants_fetch_service_table',$data);	
             }
-            if($type == 'CATERING')
+            if($service == 4)
             {
-                $data['retro_list']=$this->Home_Restro->all_restro_by_city($_SESSION['filter_city'],$_SESSION['filter_service']);
-                $this->load->view('ajax_restaurants_fetch_service_catering',$data);	
+                $this->load->view('ajax_restaurants_fetch_service_pickup',$data);   
             }
         }
 

@@ -102,6 +102,7 @@ $this->load->view("includes/Administration/footer");
           "paging": true,
           "lengthChange": true,
           "searching": true,
+          "dom": '<fl<t>ip>',
           "ordering": true,
           "info": true,
           "autoWidth": true
