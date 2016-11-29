@@ -78,7 +78,7 @@
 
                         foreach($devices as $device){
                             if($device->device_type == 'android') {
-                                $this->notification->google_cloud_messaging(
+                                $this->Notification->google_cloud_messaging(
                                     'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY',
                                     $device->device_token,
                                     array(
@@ -90,7 +90,7 @@
                                     )
                                 );                                
                             } else if($device->device_type == 'ios') {
-                                $result = $this->notification->apple_push_notification(
+                                $result = $this->Notification->apple_push_notification(
                                     file_get_contents(APPPATH.'/credentials/MataamPushKeyProd.pem'),
                                     $device->device_token,
                                     array(
