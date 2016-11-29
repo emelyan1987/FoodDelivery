@@ -411,7 +411,7 @@
     }
 
     $(document).ready(function(){
-        var restro_list = eval('<?php echo json_encode($restro_list);?>'); 
+        var restro_list = eval('<?php echo addslashes(json_encode($restro_list));?>'); 
 
         $("#restroTemplate").tmpl(restro_list).appendTo("#restro-list"); 
 

@@ -736,8 +736,8 @@
             }
             if(isset($filter_cuisines)) {
                 $params['cuisines'] = $filter_cuisines;
-            } echo json_encode($params);
-            $data['restro_list'] = $this->RestaurantModel->find($params); echo json_encode($data['restro_list']);
+            }
+            $data['restro_list'] = $this->RestaurantModel->find($params); 
             
             if($filter_service == 3) {
                 $reserve_time = $this->input->post('reserve_time');
