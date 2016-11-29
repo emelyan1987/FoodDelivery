@@ -248,7 +248,7 @@
                                             <?php
                                                 foreach ($city as $ct => $it):
                                                 ?>
-                                                <option value="<?php echo $it->id;?>" <?php if($_SESSION["order_area_id"]==$it->id) echo "selected"; ?>><?php echo addslashes($it->name) . " , " . addslashes($it->city_name);?></option>
+                                                <option value="<?php echo $it->id;?>" <?php if($_SESSION["order_area_id"]==$it->id) echo "selected"; ?>><?php echo ucwords($it->name) . " , " . ucwords($it->city_name);?></option>
                                                 <?php
                                                     endforeach;
                                             ?>
