@@ -16,7 +16,7 @@
             $this->load->model("Administration/Notification_management"); 
             $this->load->model("Restaurant_Owner/Restro_Owner_Model");
 
-            $this->load->library('codeigniter-library-notification/notification');
+            $this->load->library('codeigniter-library-notification/Notification');
 
             $this->load->model('UserDeviceModel');
 

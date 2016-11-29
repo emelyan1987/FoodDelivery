@@ -42,7 +42,7 @@ foreach ($restroInfo as $re => $ES):
 				    <div class="row">
 				        <div class="col-md-3 col-sm-12">
 				            <div class="searchBox">
-				                <a href="/reservation_filter/"><h4><i class="fa fa-angle-left"></i> Back to restaurant list</h4></a>
+				                <a href="/filter?service=3"><h4><i class="fa fa-angle-left"></i> Back to restaurant list</h4></a>
 				            </div>
 				            <div class="row">
 				                <div class="col-sm-3 pull-right">
