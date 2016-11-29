@@ -720,7 +720,7 @@
             
             $filter_service = $this->input->get('service');
             $filter_area = $this->input->post('filter_area');
-            $filter_cusines = $this->input->post('filter_cusines');
+            $filter_cuisines = $this->input->post('filter_cuisines');
 
             if(isset($filter_service)) $_SESSION['filter_service'] = $filter_service;
             if(isset($filter_area)) $_SESSION['order_area_id'] = $filter_area;
@@ -734,9 +734,9 @@
             if(isset($filter_area)) {
                 $params['area'] = $filter_area;
             }
-            if(isset($filter_cusines)) {
-                $params['cusines'] = $filter_cusines;
-            } 
+            if(isset($filter_cuisines)) {
+                $params['cuisines'] = $filter_cuisines;
+            } echo json_encode($params);
             $data['restro_list'] = $this->RestaurantModel->find($params); 
             
             if($filter_service == 3) {
