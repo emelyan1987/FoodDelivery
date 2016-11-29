@@ -966,6 +966,10 @@
         }
 
         function view_restro_item(){
+            $user_id = $_SESSION['Customer_User_Id'];
+            
+            if(!isset($user_id)) redirect('customer_login');
+            
             $data['errors']=array();
 
             $service_id = $_SESSION["filter_service"];
@@ -996,7 +1000,7 @@
                 $CartArray['price'] = $this->input->post('last_price'); 
                 $CartArray['restro_id'] = $restro_id;
                 $CartArray['location_id'] = $location_id;
-                $CartArray['user_id'] = $_SESSION['Customer_User_Id'];
+                $CartArray['user_id'] = $user_id;
                 $CartArray['spacial_request'] = $this->input->post('spacial_request'); 
                 $CartArray['variation_ids'] = $variation_ids;
 
@@ -1012,7 +1016,7 @@
             }            
 
             $data['cartData'] = $this->CartModel->find($service_id, array(
-                'user_id'=>$_SESSION['Customer_User_Id'],
+                'user_id'=>$user_id,
                 'restro_id'=>$restro_id,
                 'location_id'=>$location_id
                 ), true); 
