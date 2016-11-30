@@ -1,4 +1,7 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
+    if (!defined('BASEPATH')) exit('No direct script access allowed');
+    require APPPATH . '/libraries/codeigniter-library-notification/Notification.php';
+    
     @ob_start();
     class Push_Notification extends CI_Controller
     {
