@@ -18,7 +18,7 @@
             $this->load->model("Administration/Notification_management"); 
             $this->load->model("Restaurant_Owner/Restro_Owner_Model");
 
-            $this->load->library('codeigniter-library-notification/Notification');
+            $this->load->library('codeigniter-library-notification/notification');
 
             $this->load->model('UserDeviceModel');
 
@@ -80,7 +80,7 @@
 
                         foreach($devices as $device){
                             if($device->device_type == 'android') {
-                                $this->Notification->google_cloud_messaging(
+                                $this->notification->google_cloud_messaging(
                                     'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY',
                                     $device->device_token,
                                     array(
@@ -92,7 +92,7 @@
                                     )
                                 );                                
                             } else if($device->device_type == 'ios') {
-                                $result = $this->Notification->apple_push_notification(
+                                $result = $this->notification->apple_push_notification(
                                     file_get_contents(APPPATH.'/credentials/MataamPushKeyProd.pem'),
                                     $device->device_token,
                                     array(
