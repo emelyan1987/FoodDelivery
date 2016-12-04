@@ -49,6 +49,11 @@
             if(isset($params)) {
                 if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
             }  
+            
+            $this->db->group_by('user_id');
+            $this->db->group_by('device_type');
+            $this->db->order_by('created_time', 'DESC');
+            
             $result = $this->db->get()->result();
 
             return $result;

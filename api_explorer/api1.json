@@ -2630,6 +2630,56 @@
         }
       }
     },
+    "/orders/reserve/{id}": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "description": "This API is responsible for getting an User with specific ID",
+        "operationId": "getReservation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "required": false,
+            "in": "path",
+            "description": "reservation id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/orders/my_points": {
       "get": {
         "tags": [
@@ -3172,6 +3222,9 @@
         },
         "device_token": {
           "type": "string"
+        },
+        "dev_mode": {
+          "type": "boolean"
         }
       }
     }

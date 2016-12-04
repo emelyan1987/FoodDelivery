@@ -76,12 +76,12 @@
                     {
                         $data['success_app_msg'] = 'Push Notification Added Successfully done!';
 
-                        $devices = $this->UserDeviceModel->find();
+                        $devices = $this->UserDeviceModel->find(); 
 
                         foreach($devices as $device){
                             if($device->device_type == 'android') {
                                 $this->notification->google_cloud_messaging(
-                                    $device->dev_mode ? 'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY' : 'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY',
+                                    $device->dev_mode==1 ? 'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY' : 'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY',
                                     $device->device_token,
                                     array(
                                         // With your payload format
@@ -93,7 +93,7 @@
                                 );                                
                             } else if($device->device_type == 'ios') {
                                 $result = $this->notification->apple_push_notification(
-                                    file_get_contents(APPPATH.'/credentials/' . ($device->dev_mode ? 'devpush.pem' : 'dispush.pem')),
+                                    file_get_contents(APPPATH.'/credentials/' . ($device->dev_mode==1 ? 'devpush.pem' : 'dispush.pem')),
                                     $device->device_token,
                                     array(
                                         // apn payload format
@@ -106,6 +106,7 @@
                                     )
                                 );                                
                                 //echo json_encode($result);
+                                //echo APPPATH.'/credentials/' . ($device->dev_mode==1 ? 'devpush.pem' : 'dispush.pem');
                             }
                         }
 
