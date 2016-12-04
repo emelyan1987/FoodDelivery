@@ -512,6 +512,7 @@ $route['api/orders/point'] = '/api/OrderController/point';
 $route['api/orders/discount'] = '/api/OrderController/discount'; 
 $route['api/orders/times'] = '/api/OrderController/times'; 
 $route['api/orders/reserve'] = '/api/OrderController/reserve'; 
+$route['api/orders/reserve/(:num)'] = '/api/OrderController/reserve/$1'; 
 $route['api/orders/my_points'] = '/api/OrderController/my_points'; 
 $route['api/orders/(:num)/cancel'] = '/api/OrderController/cancel/$1'; 
 $route['api/orders/(:num)/accept'] = '/api/OrderController/accept/$1'; 

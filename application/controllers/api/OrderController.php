@@ -407,31 +407,38 @@
                     ), REST_Controller::HTTP_OK);
             }
         }
-        public function reserve_get()
+        public function reserve_get($id=null)
         {                 
             try {                
                 $this->validateAccessToken();
-                $restro_id = $this->get('restro_id');
-                $location_id = $this->get('location_id');
-                $params = array();
-                $params['user_id'] = $this->user->id;
-                if(isset($restro_id)) $params['restro_id'] = $restro_id;
-                if(isset($location_id)) $params['location_id'] = $location_id;
-                $orders = $this->RestroTableOrderModel->find($params);
-                foreach($orders as $order) {                       
-                    $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, 3);
-                    if($order->status == 2) {   // Accepted or Waiting Payment
-                        $weekday = strtolower(date('l', strtotime($order->date)));
-                        $seating_info = getSeatingInfo($order->restro_id, $order->location_id, $weekday, $order->time);
+                if($id == null) {                 
+                    $restro_id = $this->get('restro_id');
+                    $location_id = $this->get('location_id');
+                    $params = array();
+                    $params['user_id'] = $this->user->id;
+                    if(isset($restro_id)) $params['restro_id'] = $restro_id;
+                    if(isset($location_id)) $params['location_id'] = $location_id;
+                    $orders = $this->RestroTableOrderModel->find($params);
+                    foreach($orders as $order) {                       
+                        $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, 3);
+                        if($order->status == 2) {   // Accepted or Waiting Payment
+                            $weekday = strtolower(date('l', strtotime($order->date)));
+                            $seating_info = getSeatingInfo($order->restro_id, $order->location_id, $weekday, $order->time);
 
-                        if($seating_info['deposit']==0 || ($seating_info['deposit']>0&&$order->pay_done)) {
-                            $order->status = 3;
+                            if($seating_info['deposit']==0 || ($seating_info['deposit']>0&&$order->pay_done)) {
+                                $order->status = 3;
+                            }
                         }
-                    }
+                    }   
+                    $resource = $orders;
+                } else {
+                    $order = $this->RestroTableOrderModel->findById($id);
+                    $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, 3);
+                    $resource = $order;
                 }
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
-                    "resource"=>$orders
+                    "resource"=>$resource
                     ), REST_Controller::HTTP_OK);
             } catch (Exception $e) {
                 $this->response(array(
@@ -706,7 +713,7 @@
                     throw new Exception('reserve_time ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
                 $reserve_time = strtotime($reserve_time);
-        
+
                 $time_slots = getTimeSlots($restro_id, $location_id, $reserve_time, $people_number);
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    

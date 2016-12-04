@@ -57,12 +57,17 @@
                 if(!isset($device_token)) {
                     throw new Exception("device_token ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
+                $dev_mode = $this->post('dev_mode');
+                if(!isset($dev_mode)) {
+                    throw new Exception("dev_mode ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
 
                 $insert_id = $this->UserDeviceModel->create(array(
                     "user_id"=>$this->user->id,
                     "device_id"=>$this->post('device_id'),
                     "device_type"=>$this->post('device_type'),
-                    "device_token"=>$this->post('device_token')
+                    "device_token"=>$this->post('device_token'),
+                    "dev_mode"=>$this->post('dev_mode')
                 ));
                 $resource = $this->UserDeviceModel->findById($insert_id);
 
