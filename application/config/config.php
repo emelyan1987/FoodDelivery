@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
  */
  $config['base_url'] = 'http://mataam.net/';
- $config['base_url'] = 'http://192.168.1.71/';
+ $config['base_url'] = 'http://35.162.120.123/';
 
 /*
 |--------------------------------------------------------------------------

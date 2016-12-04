@@ -1,0 +1,332 @@
+Could not open input file: cgi-bin/chatserver.php
+Could not open input file: cgi-bin/chatserver.php
+New connection! (46)
+Connection 46 has disconnected
+New connection! (94)
+Connection 94 has disconnected
+New connection! (99)
+Connection 99 has disconnected
+New connection! (104)
+Connection 104 has disconnected
+New connection! (109)
+Connection 109 has disconnected
+New connection! (114)
+New connection! (119)
+Connection 119 sending message "{"event":"login","data":{"access_token":"WzMekLXtKlJYHIrfgMqecqF6XiNCuWXGi1yb79BtXEhEdeQMum"}}" to 1 other connection
+Connection 114 sending message "{"event":"login","data":{"access_token":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L"}}" to 1 other connection
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 1 other connection
+New connection! (129)
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 129 sending message "{"event":"login","data":{"access_token":"WzMekLXtKlJYHIrfgMqecqF6XiNCuWXGi1yb79BtXEhEdeQMum"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 114 sending message "{"event":"create message","data":{"message":"SGwlzWfTjHbxuDdscO9rlsHMLyj57Y1PYRndLnba8qh32Ze70L", "to":"user_269"}}" to 2 other connections
+Connection 119 has disconnected
+Connection 114 has disconnected
+New connection! (146)
+Connection 146 sending message "{"event":"login","data":{"access_token":"WzMekLXtKlJYHIrfgMqecqF6XiNCuWXGi1yb79BtXEhEdeQMum"}}" to 1 other connection
+Connection 129 has disconnected
+New connection! (218)
+Connection 218 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Thursday, December 1, 2016  amt 9:02:04 AM</td></tr>
+                        </table>
+    Connection 218 has disconnected
+New connection! (223)
+Connection 223 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Thursday, December 1, 2016  amt 9:02:07 AM</td></tr>
+                        </table>
+    Connection 223 has disconnected
+New connection! (228)
+Connection 228 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Thursday, December 1, 2016  amt 9:02:09 AM</td></tr>
+                        </table>
+    Connection 228 has disconnected
+New connection! (268)
+Connection 268 sending message "{"event":"login","data":{"access_token":"RdU2fQDoMH1RO6RTO2wJs8ZsfV1fGyUAY0zEKdYao41nnjDNE6"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='RdU2fQDoMH1RO6RTO2wJs8ZsfV1fGyUAY0zEKdYao41nnjDNE6'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  amt 7:15:59 AM</td></tr>
+                        </table>
+    Connection 268 sending message "{"event":"create message","data":{"message":"hi","to":"user_280"}}" to 1 other connection
+PHP Notice:  Undefined property: Ratchet\Server\IoConnection::$userid in /var/www/html/vendor/cboden/ratchet/src/Ratchet/AbstractConnectionDecorator.php on line 31
+Connection 268 has disconnected
+New connection! (288)
+Connection 288 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 5:58:04 PM</td></tr>
+                        </table>
+    Connection 288 has disconnected
+New connection! (293)
+Connection 293 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 5:58:24 PM</td></tr>
+                        </table>
+    Connection 293 has disconnected
+New connection! (298)
+Connection 298 sending message "{"event":"login","data":{"access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 1 other connection
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 298 sending message "{"event":"create message","data":{"message":"Ygh","to":"admin"}}" to 1 other connection
+PHP Notice:  Undefined property: Ratchet\Server\IoConnection::$userid in /var/www/html/vendor/cboden/ratchet/src/Ratchet/AbstractConnectionDecorator.php on line 31
+Connection 298 has disconnected
+New connection! (303)
+Connection 303 sending message "{"event":"login","data":{"access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 1 other connection
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 303 sending message "{"event":"create message","data":{"message":"Ygg","to":"admin"}}" to 1 other connection
+PHP Notice:  Undefined property: Ratchet\Server\IoConnection::$userid in /var/www/html/vendor/cboden/ratchet/src/Ratchet/AbstractConnectionDecorator.php on line 31
+Connection 303 sending message "{"event":"create message","data":{"message":"Ygh","to":"admin"}}" to 1 other connection
+PHP Notice:  Undefined property: Ratchet\Server\IoConnection::$userid in /var/www/html/vendor/cboden/ratchet/src/Ratchet/AbstractConnectionDecorator.php on line 31
+Connection 303 has disconnected
+New connection! (308)
+Connection 308 sending message "{"event":"login","data":{"access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 1 other connection
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 308 has disconnected
+New connection! (313)
+Connection 313 sending message "{"event":"login","data":{"access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 1 other connection
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+New connection! (318)
+Connection 318 sending message "{"event":"login","data":"access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 2 other connections
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 318 sending message "{"event":"login","access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}" to 2 other connections
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 318 sending message "{"event":"login","access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}" to 2 other connections
+PHP Notice:  Undefined property: stdClass::$data in /var/www/html/src/Chat.php on line 41
+Connection 318 sending message "{"event":"login","data":{"access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 2 other connections
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 318 sending message "{"event":"login","data":{"access_token":WXfJJ4ZAS70eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 2 other connections
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 318 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 2 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 6:06:24 PM</td></tr>
+                        </table>
+    Connection 313 has disconnected
+New connection! (323)
+Connection 323 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 2 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 6:07:09 PM</td></tr>
+                        </table>
+    Connection 323 has disconnected
+New connection! (328)
+Connection 328 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 2 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 6:08:00 PM</td></tr>
+                        </table>
+    Connection 318 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 2 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 6:08:45 PM</td></tr>
+                        </table>
+    Connection 318 sending message "{"event":"login","data":{"access_token":WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0}}" to 2 other connections
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 40
+PHP Notice:  Trying to get property of non-object in /var/www/html/src/Chat.php on line 41
+Connection 328 has disconnected
+Connection 318 has disconnected
+New connection! (333)
+Connection 333 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 6:11:10 PM</td></tr>
+                        </table>
+    Connection 333 has disconnected
+New connection! (338)
+Connection 338 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 6:14:28 PM</td></tr>
+                        </table>
+    Connection 338 has disconnected
+New connection! (343)
+Connection 343 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 6:14:32 PM</td></tr>
+                        </table>
+    Connection 343 has disconnected
+New connection! (348)
+Connection 348 sending message "{"event":"login","data":{"access_token":"RdU2fQDoMH1RO6RTO2wJs8ZsfV1fGyUAY0zEKdYao41nnjDNE6"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='RdU2fQDoMH1RO6RTO2wJs8ZsfV1fGyUAY0zEKdYao41nnjDNE6'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Friday, December 2, 2016  pmt 10:03:42 PM</td></tr>
+                        </table>
+    Connection 348 sending message "{"event":"create message","data":{"message":"hi","to":"user_280"}}" to 1 other connection
+PHP Notice:  Undefined property: Ratchet\Server\IoConnection::$userid in /var/www/html/vendor/cboden/ratchet/src/Ratchet/AbstractConnectionDecorator.php on line 31
+Connection 348 sending message "{"event":"create message","data":{"message":"sddd","to":"user_280"}}" to 1 other connection
+PHP Notice:  Undefined property: Ratchet\Server\IoConnection::$userid in /var/www/html/vendor/cboden/ratchet/src/Ratchet/AbstractConnectionDecorator.php on line 31
+Connection 348 has disconnected
+New connection! (399)
+Connection 399 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Saturday, December 3, 2016  pmt 5:50:56 PM</td></tr>
+                        </table>
+    Connection 399 has disconnected
+New connection! (409)
+Connection 409 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Saturday, December 3, 2016  pmt 8:39:49 PM</td></tr>
+                        </table>
+    Connection 409 has disconnected
+New connection! (414)
+Connection 414 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Saturday, December 3, 2016  pmt 8:39:52 PM</td></tr>
+                        </table>
+    Connection 414 has disconnected
+New connection! (419)
+Connection 419 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Saturday, December 3, 2016  pmt 8:40:54 PM</td></tr>
+                        </table>
+    Connection 419 has disconnected
+New connection! (424)
+Connection 424 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Saturday, December 3, 2016  pmt 9:39:04 PM</td></tr>
+                        </table>
+    Connection 424 has disconnected
+New connection! (434)
+New connection! (439)
+Connection 439 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 2 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:14:39 AM</td></tr>
+                        </table>
+    Connection 439 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 2 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:14:46 AM</td></tr>
+                        </table>
+    Connection 439 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 2 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:15:08 AM</td></tr>
+                        </table>
+    New connection! (444)
+Connection 444 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:15:18 AM</td></tr>
+                        </table>
+    Connection 444 has disconnected
+New connection! (454)
+Connection 454 has disconnected
+New connection! (459)
+Connection 459 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:22:27 AM</td></tr>
+                        </table>
+    Connection 459 sending message "{"event":"admin login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:24:37 AM</td></tr>
+                        </table>
+    Connection 459 sending message "{"event":"admin login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:24:40 AM</td></tr>
+                        </table>
+    Connection 459 sending message "{"event":"admin login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:24:46 AM</td></tr>
+                        </table>
+    Connection 459 sending message "{"event":"admin login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:24:48 AM</td></tr>
+                        </table>
+    Connection 459 sending message "{"event":"admin login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:26:00 AM</td></tr>
+                        </table>
+    Connection 459 sending message "{"event":"admin login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:26:03 AM</td></tr>
+                        </table>
+    Connection 459 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:26:09 AM</td></tr>
+                        </table>
+    Connection 459 has disconnected
+New connection! (464)
+Connection 464 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 3 other connections
+        <table align="center" border="1" cellspacing="0" style="background:white;color:black;width:80%;">
+        <tr><th colspan=2>Database Error</th></tr>
+        <tr><td align="right" valign="top">Message:</td><td><b>MySQL Query fail:</b> SELECT * FROM user_access_tokens WHERE access_token='pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL'</td></tr>
+        <tr><td align="right" valign="top" nowrap>MySQL Error:</td><td>MySQL server has gone away</td></tr>        <tr><td align="right">Date:</td><td>Sunday, December 4, 2016  amt 1:26:15 AM</td></tr>
+                        </table>
+    Could not open input file: cgit-bin/chat-server.php
+Could not open input file: cgit-bin/chat-server.php
+New connection! (46)
+Connection 46 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 0 other connections
+Connection 46 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 0 other connections
+Connection 46 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 0 other connections
+Connection 46 has disconnected
+New connection! (100)
+Connection 100 sending message "{"event":"login","data":{"access_token":"pa70cRzG61QFLev9djOwvjp5B9YKFIN1wDs5O3SPnU0RunDyXL"}}" to 0 other connections
+New connection! (107)
+Connection 107 sending message "{"event":"login","data":{"access_token":"WXfJJ4ZAS7U0eVaUyqS9ih93mEvcoETAJ7WWAFh551laY8KUx0"}}" to 1 other connection
+Connection 107 has disconnected
