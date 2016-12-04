@@ -81,7 +81,7 @@
                         foreach($devices as $device){
                             if($device->device_type == 'android') {
                                 $this->notification->google_cloud_messaging(
-                                    'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY',
+                                    $device->dev_mode ? 'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY' : 'AIzaSyAN15FTczeZkWR4FayERTxaVyYlYta35eY',
                                     $device->device_token,
                                     array(
                                         // With your payload format
@@ -93,7 +93,7 @@
                                 );                                
                             } else if($device->device_type == 'ios') {
                                 $result = $this->notification->apple_push_notification(
-                                    file_get_contents(APPPATH.'/credentials/dispush.pem'),
+                                    file_get_contents(APPPATH.'/credentials/' . ($device->dev_mode ? 'devpush.pem' : 'dispush.pem')),
                                     $device->device_token,
                                     array(
                                         // apn payload format
