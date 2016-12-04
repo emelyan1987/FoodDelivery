@@ -195,392 +195,452 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="tab-content">
-                    <div id="tab1" class="tab-pane fade in active">
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-sm-3 pull-right">
+                        <?php
+                            if ($restroInfo->status == 1) {
+                                $stl = 'class="opened"';
+                                $status_title = "Open";
+                            } elseif ($restroInfo->status == 2) {
+                                $stl = 'class="busy"';
+                                $status_title = "Busy";
+                            } else {
+                                $stl = 'class="close"';
+                                $status_title = "Close";
+                            }
+                        ?>
+                        <span <?php echo $stl;?>></span> <?php echo $status_title;?>
+                    </div>
+                    <div class="col-sm-12">
+                        <img class="img-responsive res-logo" alt="" src="<?php if ($restroInfo->restro_logo != '') {getImagePath($restroInfo->restro_logo);}
+                            ?>">
+                    </div>
+                    <br>
+                    <div class="col-sm-12">
+                        <?php
+                            $restro_imgs = get_restro_allImage($restroInfo->restro_id);
+                            foreach ($restro_imgs as $ResImg => $resimg):
+                            ?>
+                            <div class="col-xs-<?php echo 12/count($restro_imgs);?>">
+                                <br>
+                                <img class="img-responsive" alt="" src="<?php if ($resimg->restro_images != '') {getImagePath($resimg->restro_images);}
+                                    ?>" >
+                            </div>
+                            <?php
+                                endforeach;
+                        ?>
+                    </div>
+                    <div class="col-sm-12">
+                        <h4 class="text-center"><?php echo ucwords($restroInfo->restro_name);?></h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="list-label">Min. Order:</label>
+                        <label class="list-data">&nbsp;KD <?php echo number_format($restroInfo->min_order, 3);?></label>
+                        <label class="list-label">Delivery Time:</label>
+                        <label class="list-data">&nbsp;<?php echo $restroInfo->order_time . " Min. ";?></label>
+                        <label class="list-label">Payment:</label>
+                        <label class="list-data">&nbsp;<?php
+                                $payArray = explode(',', $restroInfo->payment_method);
+                                if (in_array(1, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/cash.png">';
+                                }
+                                if (in_array(2, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/knet.png">';
+                                }
+                                if (in_array(3, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/card.png">';
+                                }
+                                if (in_array(4, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/paypal.png">';
+                                }
+                            ?>
+                        </label>
+                        <div>
+                            <div id="rating-view" style="display:inline-block;"></div>
+                            <label><?php echo count($restroInfo->reviews);?> reviews</label>
+                        </div>
+                        <a href="/restaurant_rating/<?php echo $restroInfo->restro_id?>/<?php echo $restroInfo->location_id?>">Put Your Review</a>
+                        <div>
+                            <?php if ($restroInfo->restro_state == 1): ?>
+                                <img src="/assets/Customer/img/icon/love.png" alt="">
+                                <?php endif?>
+                            <?php if ($restroInfo->promo_id != ""): ?>
+                                <img src="/assets/Customer/img/icon/bow.png" alt="">
+                                <?php endif?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="list-label">Address:</label>
+                        <label>&nbsp;<?php echo $restroInfo->street." ".$restroInfo->building." ".$restroInfo->block." ".$restroInfo->area." ".$restroInfo->city;?></label>                    
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="itemCheck" id="show_cartdata">                                                                        
+                    <div class="margin20"></div>
+                    <div class="wall">
+                        <?php
+                            foreach ($cartData as $ca => $CD):
+                            ?>
+                            <div class="row cart-item" data-id="<?php echo $CD['id'];?>">
+                                <div class="col-md-12">
+                                    <div class="col-md-12" style="padding:0px 3px 0 3px">
+                                        <div class="border pos-rel">
+                                            <a href="/view_restro_item/<?php echo $CD["restro_id"]?>/<?php echo $CD["location_id"]?>/<?php echo $CD["product_id"]?>?cart_item_id=<?php echo $CD["id"]?>" class="editItem">Edit  <i class="fa fa-pencil"></i></a>
+                                            <div class="col-md-4" style="padding-right:0;margin-left: 18px;">
+                                                <a href="javascript:removeCartItem(<?php echo $CD['id'];?>)" class="removeItem"><i class="fa fa-times-circle" style="color: #cbcbcb;"></i></a>
+                                                <img class="itemCheckImg" src="<?php if ($CD['item_image'] != '') {getImagePath($CD['item_image']);} else {echo '/assets/Customer/img/default_item.png';}?>" alt=""/>
+                                            </div>
+                                            <div class="col-md-4" style="padding-left:0;">
+                                                <h4 style="margin-bottom: 0px;"><?php echo $CD['item_name'];?></h4>
+                                                <span>Qty : <?php echo $CD['quantity'];?> </span><br>
+                                                <!-- <span>Price : KD&nbsp;<?php echo number_format($CD['item_price'], 3);?> </span> -->
+                                            </div>
+                                            <div class="col-md-4 pos-abs">
+                                                <h5 style="font-weight: bold">Total</h5>
+                                                <h5>KD&nbsp;<?php echo number_format($CD['subtotal'], 3);?></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <?php
+                                endforeach;
+                        ?>
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="itemCheck" id="show_cartdata">                                                                        
-                                    <div class="margin20"></div>
-                                    <div class="wall">
-                                        <?php
-                                            foreach ($cartData as $ca => $CD):
-                                            ?>
-                                            <div class="row cart-item" data-id="<?php echo $CD['id'];?>">
-                                                <div class="col-md-12">
-                                                    <div class="col-md-12" style="padding:0px 3px 0 3px">
-                                                        <div class="border pos-rel">
-                                                            <a href="/view_restro_item/<?php echo $CD["restro_id"]?>/<?php echo $CD["location_id"]?>/<?php echo $CD["product_id"]?>?cart_item_id=<?php echo $CD["id"]?>" class="editItem">Edit  <i class="fa fa-pencil"></i></a>
-                                                            <div class="col-md-4" style="padding-right:0;margin-left: 18px;">
-                                                                <a href="javascript:removeCartItem(<?php echo $CD['id'];?>)" class="removeItem"><i class="fa fa-times-circle" style="color: #cbcbcb;"></i></a>
-                                                                <img class="itemCheckImg" src="<?php if ($CD['item_image'] != '') {getImagePath($CD['item_image']);} else {echo '/assets/Customer/img/default_item.png';}?>" alt=""/>
-                                                            </div>
-                                                            <div class="col-md-4" style="padding-left:0;">
-                                                                <h4 style="margin-bottom: 0px;"><?php echo $CD['item_name'];?></h4>
-                                                                <span>Qty : <?php echo $CD['quantity'];?> </span><br>
-                                                                <!-- <span>Price : KD&nbsp;<?php echo number_format($CD['item_price'], 3);?> </span> -->
-                                                            </div>
-                                                            <div class="col-md-4 pos-abs">
-                                                                <h5 style="font-weight: bold">Total</h5>
-                                                                <h5>KD&nbsp;<?php echo number_format($CD['subtotal'], 3);?></h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </div>
-                                            <?php
-                                                endforeach;
-                                        ?>
-                                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-6" style="padding: 0px 0px 0 3px;">
+                                    <div class="border">
+                                        <div class="form-horizontal">
                                             <div class="col-sm-12">
-                                                <div class="col-sm-6" style="padding: 0px 0px 0 3px;">
-                                                    <div class="border">
-                                                        <div class="form-horizontal">
-                                                            <div class="col-sm-12">
-                                                                <div class="roundedOne">
-                                                                    <input type="checkbox" value="1" id="redeem-type-coupon-checkbox" name="redeem_type" onchange="changeRedeemType()">
-                                                                    <label for="redeem-type-coupon-checkbox"><span>Redeem Coupon</span></label>
-                                                                </div>
-                                                                <div class="roundedOne" style="margin: 11px 0;">
-                                                                    <input type="checkbox" value="2" id="redeem-type-loyalty-point-checkbox" name="redeem_type" onchange="changeRedeemType()">
-                                                                    <label for="redeem-type-loyalty-point-checkbox"><span>Loyalty Points</span></label>
-                                                                </div>
-                                                                <div class="roundedOne">
-                                                                    <input type="checkbox" value="3" id="redeem-type-mataam-point-checkbox" name="redeem_type" onchange="changeRedeemType()">
-                                                                    <label for="redeem-type-mataam-point-checkbox"><span>Mataam Points</span></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="roundedOne">
+                                                    <input type="checkbox" value="1" id="redeem-type-coupon-checkbox" name="redeem_type" onchange="changeRedeemType()">
+                                                    <label for="redeem-type-coupon-checkbox"><span>Redeem Coupon</span></label>
                                                 </div>
-                                                <div class="col-sm-6" style="padding:0px 3px 0px 2px;">
-                                                    <div class="border" style="padding: 10px 0;">
-                                                        <div class="form-horizontal">
-                                                            <div class="col-sm-12">
-                                                                <input id="coupon-code-input" type="text" style="font-size: 12px !important" class="form-control" placeholder="Insert Coupon Code Here" name="coupon_code">
-                                                                <div class="">
-                                                                    <a id="coupon-apply-btn" href="javascript:applyCoupon()" class="btn-warning-shade btn-block btn">Apply</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="roundedOne" style="margin: 11px 0;">
+                                                    <input type="checkbox" value="2" id="redeem-type-loyalty-point-checkbox" name="redeem_type" onchange="changeRedeemType()">
+                                                    <label for="redeem-type-loyalty-point-checkbox"><span>Loyalty Points</span></label>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-6" style="padding: 0px 0px 0 3px">
-                                                    <div class="border">
-                                                        <div class="col-sm-12" style="padding: 0 5px;">
-                                                            <p>Loyalty Points</p>
-                                                            <div class="green">Gained/Used: <span id="loyalty-gained-points-display">16</span>pt/<span id="loyalty-used-points-display">16</span>pt</div>
-                                                            <div class="green">Balance: <span id="loyalty-balance-points-display">16</span>pt</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6" style="padding:0px 3px 0px 2px">
-                                                    <div class="border">
-                                                        <div class="col-sm-12" style="padding: 0 5px;">
-                                                            <p>Mataam Points</p>
-                                                            <div class="green">Gained/Used: <span id="mataam-gained-points-display">16</span>pt/<span id="mataam-used-points-display">16</span>pt</div>
-                                                            <div class="green">Balance: <span id="mataam-balance-points-display">16</span>pt</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-12" style="padding:0px 3px">
-                                                    <div class="border" style="">
-                                                        <div class="col-sm-12" style="padding: 0 5px;">
-                                                            <div>Subtotal: <span class="green pull-right">KD&nbsp;<span id="subtotal-display">0.000</span></span></div>
-                                                            <div>Discount: <span class="green pull-right">KD&nbsp;<span id="discount-display">0.000</span></span></div>
-                                                            <div>Delivery Charges: <span class="green pull-right">KD&nbsp;<span id="charge-display">0.000</span></span></div>
-                                                            <div>Grand Total: <span class="green pull-right">KD&nbsp;<span id="grandtotal-display">0.000</span>
-                                                                </span></div>
-                                                        </div>
-                                                    </div>
+                                                <div class="roundedOne">
+                                                    <input type="checkbox" value="3" id="redeem-type-mataam-point-checkbox" name="redeem_type" onchange="changeRedeemType()">
+                                                    <label for="redeem-type-mataam-point-checkbox"><span>Mataam Points</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- item check end  -->
+                                <div class="col-sm-6" style="padding:0px 3px 0px 2px;">
+                                    <div class="border" style="padding: 10px 0;">
+                                        <div class="form-horizontal">
+                                            <div class="col-sm-12">
+                                                <input id="coupon-code-input" type="text" style="font-size: 12px !important" class="form-control" placeholder="Insert Coupon Code Here" name="coupon_code">
+                                                <div class="">
+                                                    <a id="coupon-apply-btn" href="javascript:applyCoupon()" class="btn-warning-shade btn-block btn">Apply</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-7">
-                                <div class="itemCheck">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                <div class="margin20"></div>
-                                                <textarea class="form-control" rows="3" placeholder="Order Notes" name="order_notes"></textarea>
-                                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-6" style="padding: 0px 0px 0 3px">
+                                    <div class="border">
+                                        <div class="col-sm-12" style="padding: 0 5px;">
+                                            <p>Loyalty Points</p>
+                                            <div class="green">Gained/Used: <span id="loyalty-gained-points-display">16</span>pt/<span id="loyalty-used-points-display">16</span>pt</div>
+                                            <div class="green">Balance: <span id="loyalty-balance-points-display">16</span>pt</div>
                                         </div>
                                     </div>
-                                    <div class="clearfix"></div>
-                                    <div class="margin20"></div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="col-md-6">
-                                                <h4 class="text-uppercase">Address</h4>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select class="addressSelection" name="address_id" onchange="changeAddress(this.value)" id="CustomerAddressData">
-                                                    <option value="">-Select Address-</option>
-                                                    <?php
-                                                        foreach ($addressData as $add => $address):
-                                                        ?>
-                                                        <option value="<?php echo $address->id;?>"><?php echo $address->address_name;?></option>
-                                                        <?php
-                                                            endforeach;
-                                                    ?>
-                                                </select>
-                                                <span class="red"><?php echo form_error('useraddress');?></span>
-                                                <div class="pull-right">
-                                                    <a data-toggle="modal" data-target="#customerAddress" style="cursor: pointer;"><span class="checkoutEdit"><i class="fa fa-home"></i> Add New Address</span></a>
-                                                </div>
-                                            </div>
+                                </div>
+                                <div class="col-sm-6" style="padding:0px 3px 0px 2px">
+                                    <div class="border">
+                                        <div class="col-sm-12" style="padding: 0 5px;">
+                                            <p>Mataam Points</p>
+                                            <div class="green">Gained/Used: <span id="mataam-gained-points-display">16</span>pt/<span id="mataam-used-points-display">16</span>pt</div>
+                                            <div class="green">Balance: <span id="mataam-balance-points-display">16</span>pt</div>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12" >
-                                            <div id="addressdata" class="margin20">
-
-                                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-12" style="padding:0px 3px">
+                                    <div class="border" style="">
+                                        <div class="col-sm-12" style="padding: 0 5px;">
+                                            <div>Subtotal: <span class="green pull-right">KD&nbsp;<span id="subtotal-display">0.000</span></span></div>
+                                            <div>Discount: <span class="green pull-right">KD&nbsp;<span id="discount-display">0.000</span></span></div>
+                                            <div>Delivery Charges: <span class="green pull-right">KD&nbsp;<span id="charge-display">0.000</span></span></div>
+                                            <div>Grand Total: <span class="green pull-right">KD&nbsp;<span id="grandtotal-display">0.000</span>
+                                                </span></div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                <div class="margin20"></div>
-                                                <textarea class="form-control" rows="3" placeholder="Please enter extra direction." name="extra_direction"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="margin20"></div>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-sm-12 col-md-12">
-                                            <div class="col-sm-3 col-sm-3 col-md-3">
-                                                <h4>Delivery Time: </h4>
-                                            </div>
-                                            <div class="col-sm-3 col-sm-3 col-md-3">
-                                                <div class="form-horizontal">
-                                                    <div class="col-sm-12">
-                                                        <div class="padTB10">
-
-
-                                                            <div class="roundedOne">
-                                                                <input type="radio" value="1" onClick="selectTimeType(1)"  id="time-type-now-radio" class="" name="hd_orderTime" />
-                                                                <label for="time-type-now-radio"><span>Order Now</span></label>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <span class="red"><?php echo form_error('hd_orderTime');?></span>
-                                            </div>
-                                            <div class="col-sm-6 col-sm-6 col-md-6">
-                                                <div class="form-horizontal">
-                                                    <div class="col-sm-12">
-                                                        <div class="padTB10">
-                                                            <div class="roundedOne">
-
-                                                                <div class="roundedOne">
-                                                                    <input type="radio" value="2" onClick="selectTimeType(2)"  id="time-type-schedule-radio" class="myCheckBox1" name="hd_orderTime" />
-                                                                    <label for="time-type-schedule-radio"><span>Scheduled for : </span></label>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="padTB10" id="sheduledate" style="display:none;">
-                                                            <div class="col-md-6">
-                                                                <input type="text" name="schedule_date" value="<?php echo date('Y-m-d');?>" id="scheduled_date" class="form-control">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <input type="text" name="schedule_time" value="<?php echo date('H:i');?>" class="form-control text-center openTimeController" id="scheduled_time">
-                                                                <div id="datetimepicker3" class="input-append">
-                                                                    <!---Time Picker-->
-                                                                    <div style="margin-top: 15px;">
-                                                                        <span class="closeTimeInput">x</span>
-                                                                        <select onchange="gettimevalue()" id="time1" style="height:30px;">
-                                                                            <?php
-                                                                                for ($h = 1; $h <= 12; $h++) {
-                                                                                ?>
-                                                                                <option value="<?php if ($h < 10) {echo 0;}
-                                                                                    ?><?php echo $h;?>"> <?php if ($h < 10) {echo 0;}
-                                                                                ?><?php echo $h;?></option>
-                                                                                <?php
-                                                                                }
-                                                                            ?>
-                                                                        </select>
-                                                                        <select onchange="gettimevalue()" id="time2" style="height:30px;">
-                                                                            <?php
-                                                                                for ($M = 1; $M <= 60; $M++) {
-                                                                                ?>
-                                                                                <option value="<?php if ($M < 10) {echo 0;}
-                                                                                    ?><?php echo $M;?>"> <?php if ($M < 10) {echo 0;}
-                                                                                ?><?php echo $M;?></option>
-                                                                                <?php
-                                                                                }
-                                                                            ?>
-                                                                        </select>
-                                                                        <select onchange="gettimevalue()" id="time3" style="height:30px;">
-                                                                            <option value="AM">AM</option>
-                                                                            <option value="PM">PM</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <!---Time Picker-->
-                                                                    <span class="add-on">
-                                                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                                                                        </i>
-                                                                    </span>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="margin20"></div>
-                                            <div class="line"></div>
-
-
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-sm-12 col-md-12">
-                                            <div class="col-sm-3 col-sm-3 col-md-3">
-                                                <h4>Payment option: </h4>
-                                            </div>
-                                            <div class="col-sm-9 col-sm-9 col-md-9">
-                                                <div class="form-horizontal">
-                                                    <div class="col-sm-12">
-
-
-
-                                                        <?php
-                                                            if (in_array(1, $payMethod)) {
-                                                            ?>
-                                                            <div class="paymentMethod">
-
-                                                                <div class="roundedOne">
-                                                                    <input type="radio" value="1" id="payment-type-cash-radio" class="myCheckBox1" name="hd_paymentType" />
-                                                                    <label for="payment-type-cash-radio"><span><img class="" alt="" src="/assets/Customer/img/cash.png"> cash</span></label>
-                                                                </div>
-                                                            </div>
-                                                            <?php
-                                                            }
-                                                        ?>
-                                                        <?php
-                                                            if (in_array(2, $payMethod)) {
-                                                            ?>
-                                                            <div class="paymentMethod">
-
-                                                                <div class="roundedOne">
-                                                                    <input type="radio" value="2" id="payment-type-knet-radio" class="myCheckBox1" name="hd_paymentType" />
-                                                                    <label for="payment-type-knet-radio"><span><img class="" alt="" src="/assets/Customer/img/knet.png"> Knet</span></label>
-                                                                </div>
-                                                            </div>
-                                                            <?php
-                                                            }
-                                                        ?>
-                                                        <?php
-                                                            if (in_array(3, $payMethod)) {
-                                                            ?>
-                                                            <div class="paymentMethod">
-                                                                <div class="roundedOne">
-                                                                    <input type="radio" value="3" id="payment-type-card-radio" class="myCheckBox1" name="hd_paymentType" />
-                                                                    <label for="payment-type-card-radio"><span><img class="" alt="" src="/assets/Customer/img/card.png"> Credit Card</span></label>
-                                                                </div>
-                                                            </div>
-                                                            <?php
-                                                            }
-                                                        ?>
-                                                        <?php
-                                                            if (in_array(4, $payMethod)) {
-                                                            ?>
-                                                            <div class="paymentMethod">
-
-                                                                <div class="roundedOne">
-                                                                    <input type="radio" value="4" id="payment-type-paypal-radio" class="myCheckBox1" name="hd_paymentType" />
-                                                                    <label for="payment-type-paypal-radio"><span><img class="" alt="" src="/assets/Customer/img/paypal.png"> Paypal</span></label>
-                                                                </div>
-                                                            </div>
-                                                            <?php
-                                                            }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                                <span class="red"><?php echo form_error('hd_paymentType');?></span>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="line"></div>
-                                        </div>
-                                        <!--<div class="col-md-12">
-                                        <div class="col-md-6">
-                                        <h4>Total :</h4>
-                                        </div>
-                                        <div class="col-md-6">
-                                        <h4 class="text-right" id="order_total">KD 0.000</h4>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="line"></div>
-                                        </div>
-                                        <div class="col-md-12" id="discountvalue">
-
-                                        </div>
-                                        <div class="col-md-12">
-                                        <div class="col-md-6">
-                                        <h4>Delivery Charges :</h4>
-                                        </div>
-                                        <div class="col-md-6">
-                                        <h4 class="text-right" id="order_charges">KD 0.000</h4>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="line"></div>
-                                        </div>
-                                        <div class="col-md-12">
-                                        <div class="col-md-6">
-                                        <h4>Grand Total :</h4>
-                                        </div>
-                                        <div class="col-md-6">
-                                        <h4 class="text-right" id="order_grandTotal">KD 0.000</h4>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="margin20"></div>
-                                        </div>-->
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div class="margin20"></div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="col-md-offset-4 col-md-4">
-                                                <button style="width: 100%" type="submit" name="btncheckout" class="btn btn-yellow btn-yellow-new btn-block"><img src="/assets/Administration/images/icon/cartIcon.png" alt=""> CHECKOUT</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="margin20"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="tab2" class="tab-pane fade">
-                        hello
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="margin20"></div>
+                                <textarea class="form-control" rows="3" placeholder="Order Notes" name="order_notes"></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div id="tab3" class="tab-pane fade">
-                        hello
+                    <div class="clearfix"></div>
+                    <div class="margin20"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <h4 class="text-uppercase">Address</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="addressSelection" name="address_id" onchange="changeAddress(this.value)" id="CustomerAddressData">
+                                    <option value="">-Select Address-</option>
+                                    <?php
+                                        foreach ($addressData as $add => $address):
+                                        ?>
+                                        <option value="<?php echo $address->id;?>"><?php echo $address->address_name;?></option>
+                                        <?php
+                                            endforeach;
+                                    ?>
+                                </select>
+                                <span class="red"><?php echo form_error('useraddress');?></span>
+                                <div class="pull-right">
+                                    <a data-toggle="modal" data-target="#customerAddress" style="cursor: pointer;"><span class="checkoutEdit"><i class="fa fa-home"></i> Add New Address</span></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div id="tab4" class="tab-pane fade">
-                        hello
+
+                    <div class="row">
+                        <div class="col-md-12" >
+                            <div id="addressdata" class="margin20">
+
+                            </div>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="margin20"></div>
+                                <textarea class="form-control" rows="3" placeholder="Please enter extra direction." name="extra_direction"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="margin20"></div>
+                    <div class="row">
+                        <div class="col-sm-12 col-sm-12 col-md-12">
+                            <div class="col-sm-3 col-sm-3 col-md-3">
+                                <h4>Delivery Time: </h4>
+                            </div>
+                            <div class="col-sm-3 col-sm-3 col-md-3">
+                                <div class="form-horizontal">
+                                    <div class="col-sm-12">
+                                        <div class="padTB10">
+
+
+                                            <div class="roundedOne">
+                                                <input type="radio" value="1" onClick="selectTimeType(1)"  id="time-type-now-radio" class="" name="hd_orderTime" />
+                                                <label for="time-type-now-radio"><span>Order Now</span></label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="red"><?php echo form_error('hd_orderTime');?></span>
+                            </div>
+                            <div class="col-sm-6 col-sm-6 col-md-6">
+                                <div class="form-horizontal">
+                                    <div class="col-sm-12">
+                                        <div class="padTB10">
+                                            <div class="roundedOne">
+
+                                                <div class="roundedOne">
+                                                    <input type="radio" value="2" onClick="selectTimeType(2)"  id="time-type-schedule-radio" class="myCheckBox1" name="hd_orderTime" />
+                                                    <label for="time-type-schedule-radio"><span>Scheduled for : </span></label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="padTB10" id="sheduledate" style="display:none;">
+                                            <div class="col-md-6">
+                                                <input type="text" name="schedule_date" value="<?php echo date('Y-m-d');?>" id="scheduled_date" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="schedule_time" value="<?php echo date('H:i');?>" class="form-control text-center openTimeController" id="scheduled_time">
+                                                <div id="datetimepicker3" class="input-append">
+                                                    <!---Time Picker-->
+                                                    <div style="margin-top: 15px;">
+                                                        <span class="closeTimeInput">x</span>
+                                                        <select onchange="gettimevalue()" id="time1" style="height:30px;">
+                                                            <?php
+                                                                for ($h = 1; $h <= 12; $h++) {
+                                                                ?>
+                                                                <option value="<?php if ($h < 10) {echo 0;}
+                                                                    ?><?php echo $h;?>"> <?php if ($h < 10) {echo 0;}
+                                                                ?><?php echo $h;?></option>
+                                                                <?php
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                        <select onchange="gettimevalue()" id="time2" style="height:30px;">
+                                                            <?php
+                                                                for ($M = 1; $M <= 60; $M++) {
+                                                                ?>
+                                                                <option value="<?php if ($M < 10) {echo 0;}
+                                                                    ?><?php echo $M;?>"> <?php if ($M < 10) {echo 0;}
+                                                                ?><?php echo $M;?></option>
+                                                                <?php
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                        <select onchange="gettimevalue()" id="time3" style="height:30px;">
+                                                            <option value="AM">AM</option>
+                                                            <option value="PM">PM</option>
+                                                        </select>
+                                                    </div>
+                                                    <!---Time Picker-->
+                                                    <span class="add-on">
+                                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                                        </i>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="margin20"></div>
+                            <div class="line"></div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-sm-12 col-md-12">
+                            <div class="col-sm-3 col-sm-3 col-md-3">
+                                <h4>Payment option: </h4>
+                            </div>
+                            <div class="col-sm-9 col-sm-9 col-md-9">
+                                <div class="form-horizontal">
+                                    <div class="col-sm-12">
+
+
+
+                                        <?php
+                                            if (in_array(1, $payMethod)) {
+                                            ?>
+                                            <div class="paymentMethod">
+
+                                                <div class="roundedOne">
+                                                    <input type="radio" value="1" id="payment-type-cash-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <label for="payment-type-cash-radio"><span><img class="" alt="" src="/assets/Customer/img/cash.png"> cash</span></label>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            }
+                                        ?>
+                                        <?php
+                                            if (in_array(2, $payMethod)) {
+                                            ?>
+                                            <div class="paymentMethod">
+
+                                                <div class="roundedOne">
+                                                    <input type="radio" value="2" id="payment-type-knet-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <label for="payment-type-knet-radio"><span><img class="" alt="" src="/assets/Customer/img/knet.png"> Knet</span></label>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            }
+                                        ?>
+                                        <?php
+                                            if (in_array(3, $payMethod)) {
+                                            ?>
+                                            <div class="paymentMethod">
+                                                <div class="roundedOne">
+                                                    <input type="radio" value="3" id="payment-type-card-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <label for="payment-type-card-radio"><span><img class="" alt="" src="/assets/Customer/img/card.png"> Credit Card</span></label>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            }
+                                        ?>
+                                        <?php
+                                            if (in_array(4, $payMethod)) {
+                                            ?>
+                                            <div class="paymentMethod">
+
+                                                <div class="roundedOne">
+                                                    <input type="radio" value="4" id="payment-type-paypal-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <label for="payment-type-paypal-radio"><span><img class="" alt="" src="/assets/Customer/img/paypal.png"> Paypal</span></label>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            }
+                                        ?>
+                                    </div>
+                                </div>
+                                <span class="red"><?php echo form_error('hd_paymentType');?></span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="line"></div>
+                        </div>
+                        <!--<div class="col-md-12">
+                        <div class="col-md-6">
+                        <h4>Total :</h4>
+                        </div>
+                        <div class="col-md-6">
+                        <h4 class="text-right" id="order_total">KD 0.000</h4>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="line"></div>
+                        </div>
+                        <div class="col-md-12" id="discountvalue">
+
+                        </div>
+                        <div class="col-md-12">
+                        <div class="col-md-6">
+                        <h4>Delivery Charges :</h4>
+                        </div>
+                        <div class="col-md-6">
+                        <h4 class="text-right" id="order_charges">KD 0.000</h4>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="line"></div>
+                        </div>
+                        <div class="col-md-12">
+                        <div class="col-md-6">
+                        <h4>Grand Total :</h4>
+                        </div>
+                        <div class="col-md-6">
+                        <h4 class="text-right" id="order_grandTotal">KD 0.000</h4>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="margin20"></div>
+                        </div>-->
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="margin20"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-offset-4 col-md-4">
+                                <button style="width: 100%" type="submit" name="btncheckout" class="btn btn-yellow btn-yellow-new btn-block"><img src="/assets/Administration/images/icon/cartIcon.png" alt=""> CHECKOUT</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="margin20"></div>
                 </div>
-                <div class="margin20"></div>
             </div>
+            <div class="col-md-2"></div>
         </div>
     </div>
 
@@ -693,7 +753,7 @@
 </div>
 
 <!-- Modal -->
-
+<script src="/assets/common/plugins/rating/jquery.rateyo.js" type="text/javascript"></script>
 <script> 
 
     function selectTimeType(time_type)

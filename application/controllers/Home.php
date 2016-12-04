@@ -1071,11 +1071,13 @@
             $Mdate = mdate($datestring, $time);
             $Mtime = mdate($timestring, $time);
 
+            $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_type); 
+            $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
+            $data['restroInfo'] = $restro;
+            
 
             if(isset($_POST['btncheckout']))
             {
-
-
                 $this->form_validation->set_rules('address_id', 'Address', 'required');
                 $this->form_validation->set_rules('hd_orderTime', 'Delivery Time', 'required');
                 $this->form_validation->set_rules('hd_paymentType', 'Payment Option', 'required');

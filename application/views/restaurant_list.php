@@ -1,6 +1,6 @@
 <?PHP
     $this->load->view("includes/Customer/header");
-    
+
     if($_SESSION['filter_service'] == 1) {
         $borderClass = "greenBorder";
         $bulletinIcon = "/assets/Customer/img/icon/smallLogo.png";
@@ -69,6 +69,9 @@
     }
     .fa.fa-angle-right {
         color: #ffffff !important;
+    }
+    .rating-view {
+        display: inline-block;
     }
     /*.select2-container--classic .select2-selection--single {
     background-color: #73b720;
@@ -348,29 +351,31 @@
     {{if slots}}
     <div class="row">
     {{each slots}}
-                      <div class="col-sm-2" style="margin-bottom: 10px;padding-right: 0"><a href="/reservation_tabel/${restro_id}" class="btn btn-danger fullw">${time}</a></div>
-                      {{/each}}
-                    </div>
-                    {{/if}}
-                    
-    <div class="restroheart">
-    {{if restro_state==1}}<img src="/assets/Customer/img/icon/love.png" alt="">{{/if}}
+    <div class="col-sm-2" style="margin-bottom: 10px;padding-right: 0; color:#73b720;"><a href="/reservation_checkout/${restro_id}" class="btn btn-danger fullw">${time}</a>${seating_info.point}pt</div>
+    {{/each}}
+    </div>
+    {{/if}}
+
+        <div class="restroheart">
+        {{if restro_state==1}}<img src="/assets/Customer/img/icon/love.png" alt="">{{/if}}
     {{if promo_id}}<img src="/assets/Customer/img/icon/bow.png" alt="">{{/if}}
     </div>
     </div>
     <div class="col-md-4">
+    {{if service_type!=3}}
     <label class="list-label">Min. Order:</label>
     <label class="list-data">&nbsp;${formatPrice(min_order)}</label>
     <br>
     <label class="list-label">Delivery Time:</label>
     <label class="list-data">&nbsp;${order_time} Min.</label>
     <br>
+    {{/if}}
     <label class="list-label">Payment:</label>
-    {{if hasPaymentOption(payment_method,1)}}<img class="" alt="" src="/assets/Customer/img/cash.png">{{/if}}
-    {{if hasPaymentOption(payment_method,2)}}<img class="" alt="" src="/assets/Customer/img/knet.png">{{/if}}
-    {{if hasPaymentOption(payment_method,3)}}<img class="" alt="" src="/assets/Customer/img/card.png">{{/if}}
-    {{if hasPaymentOption(payment_method,4)}}<img class="" alt="" src="/assets/Customer/img/paypal.png">{{/if}}
-    <div><a href="/restaurant_view/${restro_id}/${location_id}" class="btn-success-newone list-button">Go to menu <i class="fa fa-angle-right"></i></a></div>
+    {{if hasPaymentOption(payment_method, "1")}}<img class="" alt="" src="/assets/Customer/img/cash.png">{{/if}}
+    {{if hasPaymentOption(payment_method, "2")}}<img class="" alt="" src="/assets/Customer/img/knet.png">{{/if}}
+    {{if hasPaymentOption(payment_method, "3")}}<img class="" alt="" src="/assets/Customer/img/card.png">{{/if}}
+    {{if hasPaymentOption(payment_method, "4")}}<img class="" alt="" src="/assets/Customer/img/paypal.png">{{/if}}
+    <div>{{if service_type!=3}}<a href="/restaurant_view/${restro_id}/${location_id}" class="btn-success-newone list-button">Go to menu <i class="fa fa-angle-right"></i></a>{{/if}}</div>
     </div>
     </div>
     </div>
@@ -381,7 +386,7 @@
 
 
 <script src="/assets/Customer/js/jquery.tmpl.js" type="text/javascript"></script>
-<script src="/assets/Customer/plugins/rating/jquery.rateyo.js" type="text/javascript"></script>
+<script src="/assets/common/plugins/rating/jquery.rateyo.js" type="text/javascript"></script>
 <script>
 
     function statusClass(status) {
@@ -404,8 +409,8 @@
     function hasPaymentOption(payment_method, option) {
         if(payment_method == null) return false;
 
-        var methods = payment_method.split(',');
-        if(methods.indexOf(option)) return true;
+        var methods = payment_method.split(','); 
+        if(methods.indexOf(option) > -1) return true;
 
         return false;
     }
@@ -421,10 +426,6 @@
         });
     });
 </script>
-
-
-
-
 
 <script>
     function searchRestros(){

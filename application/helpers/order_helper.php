@@ -228,7 +228,8 @@
                             'largest_party_size'=>$item->{$weekday.'_largest_party_size'},
                             'booking_limit'=>$item->{$weekday.'_booking_limit'},
                             'cover_count'=>$item->{$weekday.'_cover_count'},
-                            'point'=>$item->{$weekday.'_point'}
+                            'point'=>$item->{$weekday.'_point'},
+                            'deposit'=>$item->{$weekday.'_deposit'}
                         )
                     );
                 }   

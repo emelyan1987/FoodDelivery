@@ -64,10 +64,10 @@
                 <br>
                 <div class="col-sm-12">
                     <?php
-                        $restro_img = get_restro_allImage($restroInfo->restro_id);
-                        foreach ($restro_img as $ResImg => $resimg):
+                        $restro_imgs = get_restro_allImage($restroInfo->restro_id);
+                        foreach ($restro_imgs as $ResImg => $resimg):
                         ?>
-                        <div class="col-xs-3">
+                        <div class="col-xs-<?php echo 12/count($restro_imgs);?>">
                             <br>
                             <img class="img-responsive" alt="" src="<?php if ($resimg->restro_images != '') {getImagePath($resimg->restro_images);}
                                 ?>" >
@@ -101,76 +101,8 @@
                             }
                         ?>
                     </label>
-                    <div class="ratings">
-                        <?php
-                            if($restroInfo->rating!=null){
-                            ?>
-                            <span>
-                                <?php
-                                    if (round($restroInfo->rating) == 5) {
-                                    ?>
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <?php
-                                    } elseif (round($restroInfo->rating) == 4) {
-                                    ?>
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <?php
-                                    } elseif (round($restroInfo->rating) == 3) {
-                                    ?>
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <?php
-                                    } elseif (round($restroInfo->rating) == 2) {
-                                    ?>
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <?php
-                                    } elseif (round($restroInfo->rating) == 1) {
-                                    ?>
-                                    <img class="" alt="" src="/assets/Customer/img/star.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <?php
-                                    } else {
-                                    ?>
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                    <?php
-                                    }
-                                ?>
-                            </span>
-                            <?php
-                            } else {
-                            ?>
-                            <span>
-                                <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                                <img class="" alt="" src="/assets/Customer/img/star1.png" width="30">
-                            </span>
-                            <?php
-                            }
-                        ?>
+                    <div>
+                        <div id="rating-view" style="display:inline-block;"></div>
                         <label><?php echo count($restroInfo->reviews);?> reviews</label>
                     </div>
                     <a href="/restaurant_rating/<?php echo $restroInfo->restro_id?>/<?php echo $restroInfo->location_id?>">Put Your Review</a>
@@ -182,6 +114,10 @@
                             <img src="/assets/Customer/img/icon/bow.png" alt="">
                             <?php endif?>
                     </div>
+                </div>
+                <div class="col-sm-12">
+                    <label class="list-label">Address:</label>
+                    <label>&nbsp;<?php echo $restroInfo->street." ".$restroInfo->building." ".$restroInfo->block." ".$restroInfo->area." ".$restroInfo->city;?></label>                    
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -397,7 +333,11 @@
         </div>
     </div>
 </div>
+<script src="/assets/common/plugins/rating/jquery.rateyo.js" type="text/javascript"></script>
 <script>
+    $(document).ready(function(){
+        $("#rating-view").rateYo({rating:<?php echo $restroInfo->rating; ?>, starWidth:'24px', ratedFill:'#f1c40f'}); 
+    });
     function get_starRating(id)
     {
         $("#rating_value_id").val($("#"+id).val());
