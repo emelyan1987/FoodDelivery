@@ -12,6 +12,7 @@
             $this->clients = new \SplObjectStorage;
 
             $this->db = new \Database('mataam-db.caoladrjz2uc.us-west-2.rds.amazonaws.com:3306', 'mataam_admin', 'mataam2016', 'kandil_restro'); 
+
             // connect to the server 
             $this->db->connect(); 
         }

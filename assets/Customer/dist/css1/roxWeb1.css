@@ -2018,7 +2018,7 @@ em {
 
 .roundedOne > label > span {
     display: inline-block;
-    min-width: 1000px;
+    min-width: 250px;
     padding-left: 40px;
 }
 

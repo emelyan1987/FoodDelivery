@@ -15,7 +15,7 @@ and open the template in the editor.
     <script src="/assets/Customer/dist/js/bootstrap.js" type="text/javascript"></script>
     <link href="/assets/Customer/dist/css1/roxWeb1.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/Customer/dist/css/animate.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/Customer/plugins/rating/jquery.rateyo.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/common/plugins/rating/jquery.rateyo.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/Customer/dist/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>
     <script src="/assets/Customer/dist/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
     <script src="/assets/common/bootbox.min.js" type="text/javascript"></script>
