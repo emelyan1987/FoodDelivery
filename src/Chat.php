@@ -20,7 +20,7 @@
             
 
             // connect to the server 
-            $this->db->connect(); 
+            //$this->db->connect(); 
         }
 
         public function onOpen(ConnectionInterface $conn) {
