@@ -13,7 +13,7 @@
 
             define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
             if(ENVIRONMENT === 'production') {
-                $this->db = new \Database('mataam-db.caoladrjz2uc.us-west-2.rds.amazonaws.com:3306', 'mataam_admin', 'mataam2016', 'kandil_restro');    
+                $this->db = new \Database('localhost:3306', 'root', 'mataam2016', 'kandil_restro');    
             } else {
                 $this->db = new \Database('localhost:3306', 'root', 'mataam2016', 'kandil_restro'); 
             }
