@@ -79,9 +79,9 @@ $query_builder = TRUE;
 
  $db['default'] = array(
  	'dsn'	=> '',
- 	'hostname' => (ENVIRONMENT === 'production')?'mataam-db.caoladrjz2uc.us-west-2.rds.amazonaws.com:3306':'localhost:3306',
- 	'username' => (ENVIRONMENT === 'production')?'mataam_admin':'root',
- 	'password' => (ENVIRONMENT === 'production')?'mataam2016':'',
+ 	'hostname' => (ENVIRONMENT === 'production')?'localhost:3306':'localhost:3306',
+ 	'username' => (ENVIRONMENT === 'production')?'root':'root',
+ 	'password' => (ENVIRONMENT === 'production')?'mataam2016':'mataam2016',
  	'database' => 'kandil_restro',
  	'dbdriver' => 'mysqli',
  	'dbprefix' => '',
