@@ -1,0 +1,10 @@
+DirectoryIndex index.php index.html
+RewriteEngine on
+
+SetEnv CI_ENV development
+
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L]
+Allow From All
