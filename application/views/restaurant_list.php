@@ -105,26 +105,32 @@
             <ul class="filterList">
                 <li>
                     <div class="roundedOne">
-                        <input type="radio" value="all"  onClick="searchRestros()" id="roundedOne" class="myCheckBox1" name="kind" checked='checked'/>
+                        <input type="radio" value="0"  onClick="searchRestros()" id="roundedOne" class="myCheckBox1" name="kind" <?php echo !isset($selected_kind) ? "checked" : "";?>/>
                         <label for="roundedOne"><span>All</span></label>
                     </div>
                 </li>
                 <li>
                     <div class="roundedOne">
-                        <input type="radio" value="featured" onClick="searchRestros()" id="roundedOne1" class="myCheckBox2" name="kind"/>
-                        <label for="roundedOne1"><span>Featured</span></label>
+                        <input type="radio" value="1"  onClick="searchRestros()" id="roundedOne1" class="myCheckBox1" name="kind" <?php echo isset($selected_kind)&&$selected_kind==1 ? "checked" : "";?>/>
+                        <label for="roundedOne1"><span>Newly Opened</span></label>
                     </div>
                 </li>
                 <li>
                     <div class="roundedOne">
-                        <input type="radio" value="promotion" onClick="searchRestros()" id="roundedOne2" name="kind" />
-                        <label for="roundedOne2"><span>Promotion</span></label>
+                        <input type="radio" value="2" onClick="searchRestros()" id="roundedOne2" class="myCheckBox2" name="kind" <?php echo isset($selected_kind)&&$selected_kind==2 ? "checked" : "";?>/>
+                        <label for="roundedOne2"><span>Featured</span></label>
                     </div>
                 </li>
                 <li>
                     <div class="roundedOne">
-                        <input type="radio" value="ratings" onClick="searchRestros()" id="roundedOne3" name="kind"/>
-                        <label for="roundedOne3"><span>Ratings</span></label>
+                        <input type="radio" value="4" onClick="searchRestros()" id="roundedOne3" name="kind" <?php echo isset($selected_kind)&&$selected_kind==4 ? "checked" : "";?>/>
+                        <label for="roundedOne3"><span>Promotion</span></label>
+                    </div>
+                </li>
+                <li>
+                    <div class="roundedOne">
+                        <input type="radio" value="8" onClick="searchRestros()" id="roundedOne4" name="kind" <?php echo isset($selected_kind)&&$selected_kind==8 ? "checked" : "";?>/>
+                        <label for="roundedOne4"><span>Coupon</span></label>
                     </div>
                 </li>
             </ul>
@@ -339,11 +345,12 @@
     <span class="${statusClass(status)}">${statusTitle(status)}</span> 
     </div>
     <div class="col-sm-6 col-md-6">
-    <a href="/restaurant_profile/${restro_id}"><img class="img-responsive resimg" alt="" src="${restroLogoPath(restro_logo)}" > </a>
+    <a href="/restaurant_profile/${restro_id}"><img class="img-responsive" alt="" src="${restroLogoPath(restro_logo)}" > </a>
     </div>
     </div>
     <div class="col-md-4 col-sm-12">
     <a href="/restaurant_profile/${restro_id}"><h4 class="restrotitle">${restro_name}</h4></a>
+    <h5 class="restrotitle">${location_name}</h5>
     <div class="ratings"> 
     <div class="rating-view"></div>
     <label>${reviews} reviews</label>
@@ -351,7 +358,7 @@
     {{if slots}}
     <div class="row">
     {{each slots}}
-    <div class="col-sm-2" style="margin-bottom: 10px;padding-right: 0; color:#73b720;"><a href="/reservation_checkout/${restro_id}" class="btn btn-danger fullw">${time}</a>${seating_info.point}pt</div>
+    <div class="col-sm-2" style="margin-bottom: 10px;padding-right: 0; color:#73b720;"><a href="/reservation_checkout/${restro_id}/${location_id}?reserve_time=${time}" class="btn btn-danger fullw {{if !available}}disabled{{/if}}">${time}</a>${seating_info.point}pt</div>
     {{/each}}
     </div>
     {{/if}}
@@ -489,7 +496,7 @@
         {
             act = "PICKUP";
         }
-        window.location.href = "http://mataam.net/home?ref="+act;
+        window.location.href = "/?ref="+act;
 
         // $.ajax({
 
@@ -534,26 +541,26 @@
 
 
 <script>
-    if($('#roundedOne3').attr('checked')) {
-
-        $("#mind").hide();
-        //alert("hello");
-        $.ajax({
-
-            url: "/Home_coupon_filter/",
-            type: "post",
-            data: {filter_id: 4},
-            success: function (response) {
-                //alert(response);
-                $("#copp").html(response);
-
-            }
-        })
-
-    }
-    $('.selectLocation').select2({
-        theme:"classic"
-    });
+//    if($('#roundedOne3').attr('checked')) {
+//
+//        $("#mind").hide();
+//        //alert("hello");
+//        $.ajax({
+//
+//            url: "/Home_coupon_filter/",
+//            type: "post",
+//            data: {filter_id: 4},
+//            success: function (response) {
+//                //alert(response);
+//                $("#copp").html(response);
+//
+//            }
+//        })
+//
+//    }
+//    $('.selectLocation').select2({
+//        theme:"classic"
+//    });
 
 </script>
 

@@ -62,6 +62,15 @@
                     throw new Exception("dev_mode ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
 
+                $devices = $this->UserDeviceModel->find(array(
+                    'user_id'=>$this->user->id,
+                    'device_type'=>$device_type,
+                    'device_token'=>$device_token
+                ));
+                foreach($devices as $d){
+                    $this->UserDeviceModel->delete($d->id);
+                }
+                
                 $insert_id = $this->UserDeviceModel->create(array(
                     "user_id"=>$this->user->id,
                     "device_id"=>$this->post('device_id'),

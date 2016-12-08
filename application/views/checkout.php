@@ -2,7 +2,7 @@
     $this->load->view("includes/Customer/header");
     $this->load->helper('customer_helper');
 
-    $payMethod = explode(',', $getPaymentgateways['method_type']);
+    $payMethod = explode(',', $restroInfo->payment_method);
 
 ?>
 <style>
@@ -534,8 +534,6 @@
                                 <div class="form-horizontal">
                                     <div class="col-sm-12">
 
-
-
                                         <?php
                                             if (in_array(1, $payMethod)) {
                                             ?>
@@ -755,7 +753,9 @@
 <!-- Modal -->
 <script src="/assets/common/plugins/rating/jquery.rateyo.js" type="text/javascript"></script>
 <script> 
-
+    $(document).ready(function(){
+        $("#rating-view").rateYo({rating:<?php echo $restroInfo->rating; ?>, starWidth:'24px', ratedFill:'#f1c40f'}); 
+    });
     function selectTimeType(time_type)
     {
         if(time_type == 1)
@@ -968,7 +968,7 @@
     }
 
     function updateCartData() {
-        $.ajax({
+        /*$.ajax({
             url: "/api/orders/cart/count?service_type=<?php echo $_SESSION['filter_service'];?>",
             type: "GET",
             success: function(response) {
@@ -977,7 +977,7 @@
                     $("#cart-count-display").html(response.resource);
                 }
             }
-        });
+        });*/
         $.ajax({
             url: "/api/orders/point?service_type=<?php echo $_SESSION['filter_service'];?>&restro_id=<?php echo $_SESSION['order_restro_id'];?>&location_id=<?php echo $_SESSION['order_location_id'];?>",
             type: "GET",

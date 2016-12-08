@@ -644,7 +644,7 @@
     }
 
     function updateCartData() {
-        $.ajax({
+        /*$.ajax({
             url: "/api/orders/cart/count?service_type=<?php echo $_SESSION['filter_service'];?>",
             type: "GET",
             success: function(response) {
@@ -653,7 +653,7 @@
                     $("#cart-count-display").html(response.resource);
                 }
             }
-        });        
+        });*/        
     }
 
     $(document).ready(function(){

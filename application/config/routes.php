@@ -401,7 +401,7 @@ $route['pickup_orders_notification'] = 'Administration/Order/pickup_orders_notif
 
 
 $route['edit_restaurant_owner/(:num)'] = 'Customer/edit_restaurant_owner/$i'; 
-$route['delivery_order_details/(:num)'] = 'Customer/delivery_order_details/$i';
+$route['order_details/(:num)'] = 'Customer/order_details/$i';
 
 $route['edit_web_constomer/(:num)'] = 'Customer/edit_web_constomer/$i';
 $route['view_web_constomer/(:num)'] = 'Customer/view_web_constomer/$i';
@@ -496,7 +496,8 @@ $route['api/data/restro_categories'] = '/api/DataController/restro_categories';
 
 $route['api/restaurants'] = '/api/RestaurantController'; 
 $route['api/restaurants/(:num)'] = '/api/RestaurantController/index/$1'; 
-$route['api/restaurants/ratings'] = '/api/RestaurantController/ratings'; 
+$route['api/restaurants/count'] = '/api/RestaurantController/count'; 
+$route['api/restaurants/(:num)/ratings'] = '/api/RestaurantController/ratings/$1'; 
 $route['api/restaurants/item_categories'] = '/api/RestaurantController/item_categories'; 
 $route['api/restaurants/items'] = '/api/RestaurantController/items'; 
 $route['api/restaurants/items/(:num)'] = '/api/RestaurantController/items/$1'; 

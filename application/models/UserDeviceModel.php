@@ -48,10 +48,12 @@
             
             if(isset($params)) {
                 if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
+                if(isset($params["device_token"]) && $params["device_token"]!="") $this->db->where('device_token', $params["device_token"]);
+                if(isset($params["device_type"]) && $params["device_type"]!="") $this->db->where('device_type', $params["device_type"]);
             }  
             
-            $this->db->group_by('user_id');
-            $this->db->group_by('device_type');
+            //$this->db->group_by('user_id');
+            //$this->db->group_by('device_type');
             $this->db->order_by('created_time', 'DESC');
             
             $result = $this->db->get()->result();

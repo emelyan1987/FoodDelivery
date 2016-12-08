@@ -69,7 +69,7 @@
                 if(!isset($service_type)) {
                     throw new Exception('service_type '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
-                
+
                 if ($id === NULL)
                 {               
                     $params = array();
@@ -77,38 +77,20 @@
                     if($this->get('cuisines')) $params["cuisines"] = $this->get('cuisines');                           // Multiple Ids
                     if($this->get('food_types')) $params["food_types"] = $this->get('food_types');                     // Multiple Ids
                     if($this->get('restro_categories')) $params["restro_categories"] = $this->get('restro_categories');   // Multiple Ids      
-                                     
+                    if($this->get('kind')) $params["kind"] = $this->get('kind');   // BitMask 0bit:NewlyOpened, 1bit:Featured, 2bit:Promotions, 3bit:Coupons
+
                     $params["service_type"] = $service_type;   // Service Type
 
-                    $restaurants = $this->RestaurantModel->find($params); 
-                    
-                    $kind = $this->get('kind');
-                    if(isset($kind) && $kind != 'all') {
-                        $restros = array();
-                        foreach($restaurants as $restro){
-                            if($kind == 'featured') {
-                                if($restro->assign_featured) $restros[] = $restro;
-                            }
-                            if($kind == 'promotion') {
-                                if($restro->promo_id) $restros[] = $restro;
-                            }
-                            if($kind == 'ratings') {
-                                if($restro->rating && $restro->rating>0) $restros[] = $restro;
-                            }
-                        }
-                        $resource = $restros;
-                    } else {
-                        $resource = $restaurants;
-                    }
+                    $resource = $this->RestaurantModel->find($params); 
                 } else {     
                     $location_id = $this->get('location_id');
                     if(!isset($location_id)) {
                         throw new Exception('location_id '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                     }
-                                        
+
                     $restro = $this->RestaurantModel->findByRestroLocationService($id, $location_id, $service_type); 
                     $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
-                    
+
                     $resource = $restro;
                 }
 
@@ -128,7 +110,42 @@
             }
         }
 
-        public function ratings_get()
+        public function count_get($id=null)
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $service_type = $this->get('service_type');
+                if(!isset($service_type)) {
+                    throw new Exception('service_type '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $params = array();
+                if($this->get('area')) $params["area"] = $this->get('area');                                    // Single Id
+                if($this->get('cuisines')) $params["cuisines"] = $this->get('cuisines');                           // Multiple Ids
+                if($this->get('food_types')) $params["food_types"] = $this->get('food_types');                     // Multiple Ids
+                if($this->get('restro_categories')) $params["restro_categories"] = $this->get('restro_categories');   // Multiple Ids      
+                if($this->get('kind')) $params["kind"] = $this->get('kind');   // BitMask 0bit:NewlyOpened, 1bit:Featured, 2bit:Promotions, 3bit:Coupons
+
+                $params["service_type"] = $service_type;   // Service Type
+
+                $restaurants = $this->RestaurantModel->find($params);
+
+                 
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,    
+                    "resource"=>array('count'=>count($restaurants))
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        }
+
+        public function ratings_get($restro_id)
         {                 
             try {                
                 $this->validateAccessToken();
@@ -140,10 +157,11 @@
 
                 $params = array();
 
-                $params["user_id"] = $this->user->id;                    
+                //$params["user_id"] = $this->user->id;                    
+                $params["restro_id"] = $restro_id;
                 $params["location_id"] = $location_id;
 
-                $resource = $this->RatingModel->find($params, array("r.id","r.restro_id","r.location_id","r.user_id","r.msg","r.star_value","r.date"));
+                $resource = $this->RatingModel->find($params, array("r.id","r.restro_id","r.location_id","r.user_id","r.msg","r.star_value","r.created_time"));
 
                 if(!$resource) {
                     throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
@@ -161,7 +179,7 @@
             }
         }
 
-        public function ratings_post()
+        public function ratings_post($restro_id)
         {                 
             try {                
                 $this->validateAccessToken();
@@ -179,15 +197,17 @@
                     throw new Exception("msg ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
 
+                $this->RatingModel->delete(array('user_id'=>$this->user->id,'restro_id'=>$restro_id,'location_id'=>$location_id));
+
                 $params = array();
 
                 $params["user_id"] = $this->user->id;                                        
+                $params["restro_id"] = $restro_id;
                 $params["location_id"] = $location_id;
 
                 $params["star_value"] = $star_value;
                 $params["msg"] = $msg;
                 $params["ip"] = $_SERVER['REMOTE_ADDR'];
-                $params["date"] = date("Y-m-d");
 
                 $insert_id = $this->RatingModel->create($params);
                 $resource = $this->RatingModel->findById($insert_id);
@@ -250,7 +270,7 @@
 
                 if($id) {
                     $item = $this->RestroItemModel->findById($id);
-                    
+
                     $vlist = $this->RestroItemVariationModel->findByItemId($id);                    
                     $variations = array();
                     foreach($vlist as $v) {
@@ -259,14 +279,14 @@
                         }
                         $variations[$v->variation_id]["details"][] = array("id"=>$v->id, "title"=>$v->title, "price"=>$v->price);
                     }
-                    
+
                     $item->variations = array_values($variations);
                     $resource = $item;
                 } else {
                     $category_id = $this->input->get('category_id');
                     $location_id = $this->input->get('location_id');
                     $service_id = $this->input->get('service_id');
-                    
+
                     $params = array();  
                     if(isset($category_id))$params["category_id"] = $category_id;                   
                     if(isset($location_id))$params["location_id"] = $location_id;                   
@@ -290,8 +310,8 @@
                     ), REST_Controller::HTTP_OK);
             }
         }    
-        
-        
+
+
         public function promotions_get()
         {                 
             try {                
@@ -299,7 +319,7 @@
 
                 $restro_id = $this->input->get('location_id');
                 $location_id = $this->input->get('location_id');
-                
+
 
                 $params = array();
 
@@ -307,7 +327,7 @@
                 if(isset($location_id))$params["location_id"] = $location_id;    
 
                 $promotions = $this->RestroPromotionModel->find($params);
-                
+
                 foreach($promotions as $promotion) {
                     $promotion->restaurant = $this->RestaurantModel->findById($promotion->restro_id);
                 }

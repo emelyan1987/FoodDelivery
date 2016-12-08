@@ -32,6 +32,7 @@
             $this->load->model('CouponModel'); 
             $this->load->model('RestroSeatingHourModel'); 
             $this->load->model('RestroTableOrderModel'); 
+            $this->load->model('PointLogModel'); 
 
             $this->load->helper('captcha');
             $this->load->helper('utils');
@@ -715,18 +716,21 @@
             $this->load->view('contact_us',$data);
         }
 
-        function Home_filter(){
+        function Home_filter(){ 
             $data['errors']=array();
-            
+
             $filter_service = $this->input->get('service');
+            $filter_kind = $this->input->get('kind');
+            
             $filter_area = $this->input->post('filter_area');
             $filter_cuisines = $this->input->post('filter_cuisines');
+            
 
             if(isset($filter_service)) $_SESSION['filter_service'] = $filter_service;
             if(isset($filter_area)) $_SESSION['order_area_id'] = $filter_area;
-            
+
             if(isset($_SESSION['order_area_id'])) $filter_area = $_SESSION['order_area_id'];
-            
+
             $params = array();
             if(isset($filter_service)) {
                 $params['service_type'] = $filter_service;
@@ -737,8 +741,15 @@
             if(isset($filter_cuisines)) {
                 $params['cuisines'] = $filter_cuisines;
             }
-            $data['restro_list'] = $this->RestaurantModel->find($params); 
+
+            if(isset($filter_kind)) {
+                $params['kind'] = $filter_kind;
+                
+                $data['selected_kind'] = $filter_kind;
+            }
             
+            $data['restro_list'] = $this->RestaurantModel->find($params); 
+
             if($filter_service == 3) {
                 $reserve_time = $this->input->post('reserve_time');
                 $people_number = $this->input->post('people_number');
@@ -746,6 +757,9 @@
                 foreach($data['restro_list'] as $restro) {
                     $restro->slots = getTimeSlots($restro->restro_id, $restro->location_id, $reserve_time, $people_number);
                 }
+
+                $_SESSION['reserve_date'] = date('Y-m-d', $reserve_time);
+                $_SESSION['people_number'] = $people_number;
             }
 
             $data['advt1'] = $this->Advertise_management->GetAdevrtise_limit(0,3);
@@ -759,6 +773,7 @@
             $data['cuisin_list']=$this->Home_Restro->all_cuisin();
 
             
+
             if(isset($_POST['filter_type']))
             {
                 redirect('/filter/');
@@ -967,9 +982,9 @@
 
         function view_restro_item(){
             $user_id = $_SESSION['Customer_User_Id'];
-            
+
             if(!isset($user_id)) redirect('customer_login');
-            
+
             $data['errors']=array();
 
             $service_id = $_SESSION["filter_service"];
@@ -1074,7 +1089,7 @@
             $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_type); 
             $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
             $data['restroInfo'] = $restro;
-            
+
 
             if(isset($_POST['btncheckout']))
             {
@@ -1133,6 +1148,12 @@
                     $order['time'] = $schedule_time;  // H:i:s
                     $order['user_id'] = $user_id;
 
+                    $payment_method = $this->input->post('hd_paymentType');
+                    if(!isset($payment_method)) {
+                        throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    } 
+                    $order['payment_method'] = $payment_method;
+
                     $order['status'] = 1; 
                     $address_id = $this->input->post('address_id');
                     if(!isset($address_id)) {
@@ -1175,6 +1196,19 @@
                     $this->UserProfileModel->save($user_id, array(
                         'points'=>$user_loyalty_points,
                         'mataam_points'=>$user_mataam_points
+                    ));
+
+                    // Create Points Log
+                    $this->PointLogModel->create(array(
+                        'user_id'=>$user_id,
+                        'service_id'=>$service_type,
+                        'order_id'=>$order_id,
+                        'gained_loyalty_point'=>$point['loyalty']['gained_points'],
+                        'used_loyalty_point'=>$redeem_type==2 ? $point['loyalty']['used_points'] : 0,
+                        'balance_loyalty_point'=>$user_loyalty_points,
+                        'gained_mataam_point'=>$point['mataam']['gained_points'],
+                        'used_mataam_point'=>$redeem_type==3 ? $point['mataam']['used_points'] : 0,
+                        'balance_mataam_point'=>$user_mataam_points
                     ));
 
 
@@ -1462,36 +1496,33 @@
             @$user_id = $_SESSION['Customer_User_Id'];
 
             $restro_id =$this->uri->segment('2');
-            $table_id =$this->uri->segment('3');
+            $location_id =$this->uri->segment('3');
             $_SESSION['order_restro_id'] = $restro_id;
-            $_SESSION['table_id'] = $table_id;
-
-            //$data['cartData'] = $this->Home_Restro->view_my_table_cart($user_id);
-            $data['addressData'] = $this->Home_Restro->get_customer_address_data(@$user_id);
-            $data['restroInfo'] = $this->Home_Restro->restro_table_checkout_details($restro_id);
-
-            $ownerID = $data['restroInfo']['user_id'];
-
-            $Loc = $this->Home_Restro->getrestroOrderLocationId2($restro_id,$_SESSION['filter_service'],$_SESSION['filter_city']);
 
 
-            $data['locationData'] = $this->Home_Restro->getLocationAll_Details($restro_id,$Loc['location_id']);
-
-            if(($restro_id == '') or ($table_id == ''))
+            if(($restro_id == '') or ($location_id == ''))
             {
                 redirect('/');
             }
 
-            $datestring = "%Y-%m-%d";
-            $timestring = "%h:%i %a";
-            $time = time();
 
-            $Mdate = mdate($datestring, $time);
-            $Mtime = mdate($timestring, $time);
+            $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, 3); 
+            $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
+            $data['restroInfo'] = $restro;
+
+            $data['reserve_date'] = $reserve_date = $_SESSION['reserve_date'];
+            $data['reserve_time'] = $reserve_time = $this->input->get('reserve_time');
+            $data['people_number'] = $_SESSION['people_number'];
+
+            $weekday = strtolower(date('l', strtotime($reserve_date)));
+            $data['seating_info'] = getSeatingInfo($restro_id, $location_id, $weekday, $reserve_time);
+
 
             if(isset($_POST['btncheckout']))
             {
-                $this->form_validation->set_rules('booking_time', 'Address', 'required');
+                $this->form_validation->set_rules('people_number', 'Number of people', 'required');
+                $this->form_validation->set_rules('reserve_date', 'Reservation data', 'required');
+                $this->form_validation->set_rules('reserve_time', 'Reservation time', 'required');
 
                 if ($this->form_validation->run() == FALSE)
                 {
@@ -1499,54 +1530,46 @@
                 }
                 else
                 {
+                    $people_number = $this->input->post('people_number');
+                    $reserve_date = $this->input->post('reserve_date');
+                    $reserve_time = date('G:i', strtotime($this->input->post('reserve_time')));
 
-                    $hd_total = $this->input->post('hd_total');
-                    $hd_charges = $this->input->post('hd_charges');
-                    $hd_orderTime = $this->input->post('hd_orderTime');
-                    $hd_paymentType = $this->input->post('hd_paymentType');
-                    //$addressid = $this->input->post('useraddress'); 
-                    //$extra_direction = $this->input->post('extra_direction');
-                    $booking_time = $this->input->post('booking_time');
-
-                    $order['total'] = $hd_total;
-                    $order['delivery_charges'] = $hd_charges;
-                    $order['date'] = $Mdate;
-                    $order['time'] = $Mtime;
+                    $weekday = strtolower(date('l', strtotime($reserve_date)));
+                    $seating_info = getSeatingInfo($restro_id, $location_id, $weekday, $reserve_time);
+                    if($seating_info === null || !isAvailableTime($reserve_date, $reserve_time, $seating_info, $people_number, $restro_id, $location_id))  {
+                        echo json_encode($seating_info);
+                        echo json_encode($this->input->post());
+                        echo "$restro_id:$location_id:$weekday:$reserve_time";
+                        //throw new Exception($this->lang->line('time_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                        $data['errors'] = 'asdfasdf';$this->load->view('reservation_checkout',$data);
+                    }
+                    $largest_party_size = $seating_info['largest_party_size'];
+                    if($largest_party_size > 0) {             
+                        $order_table_count = floor($people_number / $largest_party_size) + 1;   
+                    } else {
+                        $order_table_count = 1;
+                    }
+                    $order['table_count'] = $order_table_count;
+                    $order['number_of_people'] = $people_number;
+                    $order['restro_id'] = $restro_id;
+                    $order['location_id'] = $location_id;
+                    $order['date'] = $reserve_date;  // Y-m-d
+                    $order['time'] = $reserve_time;  // H:i
                     $order['user_id'] = $user_id;
-                    //$order['address_id'] = $addressid;
-                    //$order['extra_direction'] = $extra_direction;
-                    $order['status'] = 1;
-                    $order['restro_location_id'] = $Loc['location_id'];
+                    $order['order_points'] = $seating_info['point'];
+                    /*$payment_method = $this->post('payment_method');
+                    if(!isset($payment_method)) {
+                    throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    } 
+                    $order['payment_method'] = $payment_method;*/
+                    $order['status'] = 1;                  
+                    $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
+                    $order_id = $this->RestroTableOrderModel->create($order);
+                    $this->RestroTableOrderModel->update($order_id, array("order_no"=>$this->config->item('Start_order_id').$order_id));
+                    $order_details['order_id'] = $order_id;
+                    $order = $this->RestroTableOrderModel->findById($order_id);
 
-
-                    $getId = $this->Home_Restro->add_table_order($order);
-
-                    $orderDetails['order_id'] = $getId;
-
-                    $updatedata['order_no'] = $this->config->item('Start_reservation_id').$getId;
-
-                    $this->Home_Restro->orderNo_update_reservation($updatedata,$getId);
-
-
-                    $orderDetails['table_id'] = $table_id;
-                    $orderDetails['quantity'] = 1;
-                    $orderDetails['restro_id'] = $restro_id;
-                    //$orderDetails['notes'] = $DA_Cart->notes;
-                    $orderDetails['user_id'] = $ownerID;  
-                    $orderDetails['booking_date'] = $_SESSION['res_date'];
-                    $orderDetails['user_limit'] = $_SESSION['res_user'];
-                    $orderDetails['booking_time'] = $booking_time;
-
-                    $this->Home_Restro->add_table_order_data($orderDetails);
-
-
-
-
-                    //$this->Home_Restro->empty_my_table_cart($user_id);
-
-                    //order msg send here
-
-                    $orderNumber = $updatedata['order_no'];
+                    $orderNumber = $order->order_no;
                     $otpMSG =urlencode("Your Order Confirmed Successfully done, Your Order ID #$orderNumber");
 
                     $apiData = $this->Customer_management->getApiDetails(1);
@@ -1582,12 +1605,12 @@
 
         function ajax_search_restaurants(){
             $data['errors']=array();
-            
+
             $area = $this->input->post('area');
             $cusines = $this->input->post('cusines');
             $area = $this->input->post('area');
             $area = $this->input->post('area');
-            
+
             $area = $_SESSION['order_area_id'] = $this->input->post('filter_area');
             $service =$this->input->post('filter_service');
 

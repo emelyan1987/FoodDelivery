@@ -35,4 +35,26 @@
             return $result;
         }    
 
+        public function findById($id){   
+            $this->db->select('d.*, v.variation_name, v.variation_type');
+            $this->db->from('restro_item_variation_data AS d');
+            $this->db->join('restro_item_variation AS v', 'v.id=d.variation_id');
+            $this->db->where('d.id', $id);
+
+            $result = $this->db->get()->row();
+
+            return $result;
+        }    
+        
+        public function findByIds($ids){   
+            $this->db->select('d.*, v.variation_name, v.variation_type');
+            $this->db->from('restro_item_variation_data AS d');
+            $this->db->join('restro_item_variation AS v', 'v.id=d.variation_id');
+            $this->db->where_in('d.id', $ids);
+
+            $result = $this->db->get()->result();
+
+            return $result;
+        }    
+
 }

@@ -266,42 +266,42 @@
 <div class="container-fluid">
     <div class="row">
         <div class="mid_design_section">
-            <a href="/Home_Restro_Filter/2">
+            <a href="#" onclick="onSelectRestroKind(2)">
                 <div class="main_fourth">
                     <div class="upperLayer1">
                         <div class="innerLayer">
                             <h4>Featured Restaurant</h4>
-                            <h5><?php echo $opening_soon_count;?> Places</h5>
+                            <h5><span id="display-featured-restaurant-count">0</span> Places</h5>
                         </div>
                     </div>
                 </div>
             </a>
-            <a href="/Home_Restro_Filter/1">
+            <a href="#" onclick="onSelectRestroKind(1)">
                 <div class="main_fourth">
                     <div class="upperLayer3">
                         <div class="innerLayer">
                             <h4>Newly Opened</h4>
-                            <h5><?php echo $newly_count;?> Places</h5>
+                            <h5><span id="display-newly-opened-restaurant-count">0</span> Places</h5>
                         </div>
                     </div>
                 </div>
             </a>
-            <a href="/Home_Restro_Filter/3">
+            <a href="#" onclick="onSelectRestroKind(4)">
                 <div class="main_fourth">
                     <div class="upperLayer2">
                         <div class="innerLayer">
                             <h4>Promotions</h4>
-                            <h5><?php echo $luxury_count;?> Places</h5>
+                            <h5><span id="display-promotion-restaurant-count">0</span> Places</h5>
                         </div>
                     </div>
                 </div>
             </a>
-            <a href="/Home_Restro_Filter/4">
+            <a href="#" onclick="onSelectRestroKind(8)">
                 <div class="main_fourth">
                     <div class="upperLayer4">
                         <div class="innerLayer">
                             <h4>Coupons </h4>
-                            <h5><?php echo $trending_count;?> Places</h5>
+                            <h5><span id="display-coupon-restaurant-count">0</span> Places</h5>
                         </div>
                     </div>
                 </div>
@@ -443,6 +443,76 @@
     });
 </script>
 <script>
+    var selected_service = 1;
+    function updateRestaurantCount(service_type) {
+        $("#display-newly-opened-restaurant-count").html('');
+        $("#display-featured-restaurant-count").html('');
+        $("#display-promotion-restaurant-count").html('');
+        $("#display-coupon-restaurant-count").html('');
+        $.ajax({
+            url: "/api/restaurants/count",
+            type: "get",
+            data: {
+                service_type: service_type,
+                kind: 1
+            },
+            success: function (response) {
+                console.log('getRestaurantCount',response);                
+                
+                if(response.code == 0) {
+                    $("#display-newly-opened-restaurant-count").html(response.resource.count);
+                }
+            }
+        })
+        
+        $.ajax({
+            url: "/api/restaurants/count",
+            type: "get",
+            data: {
+                service_type: service_type,
+                kind: 2
+            },
+            success: function (response) {
+                console.log('getRestaurantCount',response);
+                
+                if(response.code == 0) {
+                    $("#display-featured-restaurant-count").html(response.resource.count);
+                }
+            }
+        })
+        
+        $.ajax({
+            url: "/api/restaurants/count",
+            type: "get",
+            data: {
+                service_type: service_type,
+                kind: 4
+            },
+            success: function (response) {
+                console.log('getRestaurantCount',response);
+                
+                if(response.code == 0) {
+                    $("#display-promotion-restaurant-count").html(response.resource.count);
+                }
+            }
+        })
+        
+        $.ajax({
+            url: "/api/restaurants/count",
+            type: "get",
+            data: {
+                service_type: service_type,
+                kind: 8
+            },
+            success: function (response) {
+                console.log('getRestaurantCount',response);
+                
+                if(response.code == 0) {
+                    $("#display-coupon-restaurant-count").html(response.resource.count);
+                }
+            }
+        })
+    }
     //pickup
     function changeTab1(){
         $(".insideFirstColumn").css("opacity","1");
@@ -453,6 +523,10 @@
         $(".deliveryTab").css("display","none");
         $(".cateringTab").css("display","none");
         $(".reservationTab").css("display","none");
+        
+        updateRestaurantCount(4);
+        
+        selected_service = 4;
     }
     //delivery
     function changeTab2(){
@@ -464,6 +538,10 @@
         $(".pickupTab").css("display","none");
         $(".cateringTab").css("display","none");
         $(".reservationTab").css("display","none");
+        
+        updateRestaurantCount(1);
+        
+        selected_service = 1;
     }
     // catering
     function changeTab3(){
@@ -475,6 +553,10 @@
         $(".pickupTab").css("display","none");
         $(".cateringTab").css("display","block");
         $(".reservationTab").css("display","none");
+        
+        updateRestaurantCount(2);
+        
+        selected_service = 2;
     }
     // reservation
     function changeTab4(){
@@ -486,6 +568,14 @@
         $(".pickupTab").css("display","none");
         $(".cateringTab").css("display","none");
         $(".reservationTab").css("display","block");
+        
+        updateRestaurantCount(3);
+        
+        selected_service = 3;
+    }
+    
+    function onSelectRestroKind(kind) {
+        location.href = "/filter?service="+selected_service+"&kind="+kind;
     }
 </script>
 <script type="text/javascript">
@@ -716,22 +806,6 @@
     //     $("#datetimepicker3").css('display','none');
     // });
     jQuery(document).ready(function($) {
-        // if(ref == "DELIVERY")
-        // {
-        // 	changeTab2();
-        // }
-        // if(ref == "CATERING");
-        // {
-        // 	changeTab3();
-        // }
-        // if(ref == "TABLE");
-        // {
-        // 	changeTab4();
-        // }
-        // if(ref == "PICKUP")
-        // {
-        // 	changeTab1();
-        // }
         switch(ref) {
             case "DELIVERY":
                 changeTab2();

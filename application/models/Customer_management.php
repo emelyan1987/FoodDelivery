@@ -301,8 +301,8 @@
             $this->db->select('restro_promotion.*,restro_info.restro_name,restro_info.status,restro_info.restaurant_logo');
             $this->db->from('restro_promotion');
             $this->db->join('restro_info','restro_info.user_id = restro_promotion.user_id');
-            $this->db->where('restro_promotion.from_date <=', $date);
-            $this->db->where('restro_promotion.to_date >=', $date);
+            //$this->db->where('restro_promotion.from_date <=', $date);
+            //$this->db->where('restro_promotion.to_date >=', $date);
             $this->db->group_by('restro_promotion.id');
             $query = $this->db->get();
             return $query = $query->result();

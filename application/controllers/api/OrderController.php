@@ -18,6 +18,7 @@
             $this->load->model('OrderDetailModel'); 
             $this->load->model('RestroSeatingHourModel'); 
             $this->load->model('RestroTableOrderModel'); 
+            $this->load->model('PointLogModel'); 
             $this->load->helper('utils');
             $this->load->helper('order');
         } 
@@ -100,24 +101,22 @@
         {                 
             try {                
                 $this->validateAccessToken();
-                $point_type = $this->get('point_type');
                 $service_type = $this->get('service_type');
                 $offset = $this->get('offset') ? $this->get('offset') : 0;
                 $limit = $this->get('limit') ? $this->get('limit') : 50;
                 $params = array();
                 $params["user_id"] = $this->user->id;
-                if(isset($point_type))$params["coupon_point_apply"] = $point_type;
+                if(isset($service_type)) $params["service_id"] = $service_type;
                 $params["offset"] = $offset;
                 $params["limit"] = $limit;
-                if(isset($service_type)) {                     
-                    $orders = $this->OrderModel->find($service_type, $params);    
-                } else {
-                    $orders = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(4, $params)); 
+                
+                
+                $points = $this->PointLogModel->find($params);
+                foreach($points as $point) {
+                    $order = $point->order = $this->OrderModel->findById($point->service_id, $point->order_id);
+                    if($order) $point->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
                 }
-                foreach($orders as $order) {
-                    $order->restaurant = $this->RestaurantModel->findById($order->restro_id);
-                }
-                $resource = $orders;
+                $resource = $points;
                 if(!$resource) {
                     throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
                 }  
@@ -234,7 +233,11 @@
                 $order['restro_location_id'] = $location_id;
                 $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
                 $order_id = $this->OrderModel->create($service_type, $order);
+
+                // Update Order No
                 $this->OrderModel->update($service_type, $order_id, array("order_no"=>$this->config->item('Start_order_id').$order_id));
+
+                // Create Order Details
                 $order_details['order_id'] = $order_id;
                 $carts = $this->CartModel->find($service_type, array("user_id"=>$this->user->id, "restro_id"=>$restro_id, "location_id"=>$location_id));
                 foreach($carts as $cart){
@@ -248,10 +251,13 @@
                     $order_details['variation_ids'] = $cart->variation_ids;
                     $this->OrderDetailModel->create($service_type, $order_details);
                 }
+
+                // Delete Cart List
                 $this->CartModel->deleteAll($service_type, array('user_id'=>$this->user->id,'restro_id'=>$restro_id, 'location_id'=>$location_id));
                 $params = array();
                 $order = $this->OrderModel->findById($service_type, $order_id);
                 $order->details = $this->OrderDetailModel->find($service_type, array('order_id'=>$order_id));
+
                 // Update user points on profile
                 $user_loyalty_points = $this->user->profile->points; $user_mataam_points = $this->user->profile->mataam_points;
                 if($redeem_type == 2) {
@@ -265,6 +271,20 @@
                     'points'=>$user_loyalty_points,
                     'mataam_points'=>$user_mataam_points
                 ));
+
+                // Create Points Log
+                $this->PointLogModel->create(array(
+                    'user_id'=>$this->user->id,
+                    'service_id'=>$service_type,
+                    'order_id'=>$order_id,
+                    'gained_loyalty_point'=>$point['loyalty']['gained_points'],
+                    'used_loyalty_point'=>$redeem_type==2 ? $point['loyalty']['used_points'] : 0,
+                    'balance_loyalty_point'=>$user_loyalty_points,
+                    'gained_mataam_point'=>$point['mataam']['gained_points'],
+                    'used_mataam_point'=>$redeem_type==3 ? $point['mataam']['used_points'] : 0,
+                    'balance_mataam_point'=>$user_mataam_points
+                ));
+                
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$order
@@ -379,6 +399,7 @@
                     $order_table_count = 1;
                 }
                 $order['table_count'] = $order_table_count;
+                $order['number_of_people'] = $people_number;
                 $order['restro_id'] = $restro_id;
                 $order['location_id'] = $location_id;
                 $order['date'] = $reserve_date;  // Y-m-d

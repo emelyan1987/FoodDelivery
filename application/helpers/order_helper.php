@@ -176,12 +176,15 @@
         $seating_infos = $CI->RestroSeatingHourModel->find(array(
             'restro_id'     => $restro_id,
             'location_id'   => $location_id   
-        ));
+        )); //echo json_encode($seating_infos);
         $seating_info = null;
+        
+        $time = strtotime($reserve_time);
         foreach($seating_infos as $item) {
-            $from_time = $item->{$weekday.'_from'};
-            $to_time = $item->{$weekday.'_to'};
-            if($reserve_time>=$from_time && $reserve_time<=$to_time) {
+            $from_time = strtotime($item->{$weekday.'_from'});
+            $to_time = strtotime($item->{$weekday.'_to'});
+                        
+            if($time>=$from_time && $time<=$to_time) {
                 $seating_info = array(
                     'from'=>$item->{$weekday.'_from'},
                     'to'=>$item->{$weekday.'_to'},
@@ -284,7 +287,7 @@
         $table_count = 0; $cover_count = 0;
         foreach($orders as $order) {
             $table_count += $order->table_count;
-            if($order->time == $time) {
+            if(strtotime($order->time) == strtotime($time)) {
                 $cover_count += $order->table_count;
             }
         }

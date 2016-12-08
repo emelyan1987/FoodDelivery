@@ -64,6 +64,10 @@
             if(isset($params["restro_categories"])) {        
                 $where .= " AND rc.category_id IN (" . $params["restro_categories"] . ")";
             } 
+            if(isset($params["kind"])) {
+                $where .= " AND r.restro_state&" . $params["kind"] . "!=0";
+            }
+            
 
             $query = "SELECT a.*, AVG(rt.star_value) AS rating, COUNT(rt.id) AS reviews, pt.id AS promo_id, $service_type AS service_type FROM 
             (
@@ -91,7 +95,6 @@
             LEFT JOIN restro_promotion AS pt ON pt.location_id=a.location_id AND pt.service_id=$service_type
             GROUP BY a.location_id";
 
-            
             $result = $this->db->query($query)->result();
 
             return $result;

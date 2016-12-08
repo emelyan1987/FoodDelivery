@@ -68,15 +68,15 @@
             $table_name = $this->tableName($service_type);            
             if($table_name == null) return null;
 
-            $this->db->select(empty($fields)?'*':implode(',',$fields));
-            $this->db->from($table_name);   
+            $this->db->select('d.*, i.item_name, i.item_description, i.image AS item_image, i.item_price');
+            $this->db->from("$table_name AS d");
+            $this->db->join('tbl_item AS i', 'i.id=d.product_id');   
 
             if(isset($params)) {
-                if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
-                if(isset($params["product_id"]) && $params["product_id"]!="") $this->db->where('product_id', $params["product_id"]);   
-                if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('restro_id', $params["restro_id"]);   
-                if(isset($params["order_id"]) && $params["order_id"]!="") $this->db->where('order_id', $params["order_id"]);   
-                
+                if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('d.user_id', $params["user_id"]);
+                if(isset($params["product_id"]) && $params["product_id"]!="") $this->db->where('d.product_id', $params["product_id"]);   
+                if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('d.restro_id', $params["restro_id"]);   
+                if(isset($params["order_id"]) && $params["order_id"]!="") $this->db->where('d.order_id', $params["order_id"]);                   
             }  
             $result = $this->db->get()->result();
 
