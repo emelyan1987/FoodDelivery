@@ -1,5 +1,5 @@
 <?php
-echo $_SERVER['CI_ENV']; return;
+
 /**
  * CodeIgniter
  *
@@ -55,6 +55,7 @@ echo $_SERVER['CI_ENV']; return;
  * NOTE: If you change these, also change the error_reporting() code below
  */
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+    echo ENVIRONMENT; echo "OK"; return;
 
 /*
  *---------------------------------------------------------------
