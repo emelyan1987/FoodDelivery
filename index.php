@@ -282,8 +282,7 @@ switch (ENVIRONMENT)
 	}
 
 	define('VIEWPATH', $view_folder);
-
-    echo "TTTT"; return;
+    
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
