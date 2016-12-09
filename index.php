@@ -1,5 +1,5 @@
 <?php
-echo "adsfasdf"; return;
+echo $_SERVER['CI_ENV']; return;
 /**
  * CodeIgniter
  *
