@@ -361,7 +361,7 @@
             }
 
         }
-        function customer_dashboard($page = "") {
+        function customer_dashboard($page = "") {echo "Customer Dashoboard"; return;
 
             $data['errors'] = array();
             $user_id = $this->session->userdata('user_id');
