@@ -34,7 +34,7 @@
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
  * @filesource
- */echo "asdfasdfasdf"; return;
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
@@ -83,6 +83,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * ------------------------------------------------------
  */
 
+ echo "FFFF"; return;
 if ( ! is_php('5.4'))
 {
 	ini_set('magic_quotes_runtime', 0);
