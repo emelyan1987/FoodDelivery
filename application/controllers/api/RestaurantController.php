@@ -113,7 +113,7 @@
         public function count_get($id=null)
         {                 
             try {                
-                $this->validateAccessToken();
+                //$this->validateAccessToken();
 
                 $service_type = $this->get('service_type');
                 if(!isset($service_type)) {
