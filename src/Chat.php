@@ -13,9 +13,9 @@
 
             define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
             if(ENVIRONMENT === 'production') {
-                $this->db = new \Database('localhost:3306', 'mataam_admiin', 'mataam@2016', 'kandil_restro');    
+                $this->db = new \Database('localhost:3306', 'mataam_admin', 'mataam2016', 'kandil_restro');    
             } else {
-                $this->db = new \Database('localhost:3306', 'root', 'mataam@2016', 'kandil_restro'); 
+                $this->db = new \Database('localhost:3306', 'root', '', 'kandil_restro'); 
             }
             
 

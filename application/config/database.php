@@ -80,8 +80,8 @@ $query_builder = TRUE;
  $db['default'] = array(
  	'dsn'	=> '',
  	'hostname' => (ENVIRONMENT === 'production')?'localhost:3306':'localhost:3306',
- 	'username' => (ENVIRONMENT === 'production')?'root':'root',
- 	'password' => (ENVIRONMENT === 'production')?'mataam2016':'',
+ 	'username' => (ENVIRONMENT === 'production')?'mataam_admin':'root',
+ 	'password' => (ENVIRONMENT === 'production')?'mataam@2016':'',
  	'database' => 'kandil_restro',
  	'dbdriver' => 'mysqli',
  	'dbprefix' => '',

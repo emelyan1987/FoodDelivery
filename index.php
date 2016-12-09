@@ -1,4 +1,5 @@
 <?php
+echo "adsfasdf"; return;
 /**
  * CodeIgniter
  *
