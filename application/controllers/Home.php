@@ -1498,6 +1498,7 @@
             $restro_id =$this->uri->segment('2');
             $location_id =$this->uri->segment('3');
             $_SESSION['order_restro_id'] = $restro_id;
+            $_SESSION['order_location_id'] = $location_id;
 
 
             if(($restro_id == '') or ($location_id == ''))
@@ -1520,6 +1521,8 @@
 
             if(isset($_POST['btncheckout']))
             {
+                if(!isset($user_id)) redirect('customer_login');
+                
                 $this->form_validation->set_rules('people_number', 'Number of people', 'required');
                 $this->form_validation->set_rules('reserve_date', 'Reservation data', 'required');
                 $this->form_validation->set_rules('reserve_time', 'Reservation time', 'required');
