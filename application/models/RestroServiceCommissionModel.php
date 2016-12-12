@@ -1,6 +1,6 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-    class RestroCategoryModel extends CI_Model
+    class RestroServiceCommissionModel extends CI_Model
     {
 
         protected $publicFields = array();
@@ -27,7 +27,7 @@
         {
             $insert_id = null;
             $this->db->trans_start();
-            if($this->db->insert('restro_seo_category', $data)) {
+            if($this->db->insert('restro_services_commission', $data)) {
                 $insert_id = $this->db->insert_id();
             }
             $this->db->trans_complete();
@@ -38,13 +38,13 @@
         public function update($id, $data){
             $this->db->trans_start();
             $this->db->where('id',  $id);
-            $this->db->update('restro_seo_category', $data);
+            $this->db->update('restro_services_commission', $data);
             $this->db->trans_complete();
         }
 
         public function find($params){   
             $this->db->select('*');
-            $this->db->from('restro_seo_category');   
+            $this->db->from('restro_services_commission');   
 
             if(isset($params)) {
                 if(isset($params["name"]) && $params["name"]!="") $this->db->like('name', $params["name"]);
@@ -62,25 +62,24 @@
             $this->db->select('*');
             $this->db->where('id',$id);
 
-            return $this->db->get('restro_seo_category')->row();
-        }         
-
-
-
+            return $this->db->get('restro_services_commission')->row();
+        } 
+        
         public function delete($id){
             $this->db->trans_start();
-            $ret = $this->db->delete('restro_seo_category', array('id' => $id));
+            $ret = $this->db->delete('restro_services_commission', array('id' => $id));
             $this->db->trans_complete();
 
             return $ret;
         }
 
-        public function findByRestroId($restro_id) {
-            $this->db->select('a.id, a.name, a.description');
+        public function findByRestroLocationId($restro_id, $location_id) {
+            $this->db->select('a.id, a.cat_name AS name');
             
-            $this->db->from('restro_seo_category AS a');
-            $this->db->join('restro_seo_category_list AS b', 'b.category_id=a.id', 'left');
+            $this->db->from('restro_services AS a');
+            $this->db->join('restro_services_commission AS b', 'b.service_type=a.id', 'left');
             $this->db->where('b.restro_id', $restro_id);
+            $this->db->where('b.location_id', $location_id);
             
             return $this->db->get()->result();
         }

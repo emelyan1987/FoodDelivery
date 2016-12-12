@@ -345,11 +345,11 @@
     <span class="${statusClass(status)}">${statusTitle(status)}</span> 
     </div>
     <div class="col-sm-6 col-md-6">
-    <a href="/restaurant_profile/${restro_id}"><img class="img-responsive" alt="" src="${restroLogoPath(restro_logo)}" > </a>
+    <a href="/restaurant_profile/${restro_id}/${location_id}"><img class="img-responsive" alt="" src="${restroLogoPath(restro_logo)}" > </a>
     </div>
     </div>
     <div class="col-md-4 col-sm-12">
-    <a href="/restaurant_profile/${restro_id}"><h4 class="restrotitle">${restro_name}</h4></a>
+    <a href="/restaurant_profile/${restro_id}/${location_id}"><h4 class="restrotitle">${restro_name}</h4></a>
     <h5 class="restrotitle">${location_name}</h5>
     <div class="ratings"> 
     <div class="rating-view"></div>
@@ -370,18 +370,22 @@
     </div>
     <div class="col-md-4">
     {{if service_type!=3}}
+    <div class="row">
     <label class="list-label">Min. Order:</label>
     <label class="list-data">&nbsp;${formatPrice(min_order)}</label>
-    <br>
+    </div>
+    <div class="row">
     <label class="list-label">Delivery Time:</label>
     <label class="list-data">&nbsp;${order_time} Min.</label>
-    <br>
+    </div>
     {{/if}}
+    <div class="row">
     <label class="list-label">Payment:</label>
     {{if hasPaymentOption(payment_method, "1")}}<img class="" alt="" src="/assets/Customer/img/cash.png">{{/if}}
     {{if hasPaymentOption(payment_method, "2")}}<img class="" alt="" src="/assets/Customer/img/knet.png">{{/if}}
     {{if hasPaymentOption(payment_method, "3")}}<img class="" alt="" src="/assets/Customer/img/card.png">{{/if}}
     {{if hasPaymentOption(payment_method, "4")}}<img class="" alt="" src="/assets/Customer/img/paypal.png">{{/if}}
+    </div>
     <div>{{if service_type!=3}}<a href="/restaurant_view/${restro_id}/${location_id}" class="btn-success-newone list-button">Go to menu <i class="fa fa-angle-right"></i></a>{{/if}}</div>
     </div>
     </div>
@@ -541,26 +545,26 @@
 
 
 <script>
-//    if($('#roundedOne3').attr('checked')) {
-//
-//        $("#mind").hide();
-//        //alert("hello");
-//        $.ajax({
-//
-//            url: "/Home_coupon_filter/",
-//            type: "post",
-//            data: {filter_id: 4},
-//            success: function (response) {
-//                //alert(response);
-//                $("#copp").html(response);
-//
-//            }
-//        })
-//
-//    }
-//    $('.selectLocation').select2({
-//        theme:"classic"
-//    });
+    //    if($('#roundedOne3').attr('checked')) {
+    //
+    //        $("#mind").hide();
+    //        //alert("hello");
+    //        $.ajax({
+    //
+    //            url: "/Home_coupon_filter/",
+    //            type: "post",
+    //            data: {filter_id: 4},
+    //            success: function (response) {
+    //                //alert(response);
+    //                $("#copp").html(response);
+    //
+    //            }
+    //        })
+    //
+    //    }
+    //    $('.selectLocation').select2({
+    //        theme:"classic"
+    //    });
 
 </script>
 

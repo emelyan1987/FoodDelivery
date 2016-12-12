@@ -43,12 +43,14 @@
         }
 
         public function find($params){   
-            $this->db->select('*');
-            $this->db->from('area');   
-
+            $this->db->select('a.*, c.city_name');
+            $this->db->from('area AS a');   
+            $this->db->join('city AS c', 'c.id=a.city_id', 'left');
             if(isset($params)) {
-                if(isset($params["name"]) && $params["name"]!="") $this->db->like('name', $params["name"]);
-                if(isset($params["city_id"])) $this->db->where('city_id', $params["city_id"]);
+                if(isset($params["name"]) && $params["name"]!="") $this->db->like('a.name', $params["name"]);
+                if(isset($params["city_id"])) $this->db->where('a.city_id', $params["city_id"]);
+                if(isset($params["ids"]) && is_array($params['ids'])) $this->db->where_in('a.id', $params['ids']);
+                if(isset($params["id"])) $this->db->where('a.id', $params['id']);
             }  
             $result = $this->db->get()->result();
 

@@ -112,7 +112,8 @@ $route['check_otp'] = 'home/check_otp/';
 $route['login'] = 'home/login';
 $route['forgot_pass'] = 'home/forgot_pass/';
 $route['reset_pass'] = 'home/reset_pass/';
-$route['restaurant_profile/(:num)'] = 'home/restaurant_profile/$i'; 
+$route['restaurant_profile/(:num)'] = 'home/restaurant_profile/$1'; 
+$route['restaurant_profile/(:num)/(:num)'] = 'home/restaurant_profile/$1/$2'; 
 
 
 $route['customer_register'] = 'Auth/customer_register/';

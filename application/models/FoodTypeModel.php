@@ -75,4 +75,14 @@
             return $ret;
         }
 
+        public function findByRestroId($restro_id) {
+            $this->db->select('a.id, a.food_title AS name, a.food_description AS description');
+            
+            $this->db->from('restro_food_type AS a');
+            $this->db->join('food_type_restro_list AS b', 'b.food_type_id=a.id', 'left');
+            $this->db->where('b.restro_id', $restro_id);
+            
+            return $this->db->get()->result();
+        }
+
 }

@@ -63,9 +63,7 @@
             $this->db->where('id',$id);
 
             return $this->db->get('restro_cuisine')->row();
-        }         
-
-
+        }  
 
         public function delete($id){
             $this->db->trans_start();
@@ -75,4 +73,13 @@
             return $ret;
         }
 
+        public function findByRestroId($restro_id) {
+            $this->db->select('a.id, a.name, a.cuisine_description AS description');
+            
+            $this->db->from('restro_cuisine AS a');
+            $this->db->join('restro_cuisine_ids AS b', 'b.cuisine_id=a.id', 'left');
+            $this->db->where('b.restro_id', $restro_id);
+            
+            return $this->db->get()->result();
+        }
 }

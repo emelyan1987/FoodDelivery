@@ -1,10 +1,11 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-    class RestroCategoryModel extends CI_Model
+    class RestroPaymentMethodModel extends CI_Model
     {
 
         protected $publicFields = array();
 
+        private $tableName = 'restro_payments_method';
         function __construct()
         {
             parent::__construct();     
@@ -19,15 +20,15 @@
                 }
 
             }
-            
-            
+
+
             return $model;
         }
         public function create($data)
         {
             $insert_id = null;
             $this->db->trans_start();
-            if($this->db->insert('restro_seo_category', $data)) {
+            if($this->db->insert($this->tableName, $data)) {
                 $insert_id = $this->db->insert_id();
             }
             $this->db->trans_complete();
@@ -38,18 +39,25 @@
         public function update($id, $data){
             $this->db->trans_start();
             $this->db->where('id',  $id);
-            $this->db->update('restro_seo_category', $data);
+            $this->db->update($this->tableName, $data);
             $this->db->trans_complete();
         }
 
-        public function find($params){   
+        public function find($params, $toArray=false){   
             $this->db->select('*');
-            $this->db->from('restro_seo_category');   
+            $this->db->from($this->tableName);   
 
             if(isset($params)) {
-                if(isset($params["name"]) && $params["name"]!="") $this->db->like('name', $params["name"]);
+                if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('restro_id', $params["restro_id"]);
+                if(isset($params["location_id"]) && $params["location_id"]!="") $this->db->where('location_id', $params["location_id"]);
+                if(isset($params["service_id"]) && $params["service_id"]!="") $this->db->where('service_type', $params["service_id"]);
             }  
-            $result = $this->db->get()->result();
+
+            if($toArray) {
+                $result = $this->db->get()->result_array();
+            } else {
+                $result = $this->db->get()->result();    
+            }
 
             return $result;
         }
@@ -62,27 +70,17 @@
             $this->db->select('*');
             $this->db->where('id',$id);
 
-            return $this->db->get('restro_seo_category')->row();
+            return $this->db->get($this->tableName)->row();
         }         
 
 
 
         public function delete($id){
             $this->db->trans_start();
-            $ret = $this->db->delete('restro_seo_category', array('id' => $id));
+            $ret = $this->db->delete($this->tableName, array('id' => $id));
             $this->db->trans_complete();
 
             return $ret;
-        }
-
-        public function findByRestroId($restro_id) {
-            $this->db->select('a.id, a.name, a.description');
-            
-            $this->db->from('restro_seo_category AS a');
-            $this->db->join('restro_seo_category_list AS b', 'b.category_id=a.id', 'left');
-            $this->db->where('b.restro_id', $restro_id);
-            
-            return $this->db->get()->result();
         }
 
 }

@@ -5,6 +5,8 @@
 
         protected $publicFields = array();
 
+        private $tableName = 'restro_city_area';
+        
         function __construct()
         {
             parent::__construct();     
@@ -27,7 +29,7 @@
         {
             $insert_id = null;
             $this->db->trans_start();
-            if($this->db->insert('restro_city_area', $data)) {
+            if($this->db->insert($this->tableName, $data)) {
                 $insert_id = $this->db->insert_id();
             }
             $this->db->trans_complete();
@@ -38,13 +40,13 @@
         public function update($id, $data){
             $this->db->trans_start();
             $this->db->where('id',  $id);
-            $this->db->update('restro_city_area', $data);
+            $this->db->update($this->tableName, $data);
             $this->db->trans_complete();
         }
 
         public function find($params=null, $fields=array()){   
             $this->db->select(empty($fields)?'*':implode(',',$fields));
-            $this->db->from('restro_city_area');   
+            $this->db->from($this->tableName);   
             if(isset($params)) {
                 if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
                 if(isset($params["restro_id"]) && $params["restro_id"]!="") $this->db->where('restro_id', $params["restro_id"]);
@@ -64,14 +66,14 @@
             $this->db->select('*');
             $this->db->where('id',$id);
 
-            return $this->db->get('restro_city_area')->row();
+            return $this->db->get($this->tableName)->row();
         }         
 
 
 
         public function delete($id){
             $this->db->trans_start();
-            $ret = $this->db->delete('restro_city_area', array('id' => $id));
+            $ret = $this->db->delete($this->tableName, array('id' => $id));
             $this->db->trans_complete();
 
             return $ret;

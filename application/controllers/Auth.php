@@ -984,21 +984,6 @@
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public function customer_register(){
             $data['errors']=array();
             $data['city'] = $this->Home_site->show_customer_city();
@@ -1035,12 +1020,7 @@
             $val3 = rand(0,9);
             $val4 = rand(0,9);
 
-
-
-
             $capcha_val = $val1.$val2.$val3.$val4;
-
-
 
 
             if ($this->form_validation->run() == FALSE)
@@ -1119,16 +1099,7 @@
                         else
                         {
 
-
-
-
-
-
-
-
                             $customer['user_id']=$this->Custom_function->customer_user($user);
-
-
 
                             $this->Custom_function->customer_profile($customer);
                             // $this->_send_email('customer_reg', $data['email'], $data);

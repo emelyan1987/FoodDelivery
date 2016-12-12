@@ -33,6 +33,15 @@
             $this->load->model('RestroSeatingHourModel'); 
             $this->load->model('RestroTableOrderModel'); 
             $this->load->model('PointLogModel'); 
+            $this->load->model('CuisineModel'); 
+            $this->load->model('FoodTypeModel'); 
+            $this->load->model('RestroCategoryModel'); 
+            $this->load->model('RestroLocationModel'); 
+            $this->load->model('RestroServiceCommissionModel'); 
+            $this->load->model('RestroWorkingHourModel'); 
+            $this->load->model('RestroPaymentMethodModel'); 
+            $this->load->model('RestroCityAreaModel');  
+            $this->load->model('AreaModel');  
 
             $this->load->helper('captcha');
             $this->load->helper('utils');
@@ -40,6 +49,7 @@
 
             $this->load->library('tank_auth');
             $this->lang->load('tank_auth');
+
 
         }
 
@@ -721,10 +731,10 @@
 
             $filter_service = $this->input->get('service');
             $filter_kind = $this->input->get('kind');
-            
+
             $filter_area = $this->input->post('filter_area');
             $filter_cuisines = $this->input->post('filter_cuisines');
-            
+
 
             if(isset($filter_service)) $_SESSION['filter_service'] = $filter_service;
             if(isset($filter_area)) $_SESSION['order_area_id'] = $filter_area;
@@ -744,10 +754,10 @@
 
             if(isset($filter_kind)) {
                 $params['kind'] = $filter_kind;
-                
+
                 $data['selected_kind'] = $filter_kind;
             }
-            
+
             $data['restro_list'] = $this->RestaurantModel->find($params); 
 
             if($filter_service == 3) {
@@ -772,7 +782,7 @@
             $data['service_list']=$this->Home_Restro->all_service();
             $data['cuisin_list']=$this->Home_Restro->all_cuisin();
 
-            
+
 
             if(isset($_POST['filter_type']))
             {
@@ -1522,7 +1532,7 @@
             if(isset($_POST['btncheckout']))
             {
                 if(!isset($user_id)) redirect('customer_login');
-                
+
                 $this->form_validation->set_rules('people_number', 'Number of people', 'required');
                 $this->form_validation->set_rules('reserve_date', 'Reservation data', 'required');
                 $this->form_validation->set_rules('reserve_time', 'Reservation time', 'required');
@@ -2496,31 +2506,90 @@
                 echo 2;
             }
 
-
-
         }
 
-        public function restaurant_profile(){
+        public function restaurant_profile($restro_id, $location_id=null){
             //$data['advt'] = $this->Advertise_management->GetAdevrtise_limit2();
 
-            $data['retro_list']=$this->Home_Restro->all_restro();
-            $data['service_list']=$this->Home_Restro->all_service();
-            $data['city'] = $this->Home_site->show_all_city();
-            $data['cuisin_list']=$this->Home_Restro->all_cuisin();
 
-            $data['advt1'] = $this->Advertise_management->GetAdevrtise_limit2(0,3);
-            $data['advt2'] = $this->Advertise_management->GetAdevrtise_limit2(3,3);
-            $data['advt3'] = $this->Advertise_management->GetAdevrtise_limit2(6,3);
+            $restaurant = $this->RestaurantModel->findById($restro_id);
 
-            $data['errors']=array();
-            $restro_id =$this->uri->segment('2');
-            //$data['restroInfo'] = $this->Home_Restro->view_delivery_restro_details($restro_id);
-            //$data['restroCat'] = $this->Home_Restro->view_restro_cat_filter($restro_id);
-            //$data['restro_item'] = $this->Home_Restro->restro_item_list($restro_id);
+            $cuisines = $this->CuisineModel->findByRestroId($restro_id);
+            $cuisine_names = array();
+            foreach($cuisines as $cuisine) {
+                $cuisine_names[] = $cuisine->name;
+            }
+            $restaurant->cuisines = $cuisine_names;
+            
+            $food_types = $this->FoodTypeModel->findByRestroId($restro_id);            
+            $type_names = array();
+            foreach($food_types as $type) {
+                $type_names[] = $type->name;
+            } 
+            $restaurant->food_types = $type_names;
+            
+            $categories = $this->RestroCategoryModel->findByRestroId($restro_id);            
+            $category_names = array();
+            foreach($categories as $category) {
+                $category_names[] = $category->name;
+            }
+            $restaurant->categories = $category_names;
+            
+            $restaurant->locations = $this->RestroLocationModel->findByRestroId($restro_id);
 
-            $data['retsro_service_list']=$this->Home_Restro->restro_service_list($restro_id);
-            $data['restro_cuisin_list']=$this->Home_Restro->restro_cuisin_list($restro_id);
-            //print_r($data['resro_service_list']);die;
+            $data['restaurant'] = $restaurant;
+
+            // Config Map Data
+            $this->load->library('googlemaps');
+
+            $center = '0,0';
+            if($location_id!==null) {
+                $location = $this->RestroLocationModel->findById($location_id);
+
+                $services = $this->RestroServiceCommissionModel->findByRestroLocationId($restro_id, $location_id);
+
+                foreach($services as $service) {
+                    $service->working_hour = $this->RestroWorkingHourModel->findOne(array('restro_id'=>$restro_id,'location_id'=>$location_id,'service_id'=>$service->id));
+                    $service->payment = $this->RestroPaymentMethodModel->findOne(array('restro_id'=>$restro_id,'location_id'=>$location_id,'service_id'=>$service->id));
+                    if($service->id==1 || $service->id==2) {
+                        $restro_area = $this->RestroCityAreaModel->findOne(array('restro_id'=>$restro_id,'location_id'=>$location_id,'service_id'=>$service->id));   
+                        $area_ids = explode(',', $restro_area->area);
+                        $charges = explode(',', $restro_area->delivery_price); 
+                        
+                        $areas = array();
+                        foreach($area_ids as $index=>$area_id) {
+                            $area = $this->AreaModel->findOne(array('id'=>$area_id));
+                            $areas[] = array('area_id'=>$area_id, 'area_name'=>$area->name.', '.$area->city_name, 'charge_amount'=>$charges[$index]);
+                        }
+                        
+                        $service->areas = $areas;
+                    }
+                    
+                    if($service->id == 3) {
+                        $seatings = $this->RestroSeatingHourModel->find(array('restro_id'=>$restro_id, 'location_id'=>$location_id));                       
+                        $seating_infos = array();
+                        foreach($seatings as $seating) {
+                            $seating_infos[$seating->category] = $seating;
+                        }
+                        
+                        $service->seating_infos = $seating_infos;
+                    }
+                }
+
+                $location->services = $services;
+                $data['location'] = $location;
+                $center = $location->latitude.','.$location->longitude;
+            }
+            $config['center'] = $center;
+            $config['zoom'] = '15';
+            $this->googlemaps->initialize($config);
+
+            $marker = array();
+            $marker['position'] = $center;
+            $marker['onclick'] = 'alert("You just clicked me!!")';
+            $this->googlemaps->add_marker($marker);
+            $data['map'] = $this->googlemaps->create_map();
+
 
             $this->load->view('restaurant_profile',$data);
         }

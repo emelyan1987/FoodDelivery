@@ -349,7 +349,7 @@ customRadio("confirm");
                         <div class="form-group">
                             <div class="roundedOne">
                                 <input type="checkbox" name="check" id="roundedOne" value="1">
-                                <label for="roundedOne"><span> I have read and understood the <a href="" class="text-new-user"/>Privacy Policy</a> and agree to the <a href=""  class="text-new-user">Terms of Use.</a></span></label>
+                                <label for="roundedOne"><span> I have read and understood the <a href="/home_policy" class="text-new-user"/>Privacy Policy</a> and agree to the <a href="/home_terms"  class="text-new-user">Terms of Use.</a></span></label>
                                 
                             </div>
                             <span class="required-server"><?php echo form_error('check','<p style="color:#F83A18">','</p>'); ?></span>
