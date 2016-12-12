@@ -442,7 +442,7 @@
                                             <div style="text-align:right;">
                                                 <a class="btn btn-default<?php echo ($ResData->status == 3)?"":" disabled";?>" style="color:#dcc300" data-toggle="modal" data-target="#myModal2" onclick="ratPop(<?php echo $ResData->id;?>,<?php echo $ResData->location_id;?>,<?php echo $ResData->restro_id;?>);" href="/restaurant_rating/<?php echo $ResData->restro_id;?>">Rate it <i class="fa fa-star btn-icon-right"></i></a>
                                                 <a href="#" class="btn btn-default<?php echo ($ResData->status == 1)?"":" disabled";?>" style="color:#f00">CANCEL</a>
-                                                <a href="#" class="btn btn-default" style="color:#FF8205" data-toggle="modal" data-target="#reserveDetailModal" onclick="openReserveDetailModal(<?php echo $ResData->id;?>,<?php echo $ResData->location_id;?>,<?php echo $ResData->restro_id;?>);">DETAILS</a>
+                                                <a href="#" class="btn btn-default" style="color:#FF8205" data-toggle="modal" data-target="#reserveDetailModal" onclick="openReserveDetailModal(<?php echo $ResData->restaurant->status;?>,'<?php echo $ResData->restaurant->restro_logo;?>','<?php echo $ResData->restaurant->restro_name;?>','<?php echo $ResData->restaurant->restro_description;?>','<?php echo $ResData->restaurant->street.' '.$ResData->restaurant->area.','.$ResData->restaurant->city;?>','<?php echo $ResData->restaurant->telephones;?>',<?php echo $ResData->total;?>,<?php echo $ResData->number_of_people;?>,'<?php echo date('jS M Y', strtotime($ResData->date));?>','<?php echo $ResData->time;?>',<?php echo $ResData->restaurant->rating;?>);">DETAILS</a>
                                                 <button class="btn btn-default<?php echo ($ResData->status == 2 && $ResData->total>0)?"":" disabled";?>">PAY </button>
                                             </div>
                                             <div style="margin-bottom:20px;border-bottom:1px solid #ddd;">&nbsp;</div>
@@ -1256,23 +1256,24 @@
         return "KD " + Number(price).toFixed(2);
     }
 
-    function openReserveDetailModal() {
+    function openReserveDetailModal(status, restro_logo, restro_name, restro_description, address, telephone, deposit, number_of_people, reserve_date, reserve_time, rating) {
+        $('#reserveDetailTplContainer').html('');
         
         $("#reserveDetailTpl").tmpl({
-            status:1,
-            restro_logo: 'asdfasf',
-            restro_name: 'ffff',
-            restro_description: 'asdfasfdasdfasdf',
-            address: 'asdfasdf',
-            telephone: 'asdf',
-            deposit: 135,
-            number_of_people: 5,
-            reserve_date: '2141234234',
-            reserve_time: 'werwerwer'
+            status: status,
+            restro_logo: restro_logo,
+            restro_name: restro_name,
+            restro_description: restro_description,
+            address: address,
+            telephone: telephone,
+            deposit: deposit,
+            number_of_people: number_of_people,
+            reserve_date: reserve_date,
+            reserve_time: reserve_time
             
         }).appendTo("#reserveDetailTplContainer"); 
 
-        var rating = 1.5;
+        //var rating = 1.5;
         $('.rating-view').rateYo({rating:rating?rating:0, starWidth:'24px', ratedFill:'#f1c40f'}); 
     }
 </script>
