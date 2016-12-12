@@ -3,7 +3,7 @@
 		foreach($restro_list as $rest => $restro):
 		?>
 				<li> 
-					<a href="/<?php echo $r_url; ?>/<?php echo $restro->id; ?>" >
+					<a href="/<?php echo $r_url; ?>/<?php echo $restro->id; ?>/<?php echo $restro->location_id; ?>" >
 					<div class="row"> 
 					<!--<div class="col-md-3"> 
 						<?php
@@ -41,7 +41,7 @@
                                                  ?>
                                                 <span <?php echo $stl; ?>></span> <?php echo $status_title; ?>
                                                <br>-->
-                    	<?php echo ucwords($restro->restro_name); ?>
+                    	<?php echo ucwords($restro->restro_name); ?>(<span style="font-size:11px;"><?php echo ucwords($restro->location_name); ?></span>)
                 	</div>
                 </div>
                 </li>

@@ -1080,12 +1080,16 @@
             $this->db->or_like('city_name', $txt);
             return $query = $this->db->get()->result();
         }
-        public function search_restro_by_name($txt) {
-            $this->db->select('id,status,restaurant_logo,restro_name');
-            $this->db->from('restro_info');
-            $this->db->where('status !=', 0);
-            $this->db->where('trash', 0);
-            $this->db->like('restro_name', $txt);
+        public function search_restro_by_name($txt, $service_id=null) {
+            $this->db->select('r.id, r.status, r.restaurant_logo, r.restro_name, c.location_id, l.location_name');
+            $this->db->from('restro_info AS r');
+            $this->db->join('restro_services_commission AS c', 'c.restro_id = r.id');
+            $this->db->join('restro_location AS l', 'c.location_id = l.id');
+            $this->db->where('r.status !=', 0);
+            $this->db->where('r.trash', 0);
+            $this->db->like('r.restro_name', $txt);
+            if(isset($service_id)) $this->db->where('c.service_type', $service_id);
+            $this->db->group_by('c.location_id');
             return $query = $this->db->get()->result();
         }
         public function getrestroOrderLocationId($restro_id, $service_id, $area_id) {

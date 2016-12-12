@@ -529,7 +529,10 @@
 
                 url: "/search_restro_by_name/",
                 type: "post",
-                data: {textsearch:abc,urltype:1},
+                data: {
+                    textsearch:abc,
+                    urltype:1
+                },
                 success: function (response) {
                     $("#restroShowDiv").html(response);
 

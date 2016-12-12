@@ -2397,6 +2397,7 @@
             $data['errors']=array();
             $searchtext = $this->input->post('textsearch');
             $urltype = $this->input->post('urltype');
+            
 
             if($urltype == 1)
             {
@@ -2415,8 +2416,7 @@
                 $data['r_url'] = 'pickup_restaurant';
             }
 
-            $data['restro_list'] = $this->Home_Restro->search_restro_by_name($searchtext);
-
+            $data['restro_list'] = $this->Home_Restro->search_restro_by_name($searchtext, $_SESSION['filter_service']);
 
             $this->load->view('search_restro_by_name',$data);	
         }
