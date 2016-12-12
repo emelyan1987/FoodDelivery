@@ -63,6 +63,7 @@ and open the template in the editor.
     </style>
     <!--added by vakeel-->
     <link rel="stylesheet" href="/assets/Customer/dist/css/default.css"  type="text/css" >
+    <link rel="stylesheet" href="/assets/common/dist/css/main.css"  type="text/css" >
     <link rel="stylesheet" href="/assets/Customer/dist/css/responsivevk.css" type="text/css">
     <!--added by vakeel-->
 </head>

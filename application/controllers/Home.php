@@ -1570,6 +1570,7 @@
                     $order['time'] = $reserve_time;  // H:i
                     $order['user_id'] = $user_id;
                     $order['order_points'] = $seating_info['point'];
+                    $order['total'] = $seating_info['deposit'];
                     /*$payment_method = $this->post('payment_method');
                     if(!isset($payment_method)) {
                     throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
@@ -1598,6 +1599,30 @@
                     //order msg send here
 
 
+                    // Update user points on profile                    
+                    $user_profile = $this->UserProfileModel->findByUserId($user_id);
+                    $user_loyalty_points = $user_profile->points; $user_mataam_points = $user_profile->mataam_points;                    
+                    
+                    $user_loyalty_points += $seating_info['point'];
+                    
+                    $mataam_point = getMataamPoint($user_id, 3, $restro_id, $location_id, $seating_info['deposit']); 
+                    $user_mataam_points += $mataam_point['gained_points'];
+                    $this->UserProfileModel->save($user_id, array(
+                        'points'=>$user_loyalty_points,
+                        'mataam_points'=>$user_mataam_points
+                    ));
+                    // Create Points Log
+                    $this->PointLogModel->create(array(
+                        'user_id'=>$user_id,
+                        'service_id'=>3,
+                        'order_id'=>$order_id,
+                        'gained_loyalty_point'=>$seating_info['point'],
+                        'used_loyalty_point'=>0,
+                        'balance_loyalty_point'=>$user_loyalty_points,
+                        'gained_mataam_point'=>$mataam_point['gained_points'],
+                        'used_mataam_point'=>0,
+                        'balance_mataam_point'=>$user_mataam_points
+                    ));
 
                     redirect('/');
                 }

@@ -77,7 +77,7 @@
     }
     .res-logo{
         width: 150px;
-
+        height: 150px;
         text-align: center;
         margin: 10px auto;
     }
@@ -398,31 +398,15 @@
                                             if ($ResData->status == 2) {
                                                 $cls_status = 'class="orange"';
                                                 $title_status = 'WAITING PAYMENT';
-                                                $btnPay = "";
-                                                $btnDetail = "style='color:#FF8205'";
-                                                $btnRate = "disabled='disabled' style='color:gray'";
-                                                $btnCancel = "disabled='disabled' style='color:gray'";
                                             } elseif ($ResData->status == 1) {
                                                 $cls_status = 'class="blue"';
                                                 $title_status = 'UNDER PROCESS';
-                                                $btnPay = "disabled='disabled' style='color:gray'";
-                                                $btnDetail = "style='color:#FF8205'";
-                                                $btnRate = "disabled='disabled' style='color:gray'";
-                                                $btnCancel = "style='color:#f00'";
                                             } elseif ($ResData->status == 3) {
                                                 $cls_status = 'class="green"';
                                                 $title_status = 'COMPLETED';
-                                                $btnPay = "disabled='disabled' style='color:gray'";
-                                                $btnDetail = "style='color:#FF8205'";
-                                                $btnRate = "style='color:#dcc300'";
-                                                $btnCancel = "disabled='disabled' style='color:gray'";
                                             } elseif ($ResData->status == -1) {
                                                 $cls_status = 'class="red"';
                                                 $title_status = 'CANCEL';
-                                                $btnPay = "disabled='disabled' style='color:gray'";
-                                                $btnDetail = "disabled='disabled' style='color:gray'";
-                                                $btnRate = "disabled='disabled' style='color:gray'";
-                                                $btnCancel = "disabled='disabled' style='color:gray'";
                                             }
                                         ?>
                                         <div>
@@ -458,7 +442,7 @@
                                             <div style="text-align:right;">
                                                 <a class="btn btn-default<?php echo ($ResData->status == 3)?"":" disabled";?>" style="color:#dcc300" data-toggle="modal" data-target="#myModal2" onclick="ratPop(<?php echo $ResData->id;?>,<?php echo $ResData->location_id;?>,<?php echo $ResData->restro_id;?>);" href="/restaurant_rating/<?php echo $ResData->restro_id;?>">Rate it <i class="fa fa-star btn-icon-right"></i></a>
                                                 <a href="#" class="btn btn-default<?php echo ($ResData->status == 1)?"":" disabled";?>" style="color:#f00">CANCEL</a>
-                                                <a href="/delivery_order_details/<?php echo $ResData->id;?>" class="btn btn-default" style="color:#FF8205">DETAILS</a>
+                                                <a href="#" class="btn btn-default" style="color:#FF8205" data-toggle="modal" data-target="#reserveDetailModal" onclick="openReserveDetailModal(<?php echo $ResData->id;?>,<?php echo $ResData->location_id;?>,<?php echo $ResData->restro_id;?>);">DETAILS</a>
                                                 <button class="btn btn-default<?php echo ($ResData->status == 2 && $ResData->total>0)?"":" disabled";?>">PAY </button>
                                             </div>
                                             <div style="margin-bottom:20px;border-bottom:1px solid #ddd;">&nbsp;</div>
@@ -1207,6 +1191,91 @@
         </div>
     </div>
 </div>
+<div id="reserveDetailModal" class="modal fade" role="dialog" data-backdrop="static" >
+    <div class="modal-dialog new-dialog">        
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close close1" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+                <h4 class="modal-title modal-title-alt"><b>RESERVE DETAILS</b></h4>
+                <div class="margin20"></div>
+
+                <div id="reserveDetailTplContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="reserveDetailTpl" type="text/x-jQuery-tmpl">
+    <div class="row">
+    <div class="col-md-5">
+    <div>                            
+    <span class="${statusClass(status)}"></span> ${statusTitle(status)}
+    </div>
+    <div>
+    <img class="img-responsive res-logo" alt="" src="${restroLogoPath(restro_logo)}">
+    </div>
+    </div>
+    <div class="col-md-7">
+    <div class="restro_title">${restro_name}</div>
+    <div class="restro_desc">${restro_description}</div>
+    <div class="rating-view"></div>
+    </div>
+    </div>
+    <div style="color:#D31E03;font-size:15px;font-weight:bold;border-bottom:2px solid #D31E03;padding:5px 20px;">RESTAURANT LOCATION</div>
+    <div style="padding:20px;">
+    <div><span>Address:&nbsp;</span><span>${address}</span></div>
+    <div><span>Phone:&nbsp;</span><span>${telephone}</span></div>
+    <div><span>Reservation for person:&nbsp;</span><span>${formatPrice(deposit)}</span></div>
+    </div>
+    <div style="padding:20px;line-height:26px;">
+    <div class="row"><span class="list-label">Number of people:&nbsp;</span><span class="list-value">${number_of_people}</span></div>
+    <div class="row"><span class="list-label">Reservation date:&nbsp;</span><span class="list-value">${reserve_date}</span></div>
+    <div class="row"><span class="list-label">Reservation time:&nbsp;</span><span class="list-value">${reserve_time}</span></div>
+    </div>
+
+</script>
+<script src="/assets/Customer/js/jquery.tmpl.js" type="text/javascript"></script>
+<script src="/assets/common/plugins/rating/jquery.rateyo.js" type="text/javascript"></script>
+
+<script>
+    function statusClass(status) {
+        if(status == 1) return 'opened';
+        else if(status == 2) return 'busy';
+            else return 'close';
+    }
+    function statusTitle(status) {
+        if(status == 1) return 'Open';
+        else if(status == 2) return 'Busy';
+            else return 'Close';
+    }
+    function restroLogoPath(restro_logo) {
+        if(restro_logo) return '/images/'+restro_logo.split('/images/')[1];
+        return '/assets/Customer/img/icon/bottomIcon2.png';
+    }
+    function formatPrice(price) {
+        return "KD " + Number(price).toFixed(2);
+    }
+
+    function openReserveDetailModal() {
+        
+        $("#reserveDetailTpl").tmpl({
+            status:1,
+            restro_logo: 'asdfasf',
+            restro_name: 'ffff',
+            restro_description: 'asdfasfdasdfasdf',
+            address: 'asdfasdf',
+            telephone: 'asdf',
+            deposit: 135,
+            number_of_people: 5,
+            reserve_date: '2141234234',
+            reserve_time: 'werwerwer'
+            
+        }).appendTo("#reserveDetailTplContainer"); 
+
+        var rating = 1.5;
+        $('.rating-view').rateYo({rating:rating?rating:0, starWidth:'24px', ratedFill:'#f1c40f'}); 
+    }
+</script>
 <!--rating model-->
 <?php
     $this->load->view("includes/Customer/advertise");

@@ -405,7 +405,7 @@
         else if(status == 2) return 'busy';
             else return 'close';
     }
-    function statusName(status) {
+    function statusTitle(status) {
         if(status == 1) return 'Open';
         else if(status == 2) return 'Busy';
             else return 'Close';

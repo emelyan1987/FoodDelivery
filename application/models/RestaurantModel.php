@@ -91,7 +91,7 @@
             WHERE $where
             GROUP BY l.id
             ) AS a 
-            LEFT JOIN restro_rating AS rt ON rt.location_id=a.location_id
+            LEFT JOIN restro_rating AS rt ON rt.location_id=a.location_id AND rt.restro_id=a.restro_id
             LEFT JOIN restro_promotion AS pt ON pt.location_id=a.location_id AND pt.service_id=$service_type
             GROUP BY a.location_id";
 
@@ -127,7 +127,7 @@
             ORDER BY p.id DESC, s.id DESC, w.id DESC
             LIMIT 0,1
             ) AS a 
-            LEFT JOIN restro_rating AS rt ON rt.location_id=a.location_id
+            LEFT JOIN restro_rating AS rt ON rt.location_id=a.location_id AND rt.restro_id=a.restro_id
             LEFT JOIN restro_promotion AS pt ON pt.location_id=a.location_id AND pt.service_id=$service_type
             GROUP BY a.location_id";
             $row = $this->db->query($query)->row();

@@ -109,8 +109,8 @@
                 if(isset($service_type)) $params["service_id"] = $service_type;
                 $params["offset"] = $offset;
                 $params["limit"] = $limit;
-                
-                
+
+
                 $points = $this->PointLogModel->find($params);
                 foreach($points as $point) {
                     $order = $point->order = $this->OrderModel->findById($point->service_id, $point->order_id);
@@ -284,7 +284,7 @@
                     'used_mataam_point'=>$redeem_type==3 ? $point['mataam']['used_points'] : 0,
                     'balance_mataam_point'=>$user_mataam_points
                 ));
-                
+
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$order
@@ -406,6 +406,7 @@
                 $order['time'] = $reserve_time;  // H:i
                 $order['user_id'] = $this->user->id;
                 $order['order_points'] = $seating_info['point'];
+                $order['total'] = $seating_info['deposit'];
                 /*$payment_method = $this->post('payment_method');
                 if(!isset($payment_method)) {
                 throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
@@ -417,6 +418,30 @@
                 $this->RestroTableOrderModel->update($order_id, array("order_no"=>$this->config->item('Start_order_id').$order_id));
                 $order_details['order_id'] = $order_id;
                 $order = $this->RestroTableOrderModel->findById($order_id);
+
+                // Update user points on profile                    
+                $user_loyalty_points = $this->user->profile->points; $user_mataam_points = $this->user->profile->mataam_points;
+                $user_loyalty_points += $seating_info['point'];
+
+                $mataam_point = getMataamPoint($this->user->id, 3, $restro_id, $location_id, $seating_info['deposit']);
+                $user_mataam_points += $mataam_point['gained_points'];
+                $this->UserProfileModel->save($this->user->id, array(
+                    'points'=>$user_loyalty_points,
+                    'mataam_points'=>$user_mataam_points
+                ));
+                // Create Points Log
+                $this->PointLogModel->create(array(
+                    'user_id'=>$this->user->id,
+                    'service_id'=>3,
+                    'order_id'=>$order_id,
+                    'gained_loyalty_point'=>$seating_info['point'],
+                    'used_loyalty_point'=>0,
+                    'balance_loyalty_point'=>$user_loyalty_points,
+                    'gained_mataam_point'=>$mataam_point['gained_points'],
+                    'used_mataam_point'=>0,
+                    'balance_mataam_point'=>$user_mataam_points
+                ));
+
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$order

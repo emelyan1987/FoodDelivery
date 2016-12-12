@@ -89,7 +89,7 @@
                     }
 
                     $restro = $this->RestaurantModel->findByRestroLocationService($id, $location_id, $service_type); 
-                    $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
+                    $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id, 'restro_id'=>$id));
 
                     $resource = $restro;
                 }

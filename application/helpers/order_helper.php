@@ -71,6 +71,33 @@
         return $result;
     }
 
+    function getMataamPoint($user_id, $service_type, $restro_id, $location_id, $total_amount) {  
+        $CI = & get_instance();                     
+
+        // Calculate Mataam Point
+        $user_profile = $CI->UserProfileModel->findByUserId($user_id);
+        $user_mataam_points = $user_profile->mataam_points;
+        $mataam_point = $CI->MataamPointModel->findByServiceId($service_type);                    
+        $mataam_discount = 0; $mataam_used_points = 0; $mataam_gained_points = 0;
+        if($mataam_point) {                
+            if($user_mataam_points >= $mataam_point->from) {
+                $mataam_discount = $mataam_point->discount;
+                $mataam_used_points = $mataam_point->from;    
+            }
+            if($mataam_point->amount > 0) {
+                $mataam_gained_points = round(($total_amount / $mataam_point->amount) * $mataam_point->point);
+            }
+        }
+        $mataam_discount_amount = ($total_amount * $mataam_discount) / 100;
+        $result = array(
+            'gained_points'     => $mataam_gained_points, 
+            'used_points'       => $mataam_used_points,
+            'discount_amount'   => $mataam_discount_amount,
+            'balance'           => $user_mataam_points
+        );
+        return $result;
+    }
+
     function getSum($user_id, $service_type, $restro_id, $location_id, $area_id=null) {                       
         $CI = & get_instance();                     
         $params = array();
@@ -178,12 +205,12 @@
             'location_id'   => $location_id   
         )); //echo json_encode($seating_infos);
         $seating_info = null;
-        
+
         $time = strtotime($reserve_time);
         foreach($seating_infos as $item) {
             $from_time = strtotime($item->{$weekday.'_from'});
             $to_time = strtotime($item->{$weekday.'_to'});
-                        
+
             if($time>=$from_time && $time<=$to_time) {
                 $seating_info = array(
                     'from'=>$item->{$weekday.'_from'},
@@ -204,7 +231,7 @@
 
     function getTimeSlots($restro_id, $location_id, $reserve_time, $people_number) {
         $CI = & get_instance();                     
-        
+
         $weekday = strtolower(date('l', $reserve_time));
         $seating_infos = $CI->RestroSeatingHourModel->find(array(
             'restro_id'     => $restro_id,
@@ -270,7 +297,7 @@
                 'seating_info'=>$t['seating_info']
             );
         }
-        
+
         return $time_slots;
     }
 
