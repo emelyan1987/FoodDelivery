@@ -1171,7 +1171,7 @@
                     }
                     $order['address_id'] = $address_id;
                     $order['extra_direction'] = $this->input->post('extra_direction'); 
-                    $order['restro_location_id'] = $location_id;
+                    $order['restro_location_id'] = $area_id;
                     $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
                     $order_id = $this->OrderModel->create($service_type, $order);
                     $this->OrderModel->update($service_type, $order_id, array("order_no"=>$this->config->item('Start_order_id').$order_id));

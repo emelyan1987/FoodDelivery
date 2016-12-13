@@ -230,7 +230,7 @@
                 }
                 $order['address_id'] = $address_id;
                 $order['extra_direction'] = $this->post('extra_direction'); 
-                $order['restro_location_id'] = $location_id;
+                $order['restro_location_id'] = $area_id;
                 $order['created_time'] = $order['updated_time'] = date('Y-m-d H:i:s');
                 $order_id = $this->OrderModel->create($service_type, $order);
 

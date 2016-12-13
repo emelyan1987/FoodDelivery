@@ -26,6 +26,7 @@
             $this->load->model('RestroItemModel'); 
             $this->load->model('RestroItemVariationModel'); 
             $this->load->model('RestroPromotionModel'); 
+            $this->load->model('RestroPromotionItemModel'); 
         } 
 
         private function validate() {
@@ -329,6 +330,7 @@
                 $promotions = $this->RestroPromotionModel->find($params);
 
                 foreach($promotions as $promotion) {
+                    $promotion->items = $this->RestroPromotionItemModel->findByPromoId($promotion->id);
                     $promotion->restaurant = $this->RestaurantModel->findById($promotion->restro_id);
                 }
 
