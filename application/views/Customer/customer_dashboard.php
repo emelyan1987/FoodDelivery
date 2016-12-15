@@ -9,7 +9,7 @@
     } else {
         //redirect('/login/');
     ?>
-    <script>window.location.href="customer_login"; </script>
+    <script>window.location.href="/customer_login"; </script>
     <?php
     }
 ?>
@@ -280,8 +280,8 @@
                                                 <div class="clearfix"></div>
                                             </div>
                                             <div style="text-align: right;">
-                                                <a href="/order_details/<?php echo $ord->id;?>?service_id=<?php echo $ord->service_type;?>" class="btn btn-default" style="color:#FF8205;">Order Details</a>
-                                                <button class="btn btn-default"<?php echo ($ord->status == 3)?"":" disabled";?>>RE-ORDER <i class="fa  fa-rotate-left btn-icon-right"></i></button>
+                                                <a href="/order_details/<?php echo $ord->id;?>?service_id=<?php echo $ord->service_type;?>" class="btn btn-default" style="color:#FF8205;">Order Details</a>                                                
+                                                <a href="#" class="btn btn-default<?php echo ($ord->status == 3)?"":" disabled";?>" data-toggle="modal" data-target="#areaSelectModal" onclick="onClickReOrder(<?php echo $ord->id;?>, <?php echo $ord->restro_id;?>, <?php echo $ord->location_id;?>, <?php echo $ord->service_type;?>)">RE-ORDER <i class="fa  fa-rotate-left btn-icon-right"></i></a>
                                                 <a class="btn btn-default<?php echo ($ord->status == 3)?"":" disabled";?>" style="color:#dcc300;" data-toggle="modal" data-target="#myModal2" onclick="ratPop(<?php echo $ord->id;?>,<?php echo $ord->location_id;?>,<?php echo $ord->restro_id;?>);">Rate it <i class="fa fa-star btn-icon-right"></i></a>
                                             </div>
                                             <div style="margin-bottom:20px;border-bottom:1px solid #ddd;">&nbsp;</div>
@@ -852,15 +852,19 @@
                                                 switch ($proData->service_id) {
                                                     case '1':
                                                         $service = "<p class='label label-success'>DELIVERY</p>";
+                                                        $color = "#73B720";
                                                         break;
                                                     case '2':
                                                         $service = "<p class='label label-warning'>CATERING</p>";
+                                                        $color = "#FF8205";
                                                         break;
                                                     case '3':
                                                         $service = "<p class='label label-danger'>RESERVATION</p>";
+                                                        $color = "#D31E03";
                                                         break;
                                                     case '4':
                                                         $service = "<p class='label label-info'>PICKUP</p>";
+                                                        $color = "#2793FF";
                                                         break;
                                                 }
                                             ?>
@@ -878,12 +882,11 @@
                                             </div>
                                             <div class="col-md-8 pull-right" style="margin-bottom: 5px;padding-right: 0">
                                                 <div class="row">
-                                                    <div class="col-md-6 col-xs-12 col-sm-8">
-
-                                                        <button style="font-size: 14px;" class="btn btn-yellow btn-yellow-new-sm btn-block"><img src="/assets/Administration/images/icon/cartIcon.png" alt="" style="height: 20px;"> ADD TO CART </button>
+                                                    <div class="col-md-6 col-xs-12 col-sm-8">                                                        
+                                                        <a href="#" data-toggle="modal" data-target="#areaSelectModal" style="font-size: 14px;" class="btn btn-yellow btn-yellow-new-sm btn-block" onclick="onClickAddPromotionToCart(<?php echo $proData->id;?>, <?php echo $proData->restro_id;?>, <?php echo $proData->location_id;?>, <?php echo $proData->service_id;?>)"><img src="/assets/Administration/images/icon/cartIcon.png" alt="" style="height: 20px;"> ADD TO CART </a>
                                                     </div>
                                                     <div class="col-md-6 col-xs-12 col-sm-8">
-                                                        <button style="font-size: 14px !important;" class="btn btn-success btn-block btn_new_section btn-success-new pull-right">GO TO MENU <i class="fa fa-caret-right"></i></button>
+                                                        <a href="/restaurant_view/<?php echo $proData->restro_id;?>/<?php echo $proData->location_id;?>" style="font-size: 14px !important;background-color:<?php echo $color;?>;border-color:<?php echo $color;?>;" class="btn btn-block btn_new_section btn-success-new pull-right">GO TO MENU <i class="fa fa-caret-right"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1258,7 +1261,7 @@
 
     function openReserveDetailModal(status, restro_logo, restro_name, restro_description, address, telephone, deposit, number_of_people, reserve_date, reserve_time, rating) {
         $('#reserveDetailTplContainer').html('');
-        
+
         $("#reserveDetailTpl").tmpl({
             status: status,
             restro_logo: restro_logo,
@@ -1270,14 +1273,187 @@
             number_of_people: number_of_people,
             reserve_date: reserve_date,
             reserve_time: reserve_time
-            
+
         }).appendTo("#reserveDetailTplContainer"); 
 
         //var rating = 1.5;
         $('.rating-view').rateYo({rating:rating?rating:0, starWidth:'24px', ratedFill:'#f1c40f'}); 
     }
 </script>
-<!--rating model-->
+
+
+<div id="areaSelectModal" class="modal fade" role="dialog" data-backdrop="static" >
+    <div class="modal-dialog new-dialog">        
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close close1" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+                <h4 class="modal-title modal-title-alt"><b>SELECT AREA</b></h4>
+                <div class="margin20"></div>
+                <div class="input-group" style="margin-bottom: 10px;">                    
+                    <span class="input-group-btn">
+                        <button id="search-area-button" class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                    </span>
+                    <input id="search-area-input" type="text" class="form-control" placeholder="Search for..." onkeyup="onChangeSearchArea()">
+                </div>
+                <div id="area-tree-view" style="max-height:600px;overflow-y:auto;"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-area-select-submit" class="btn btn-primary">OK</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/assets/common/plugins/bootstrap-treeview/dist/bootstrap-treeview.min.css" type="text/css">
+<script src="/assets/common/plugins/bootstrap-treeview/dist/bootstrap-treeview.min.js" type="text/javascript"></script>
+
+
+<script>
+    function onClickReOrder(order_id, restro_id, location_id, service_type) {
+        if(service_type == 1 || service_type == 2) {
+
+            $.ajax({
+                url: "/api/restaurants/"+restro_id+"/areas?location_id="+location_id+"&service_id="+service_type+"&tree=true",
+                type: "GET",
+                success: function(response) {
+                    console.log('getRestroAreas response', response);                
+
+                    if(response.code == 0 && response.resource.length>0) {
+                        var color = "";
+                        if(service_type == 1) {
+                            color = "green";
+                        } else if(service_type == 2) {
+                            color = "orange";
+                        }
+                        var trees = [];
+                        response.resource.forEach(function(area){
+                            console.log(area);
+                            if(trees[area.city_id] === undefined) {
+                                trees[area.city_id] = {
+                                    text: area.city_name, 
+                                    selectable: false, 
+                                    state: {
+                                        expanded:true
+                                    },
+                                    nodes: []
+                                };
+                            }
+                            trees[area.city_id].nodes.push({
+                                areaId: area.id,
+                                text: area.name,
+                                icon: 'custom-icon-normal icon-item',
+                                selectedIcon: 'custom-icon-normal icon-item-selected-'+color
+                            });
+                        });
+
+                        console.log(Object.values(trees));
+                        $('#area-tree-view').treeview({
+                            data: Object.values(trees),
+                            highlightSelected: false,
+                            expandIcon: 'custom-icon-large icon-bulletin-gray',
+                            collapseIcon: 'custom-icon-large icon-bulletin-'+color,
+                            color: '#6B6B6B',
+                            backColor: '#F5F5F5',
+                            onhoverColor: '#F5F5F5',
+                            borderColor: '#FFFFFF'
+                        });
+
+                        $('#btn-area-select-submit').click(function(e){
+                            var selectedNodes =  $('#area-tree-view').treeview('getSelected'); console.log(selectedNodes); //return;
+
+                            if(selectedNodes.length == 0) {
+                                alert('Please select an area'); return;
+                            }
+                            location.href = "/reorder?service_id="+service_type+"&order_id="+order_id+"&area_id="+selectedNodes[0].areaId;
+                        });
+                    } else {
+                        alert("Can't find restro areas");
+                    }
+                }
+            });
+        } else {
+            location.href = "/reorder?service_id="+service_type+"&order_id="+order_id;
+        }
+    }
+
+
+    function onChangeSearchArea() {
+        var keyword = $('#search-area-input').val();
+        $('#area-tree-view').treeview('search', [ keyword, {
+            ignoreCase: true,     // case insensitive
+            exactMatch: false,    // like or equals
+            revealResults: true,  // reveal matching nodes
+        }]);
+    }
+    
+    function onClickAddPromotionToCart(promo_id, restro_id, location_id, service_type) {
+        if(service_type == 1 || service_type == 2) {
+
+            $.ajax({
+                url: "/api/restaurants/"+restro_id+"/areas?location_id="+location_id+"&service_id="+service_type,
+                type: "GET",
+                success: function(response) {
+                    console.log('getRestroAreas response', response);                
+
+                    if(response.code == 0 && response.resource.length>0) {
+                        var color = "";
+                        if(service_type == 1) {
+                            color = "green";
+                        } else if(service_type == 2) {
+                            color = "orange";
+                        }
+                        var trees = [];
+                        response.resource.forEach(function(area){
+                            console.log(area);
+                            if(trees[area.city_id] === undefined) {
+                                trees[area.city_id] = {
+                                    text: area.city_name, 
+                                    selectable: false, 
+                                    state: {
+                                        expanded:true
+                                    },
+                                    nodes: []
+                                };
+                            }
+                            trees[area.city_id].nodes.push({
+                                areaId: area.id,
+                                text: area.name,
+                                icon: 'custom-icon-normal icon-item',
+                                selectedIcon: 'custom-icon-normal icon-item-selected-'+color
+                            });
+                        });
+
+                        console.log(Object.values(trees));
+                        $('#area-tree-view').treeview({
+                            data: Object.values(trees),
+                            highlightSelected: false,
+                            expandIcon: 'custom-icon-large icon-bulletin-gray',
+                            collapseIcon: 'custom-icon-large icon-bulletin-'+color,
+                            color: '#6B6B6B',
+                            backColor: '#F5F5F5',
+                            onhoverColor: '#F5F5F5',
+                            borderColor: '#FFFFFF'
+                        });
+
+                        $('#btn-area-select-submit').click(function(e){
+                            var selectedNodes =  $('#area-tree-view').treeview('getSelected'); console.log(selectedNodes); //return;
+
+                            if(selectedNodes.length == 0) {
+                                alert('Please select an area'); return;
+                            }
+                            location.href = "/add_promoitem_to_cart?service_id="+service_type+"&promo_id="+promo_id+"&area_id="+selectedNodes[0].areaId;
+                        });
+                    } else {
+                        alert("Can't find restro areas");
+                    }
+                }
+            });
+        } else {
+            location.href = "/add_promo_to_cart?service_id="+service_type+"&promo_id="+promo_id;
+        }
+    }
+</script>
 <?php
     $this->load->view("includes/Customer/advertise");
     $this->load->view("includes/Customer/footer");

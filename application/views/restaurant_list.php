@@ -19,6 +19,7 @@
         $color = "#2793FF";
     }
 ?>
+
 <style>
     .greenBorder{
         border-bottom: 4px solid #73B720;
@@ -342,7 +343,7 @@
     <div class="col-md-4">
     <div class="col-sm-4 col-md-4">
 
-    <span class="${statusClass(status)}">${statusTitle(status)}</span> 
+    <span class="${statusClass(status)}"></span>&nbsp;${statusTitle(status)} 
     </div>
     <div class="col-sm-6 col-md-6">
     <a href="/restaurant_profile/${restro_id}/${location_id}"><img class="img-responsive" alt="" src="${restroLogoPath(restro_logo)}" > </a>

@@ -42,6 +42,8 @@
             $this->load->model('RestroPaymentMethodModel'); 
             $this->load->model('RestroCityAreaModel');  
             $this->load->model('AreaModel');  
+            $this->load->model('RestroPromotionModel');  
+            $this->load->model('RestroPromotionItemModel');  
 
             $this->load->helper('captcha');
             $this->load->helper('utils');
@@ -1057,6 +1059,76 @@
             $this->load->view('view_restro_item',$data);
         }
 
+        function reorder() {
+            $service_id = $this->input->get('service_id');
+            $area_id = $this->input->get('area_id');
+            $order_id = $this->input->get('order_id');
+
+
+            $order_details = $this->OrderDetailModel->find($service_id, array('order_id'=>$order_id)); 
+
+            foreach($order_details as $detail) {
+                $cart_item = array();
+
+                $item = $this->RestroItemModel->findById($detail->product_id);
+                $cart_item["product_id"] = $detail->product_id;
+                $cart_item['quantity'] = $detail->quantity;
+                $cart_item['price'] = $item->price*$detail->quantity;
+                $cart_item['restro_id'] = $detail->restro_id;
+                $cart_item['location_id'] = $detail->location_id;
+                $cart_item['notes'] = $detail->notes;
+                $cart_item['variation_ids'] = $detail->variation_ids;
+                $cart_item['user_id'] = $_SESSION['Customer_User_Id'];
+                $cart_item['date'] = date('Y-m-d H:i:s');
+                $cart_item['status'] = 0;
+
+                $this->CartModel->create($service_id, $cart_item);
+            }
+
+            $order = $this->OrderModel->findById($service_id, $order_id);
+            $_SESSION['filter_service'] = $service_id;
+            $_SESSION['order_restro_id'] = $order->restro_id;
+            $_SESSION['order_location_id'] = $order->location_id;
+            $_SESSION['order_area_id'] = $area_id;
+
+            redirect("/checkout/");
+        }
+        function add_promoitem_to_cart() {
+            $service_id = $this->input->get('service_id');
+            $area_id = $this->input->get('area_id');
+            $promo_id = $this->input->get('promo_id');
+
+            $promotion = $this->RestroPromotionModel->findById($promo_id);
+            $promo_items = $this->RestroPromotionItemModel->find(array('promo_id'=>$promo_id)); 
+
+            foreach($promo_items as $promo) {
+                $cart_item = array();
+
+                $item = $this->RestroItemModel->findById($promo->item_id); 
+
+                if($item) {
+                    $cart_item["product_id"] = $item->id;
+                    $cart_item['quantity'] = 1;
+                    $cart_item['price'] = $item->price;
+                    $cart_item['restro_id'] = $promotion->restro_id;
+                    $cart_item['location_id'] = $promotion->location_id;
+                    $cart_item['notes'] = '';
+                    $cart_item['variation_ids'] = '';
+                    $cart_item['user_id'] = $_SESSION['Customer_User_Id'];
+                    $cart_item['date'] = date('Y-m-d H:i:s');
+                    $cart_item['status'] = 0;
+
+                    $this->CartModel->create($service_id, $cart_item);   
+                }
+            }
+
+            $_SESSION['filter_service'] = $service_id;
+            $_SESSION['order_restro_id'] = $promotion->restro_id;
+            $_SESSION['order_location_id'] = $promotion->location_id;
+            $_SESSION['order_area_id'] = $area_id;
+
+            redirect("/checkout/");
+        }
         function checkout(){
             $data['errors']=array();
             $user_id = $_SESSION['Customer_User_Id'];
@@ -1602,9 +1674,9 @@
                     // Update user points on profile                    
                     $user_profile = $this->UserProfileModel->findByUserId($user_id);
                     $user_loyalty_points = $user_profile->points; $user_mataam_points = $user_profile->mataam_points;                    
-                    
+
                     $user_loyalty_points += $seating_info['point'];
-                    
+
                     $mataam_point = getMataamPoint($user_id, 3, $restro_id, $location_id, $seating_info['deposit']); 
                     $user_mataam_points += $mataam_point['gained_points'];
                     $this->UserProfileModel->save($user_id, array(
@@ -2422,7 +2494,7 @@
             $data['errors']=array();
             $searchtext = $this->input->post('textsearch');
             $urltype = $this->input->post('urltype');
-            
+
 
             if($urltype == 1)
             {
@@ -2545,21 +2617,21 @@
                 $cuisine_names[] = $cuisine->name;
             }
             $restaurant->cuisines = $cuisine_names;
-            
+
             $food_types = $this->FoodTypeModel->findByRestroId($restro_id);            
             $type_names = array();
             foreach($food_types as $type) {
                 $type_names[] = $type->name;
             } 
             $restaurant->food_types = $type_names;
-            
+
             $categories = $this->RestroCategoryModel->findByRestroId($restro_id);            
             $category_names = array();
             foreach($categories as $category) {
                 $category_names[] = $category->name;
             }
             $restaurant->categories = $category_names;
-            
+
             $restaurant->locations = $this->RestroLocationModel->findByRestroId($restro_id);
 
             $data['restaurant'] = $restaurant;
@@ -2580,23 +2652,23 @@
                         $restro_area = $this->RestroCityAreaModel->findOne(array('restro_id'=>$restro_id,'location_id'=>$location_id,'service_id'=>$service->id));   
                         $area_ids = explode(',', $restro_area->area);
                         $charges = explode(',', $restro_area->delivery_price); 
-                        
+
                         $areas = array();
                         foreach($area_ids as $index=>$area_id) {
                             $area = $this->AreaModel->findOne(array('id'=>$area_id));
                             $areas[] = array('area_id'=>$area_id, 'area_name'=>$area->name.', '.$area->city_name, 'charge_amount'=>$charges[$index]);
                         }
-                        
+
                         $service->areas = $areas;
                     }
-                    
+
                     if($service->id == 3) {
                         $seatings = $this->RestroSeatingHourModel->find(array('restro_id'=>$restro_id, 'location_id'=>$location_id));                       
                         $seating_infos = array();
                         foreach($seatings as $seating) {
                             $seating_infos[$seating->category] = $seating;
                         }
-                        
+
                         $service->seating_infos = $seating_infos;
                     }
                 }

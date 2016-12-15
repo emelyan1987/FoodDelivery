@@ -633,8 +633,6 @@
                             console.log('cart delete response', response);
                             if(response.code == 0) {
                                 $("div.cart-item[data-id="+itemId+"]").slideUp("slow", function() { $(this).remove();});  
-
-                                updateCartData();                              
                             }
                         }
                     });
@@ -642,21 +640,4 @@
             }
         });
     }
-
-    function updateCartData() {
-        /*$.ajax({
-            url: "/api/orders/cart/count?service_type=<?php echo $_SESSION['filter_service'];?>",
-            type: "GET",
-            success: function(response) {
-                console.log('getCartCount response', response);
-                if(response.code == 0) {
-                    $("#cart-count-display").html(response.resource);
-                }
-            }
-        });*/        
-    }
-
-    $(document).ready(function(){
-        updateCartData();
-    });
 </script>

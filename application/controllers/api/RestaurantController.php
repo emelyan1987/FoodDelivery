@@ -27,6 +27,8 @@
             $this->load->model('RestroItemVariationModel'); 
             $this->load->model('RestroPromotionModel'); 
             $this->load->model('RestroPromotionItemModel'); 
+            $this->load->model('RestroCityAreaModel'); 
+            $this->load->model('AreaModel'); 
         } 
 
         private function validate() {
@@ -132,7 +134,7 @@
 
                 $restaurants = $this->RestaurantModel->find($params);
 
-                 
+
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>array('count'=>count($restaurants))
@@ -349,6 +351,71 @@
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
-        }   
+        } 
+
+        public function areas_get($restro_id)
+        {                 
+            try {                
+                $this->validateAccessToken();
+
+                $location_id = $this->get('location_id');
+                if(!isset($location_id)) {
+                    throw new Exception("location_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $service_id = $this->get('service_id');
+                if(!isset($service_id)) {
+                    throw new Exception("service_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                }
+
+                $item = $this->RestroCityAreaModel->findOne(array("restro_id"=>$restro_id,"location_id"=>$location_id, "service_id"=>$service_id));
+
+                $areas = $this->AreaModel->find(array('ids'=>explode(',', $item->area)));
+
+                /*$tree = $this->get('tree');
+
+                if(isset($tree) && $tree=="true") {
+                    $trees = array();
+                    foreach ($areas as $area) {
+                        $city_id = $area->city_id;
+
+                        if(!isset($trees[$city_id])) {
+                            $trees[$city_id] = array(
+                                'text'=>$area->city_name, 
+                                'nodes'=>array(), 
+                                'selectable'=>false, 
+                                'state'=>array(
+                                    'expanded'=>true
+                                )
+                            );
+                        }
+
+                        $trees[$city_id]['nodes'][] = array(
+                            'nodeId'=>$area->id, 
+                            'text'=>$area->name,
+                            'icon'=>''
+                        );
+                    }
+
+                    $resource = array_values($trees);
+                } else {                 
+                    $resource = $areas;   
+                }*/
+                $resource = $areas;
+                if(!$resource) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }  
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$resource
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        }  
 
 }

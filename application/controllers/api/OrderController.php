@@ -77,6 +77,8 @@
                             }
                         }
                     }
+                    
+                    object_array_sort_by_column($orders, 'created_time', SORT_DESC);
                     $resource = $orders;
                 } else {                         
                     $order = $this->OrderModel->findById($service_type, $id); 

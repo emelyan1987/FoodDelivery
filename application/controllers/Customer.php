@@ -33,8 +33,10 @@
             $this->load->model("PointLogModel");
             $this->load->model("RatingModel");
             $this->load->model("RestroItemVariationModel");
+            $this->load->model("AreaModel");
             //$this->load->helper('phpass');
             $this->load->helper('order');
+            $this->load->helper('utils');
         }
 
         public function ajax_customer_login() {
@@ -369,6 +371,7 @@
             $data['customer_maindata'] = $this->Customer_management->getCustomersDetails($user_id);
             $data['customer_profile'] = $this->Customer_management->getCustomersProfileDetails($user_id);
 
+            $data['areas'] = $this->AreaModel->find(); //echo json_encode($data['areas']);
             //  ======================= Get Order Data ======================
             $offset = 0;
             $limit = 50;
@@ -390,6 +393,7 @@
                     }
                 }
             }
+            object_array_sort_by_column($orders, 'created_time', SORT_DESC);
             $data['orderData'] = $orders;
 
             // ======================= Get Reservation Data ====================            
@@ -416,7 +420,7 @@
             $data['PointData'] = $points;
 
 
-            $data['promotions'] = $this->Customer_management->all_promotions();
+            $data['promotions'] = $this->Customer_management->all_promotions();     
             $data['customer_address'] = $this->Home_Restro->get_customer_address_data($user_id);
             $data['web_list'] = $this->Notification_management->get_wp_notification();
 

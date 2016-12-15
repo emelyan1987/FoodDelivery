@@ -25,11 +25,12 @@
         }   
 
         public function find($params=null){   
-            $this->db->select('i.id, i.item_name AS name, i.item_description AS description, i.item_price AS price, i.image, i.loyalty_points AS redeem_point, i.order_point_amount AS redeem_amount, i.variation AS has_variation, i.price_type, p.id AS promo_id');
+            $this->db->select('i.id, i.item_name AS name, i.item_description AS description, i.item_price AS price, i.image, i.loyalty_points AS redeem_point, i.order_point_amount AS redeem_amount, i.variation AS has_variation, i.price_type, p.id AS promo_id, l.id AS location_id, l.restro_id');
             $this->db->from('resto_items_category_list AS c'); 
             $this->db->join('tbl_item AS i', 'i.id=c.item_id');
             $this->db->join('restro_promotion_item AS p', 'p.item_id=i.id', 'left');
             $this->db->join('tbl_item_category AS ic', 'ic.id=c.category_id', 'left');
+            $this->db->join('restro_location AS l', 'l.id=i.location_id', 'left');
             
             if(isset($params)) { 
                 if(isset($params["category_id"]) && $params["category_id"]!="") $this->db->where('c.category_id', $params["category_id"]);          

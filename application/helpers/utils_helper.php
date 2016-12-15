@@ -16,4 +16,13 @@
 
         array_multisort($sort_col, $dir, $arr);
     }
+
+    function object_array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+        $sort_col = array();
+        foreach ($arr as $key=> $obj) {
+            $sort_col[$key] = $obj->{$col};
+        }
+
+        array_multisort($sort_col, $dir, $arr);
+    }
 ?>

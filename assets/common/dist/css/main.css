@@ -157,6 +157,76 @@ input[type=radio]{outline:none;}
 }
 
 
+/* Icon Style*/
+
+.custom-icon-large {
+    width: 24px !important;
+    height: 24px !important;
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.custom-icon-normal {
+    width: 20px !important;
+    height: 20px !important;
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.icon-bulletin-blue {
+    background-image: url(../img/icon/bulletin_blue.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-bulletin-green {
+    background-image: url(../img/icon/bulletin_green.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-bulletin-orange {
+    background-image: url(../img/icon/bulletin_orange.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-bulletin-red {
+    background-image: url(../img/icon/bulletin_red.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-bulletin-gray {
+    background-image: url(../img/icon/bulletin_gray.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-item {
+    background-image: url(../img/icon/icon_item.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-item-selected-green {
+    background-image: url(../img/icon/icon_item_selected_green.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-item-selected-blue {
+    background-image: url(../img/icon/icon_item_selected_blue.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-item-selected-orange {
+    background-image: url(../img/icon/icon_item_selected_orange.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.icon-item-selected-red {
+    background-image: url(../img/icon/icon_item_selected_red.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
 
 
 

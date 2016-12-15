@@ -298,12 +298,13 @@
 
         public function all_promotions(){
             $date = date('Y-m-d');
-            $this->db->select('restro_promotion.*,restro_info.restro_name,restro_info.status,restro_info.restaurant_logo');
-            $this->db->from('restro_promotion');
-            $this->db->join('restro_info','restro_info.user_id = restro_promotion.user_id');
+            $this->db->select('p.*, r.restro_name, r.status, r.restaurant_logo, r.id AS restro_id');
+            $this->db->from('restro_promotion AS p');
+            $this->db->join('restro_location AS l','l.id = p.location_id');
+            $this->db->join('restro_info AS r','r.id = l.restro_id');
             //$this->db->where('restro_promotion.from_date <=', $date);
             //$this->db->where('restro_promotion.to_date >=', $date);
-            $this->db->group_by('restro_promotion.id');
+            $this->db->group_by('p.id');
             $query = $this->db->get();
             return $query = $query->result();
         }

@@ -93,6 +93,8 @@ $route['catering_restaurant/(:num)'] = 'home/catering_restaurant_view/$i';
 $route['view_reservation_restro_table/(:num)/(:num)'] = 'home/view_reservation_restro_table/$i/$i';
 $route['reservation_checkout/(:num)/(:num)'] = 'home/reservation_checkout/$i/$i';
 $route['view_restro_item/(:num)/(:num)/(:num)'] = 'home/view_restro_item/$i/$i/$i'; 
+$route['reorder'] = 'home/reorder'; 
+$route['add_promoitem_to_cart'] = 'home/add_promoitem_to_cart'; 
 $route['checkout'] = 'home/checkout'; 
 $route['about_us'] = 'home/about_us';
 $route['citychange'] = 'home/citychange';
@@ -503,6 +505,7 @@ $route['api/restaurants/item_categories'] = '/api/RestaurantController/item_cate
 $route['api/restaurants/items'] = '/api/RestaurantController/items'; 
 $route['api/restaurants/items/(:num)'] = '/api/RestaurantController/items/$1'; 
 $route['api/restaurants/promotions'] = '/api/RestaurantController/promotions';
+$route['api/restaurants/(:num)/areas'] = '/api/RestaurantController/areas/$1';
 
 $route['api/orders'] = '/api/OrderController'; 
 $route['api/orders/(:num)/details'] = '/api/OrderController/details/$1'; 

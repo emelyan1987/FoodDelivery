@@ -42,7 +42,7 @@
             $this->db->trans_complete();
         }
 
-        public function find($params){   
+        public function find($params=null){   
             $this->db->select('a.*, c.city_name');
             $this->db->from('area AS a');   
             $this->db->join('city AS c', 'c.id=a.city_id', 'left');
