@@ -236,10 +236,15 @@
                         <h4 class="text-center"><?php echo ucwords($restroInfo->restro_name);?></h4>
                     </div>
                     <div class="col-sm-12">
+                    <div class="row">
                         <label class="list-label">Min. Order:</label>
                         <label class="list-data">&nbsp;KD <?php echo number_format($restroInfo->min_order, 3);?></label>
+                        </div>
+                        <div class="row">
                         <label class="list-label">Delivery Time:</label>
                         <label class="list-data">&nbsp;<?php echo $restroInfo->order_time . " Min. ";?></label>
+                        </div>
+                        <div class="row">
                         <label class="list-label">Payment:</label>
                         <label class="list-data">&nbsp;<?php
                                 $payArray = explode(',', $restroInfo->payment_method);
@@ -257,6 +262,7 @@
                                 }
                             ?>
                         </label>
+                        </div>
                         <div>
                             <div id="rating-view" style="display:inline-block;"></div>
                             <label><?php echo count($restroInfo->reviews);?> reviews</label>
@@ -411,9 +417,9 @@
                                     ?>
                                 </select>
                                 <span class="red"><?php echo form_error('useraddress');?></span>
-                                <div class="pull-right">
+                                <!--<div class="pull-right">
                                     <a data-toggle="modal" data-target="#customerAddress" style="cursor: pointer;"><span class="checkoutEdit"><i class="fa fa-home"></i> Add New Address</span></a>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>

@@ -297,94 +297,108 @@
                             <div class="col-md-9">
                                 <div class="tab-content">
                                     <div class="b">
-                                        <form action="" method="post">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h2 style="margin-left: 10px">My Addresses</h2>
-                                                    <div class="margin20"></div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="address">Address Name*</label>
-                                                            <select name="address_id" id="addess_name" class="form-control">
-
-                                                                <?php foreach ($customer_profile as $key => $pro): ?>
-                                                                    <option data-address="<?= json_encode($customer_profile)?>" value="<?=$pro->id?>">
-                                                                        <?=$pro->address?>
-                                                                    </option>
-                                                                    <?php endforeach ?>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h2 style="margin-left: 10px">My Addresses</h2>
+                                                <div class="margin20"></div>
+                                                <div class="row">                                                        
+                                                    <div class="col-md-6 form-group">
+                                                        <label for="address">Select Address</label>
+                                                        <select id="addess_name" class="form-control" onchange="onChangeAddress(this.value)">
+                                                            <?php foreach ($addresses as $index => $address): ?>
+                                                                <option value="<?=$address->id?>" <?php echo $address->id==$selected_address->id?"selected":"";?>><?=$address->address_name?></option>
+                                                                <?php endforeach ?>
+                                                            <option value="">== New Address ==</option>
+                                                        </select>
+                                                        <script>
+                                                            function onChangeAddress(val){
+                                                                if(val==="") {alert('form reset');
+                                                                    //document.getElementById("address-edit-form").reset();
+                                                                    $('#address-edit-form')[0].reset();
+                                                                } else {
+                                                                    location.href="/customer_dashboard/addresses?address_id="+val;
+                                                                }
+                                                            }
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                                <form id="address-edit-form" name="addressEditForm" action="" method="post">
+                                                    <input type="hidden" name="address_id" value="<?php echo $selected_address->id;?>"/>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="cus_block">Address Name*</label>
+                                                            <input type="text" class="form-control" name="address_name" value="<?php echo $selected_address->address_name;?>">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="street">&nbsp;</label>
+                                                            <input type="checkbox" name="is_primary" <?php echo $selected_address->is_primary?"checked":"";?>>&nbsp;Set as Primary
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="email">Choose your City*</label>
+                                                            <select id="cusCity" name="city_id" class="form-control">
+                                                                <?php foreach ($cities as $key => $city): ?>
+                                                                    <option <?=$city->id == $selected_address->city_id ? "selected='selected'" : ""?> value="<?=$city->id?>"><?=$city->city_name?></option>
+                                                                    <?php endforeach?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="cus_area">Choose your Area*</label>
+                                                            <select id="cusArea" name="area_id" class="form-control">
+                                                                <?php foreach ($areas as $key => $area): ?>
+                                                                    <option <?=$area->id == $selected_address->area_id ? "selected='selected'" : ""?> value="<?=$area->id?>"><?=$area->name?></option>
+                                                                    <?php endforeach?>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <?php foreach ($customer_profile as $key => $pro): ?>
-                                                        <input type="hidden" name="user_id" value="<?=$pro->user_id?>">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="email">Choose your City*</label>
-                                                                <select id="cusCity" name="cus_city" class="form-control">
-                                                                    <?php foreach ($city as $key => $ci): ?>
-                                                                        <option <?=$ci->id == $pro->city ? "selected='selected'" : ""?> value="<?=$ci->id?>"><?=$ci->city_name?></option>
-                                                                        <?php endforeach?>
-                                                                </select>
-                                                            </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="cus_block">Block*</label>
+                                                            <input type="text" class="form-control" name="block" value="<?php echo $selected_address->block;?>">
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="cus_area">Choose your Area*</label>
-                                                                <select id="cusArea" name="cus_area" class="form-control"></select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="cus_block">Block*</label>
-                                                                <input type="text" class="form-control" name="cus_block" value="<?php echo $pro->block;?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="street">Street*</label>
-                                                                <input type="text" class="form-control" name="street" value="<?php echo $pro->street;?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="house_name_no">House Name/Number*</label>
-                                                                <input type="text" class="form-control" id="house_name_no" name="house_name_no" value="<?php echo $pro->house_name;?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="floor">Floor*</label>
-                                                                <input type="text" class="form-control" id="floor" name="floor" value="<?php echo $pro->floor;?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="appartment">Appartment*</label>
-                                                                <input type="text" class="form-control" id="appartment" name="appartment" value="<?php echo $pro->appartment;?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label for="direction">Extra Direction <span class="small-text">(add more details for the restaurant's driver to find you faster)</span></label>
-                                                                <input type="text" class="form-control" id="direction" name="direction" value="<?php echo $pro->appartment;?>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="com-md-4">
-                                                            <button type="submit" class="btn btn-default btn-default-new btn-block btn_new_section pull-left" name="btndelAddress" style="margin-right: 15px;    margin-left: 15px;color: gray">Delete</button>
-
-                                                        </div>
-                                                        <div class="col-md-offset-8 com-md-4">
-                                                            <button type="submit" class="btn btn-success btn-success-new btn-block btn_new_section pull-right" name="btnAddressEdit" style="margin-right: 15px;">Confirm</button>
-                                                        </div>
-
-                                                        <div class="clearfix"></div>
-                                                        <div class="col-md-12">
-                                                            <div class="margin20"></div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="street">Street*</label>
+                                                            <input type="text" class="form-control" name="street" value="<?php echo $selected_address->street;?>">
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <?php endforeach?>
-                                        </form>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="house_name_no">House Name/Number*</label>
+                                                            <input type="text" class="form-control" id="house_name_no" name="house" value="<?php echo $selected_address->house;?>">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="floor">Floor*</label>
+                                                            <input type="text" class="form-control" id="floor" name="floor" value="<?php echo $selected_address->floor;?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="appartment">Appartment*</label>
+                                                            <input type="text" class="form-control" id="appartment" name="appartment" value="<?php echo $selected_address->appartment;?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-12">
+                                                            <label for="direction">Extra Direction <span class="small-text">(add more details for the restaurant's driver to find you faster)</span></label>
+                                                            <textarea type="textarea" class="form-control" id="direction" name="extra_directions" value="<?php echo $selected_address->extra_directions;?>"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="com-md-4">
+                                                        <button type="submit" class="btn btn-default btn-default-new btn-block btn_new_section pull-left" name="btndelAddress" style="margin-right: 15px;    margin-left: 15px;color: gray">Delete</button>
+
+                                                    </div>
+                                                    <div class="col-md-offset-8 com-md-4">
+                                                        <button type="submit" class="btn btn-success btn-success-new btn-block btn_new_section pull-right" name="btnAddressEdit" style="margin-right: 15px;">Confirm</button>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-md-12">
+                                                        <div class="margin20"></div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1314,7 +1328,7 @@
         if(service_type == 1 || service_type == 2) {
 
             $.ajax({
-                url: "/api/restaurants/"+restro_id+"/areas?location_id="+location_id+"&service_id="+service_type+"&tree=true",
+                url: "/api/restaurants/"+restro_id+"/areas?location_id="+location_id+"&service_id="+service_type,
                 type: "GET",
                 success: function(response) {
                     console.log('getRestroAreas response', response);                
@@ -1386,7 +1400,7 @@
             revealResults: true,  // reveal matching nodes
         }]);
     }
-    
+
     function onClickAddPromotionToCart(promo_id, restro_id, location_id, service_type) {
         if(service_type == 1 || service_type == 2) {
 

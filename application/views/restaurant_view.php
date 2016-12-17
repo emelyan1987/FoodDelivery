@@ -80,27 +80,33 @@
                     <h4 class="text-center"><?php echo ucwords($restroInfo->restro_name);?></h4>
                 </div>
                 <div class="col-sm-12">
-                    <label class="list-label">Min. Order:</label>
-                    <label class="list-data">&nbsp;KD <?php echo number_format($restroInfo->min_order, 3);?></label>
-                    <label class="list-label">Delivery Time:</label>
-                    <label class="list-data">&nbsp;<?php echo $restroInfo->order_time . " Min. ";?></label>
-                    <label class="list-label">Payment:</label>
-                    <label class="list-data">&nbsp;<?php
-                            $payArray = explode(',', $restroInfo->payment_method);
-                            if (in_array(1, $payArray)) {
-                                echo '<img class="" alt="" src="/assets/Customer/img/cash.png">';
-                            }
-                            if (in_array(2, $payArray)) {
-                                echo '<img class="" alt="" src="/assets/Customer/img/knet.png">';
-                            }
-                            if (in_array(3, $payArray)) {
-                                echo '<img class="" alt="" src="/assets/Customer/img/card.png">';
-                            }
-                            if (in_array(4, $payArray)) {
-                                echo '<img class="" alt="" src="/assets/Customer/img/paypal.png">';
-                            }
-                        ?>
-                    </label>
+                    <div class="col-md-12">
+                        <label class="list-label">Min. Order:</label>
+                        <label class="list-data">&nbsp;KD <?php echo number_format($restroInfo->min_order, 3);?></label>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="list-label">Delivery Time:</label>
+                        <label class="list-data">&nbsp;<?php echo $restroInfo->order_time . " Min. ";?></label>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="list-label">Payment:</label>
+                        <label class="list-data">&nbsp;<?php
+                                $payArray = explode(',', $restroInfo->payment_method);
+                                if (in_array(1, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/cash.png">';
+                                }
+                                if (in_array(2, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/knet.png">';
+                                }
+                                if (in_array(3, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/card.png">';
+                                }
+                                if (in_array(4, $payArray)) {
+                                    echo '<img class="" alt="" src="/assets/Customer/img/paypal.png">';
+                                }
+                            ?>
+                        </label>
+                    </div>
                     <div>
                         <div id="rating-view" style="display:inline-block;"></div>
                         <label><?php echo count($restroInfo->reviews);?> reviews</label>

@@ -211,7 +211,7 @@
 
                             </div>
                             <div class="col-md-9">
-                                <h4>By <b><?php echo $rat->name; ?></b> on <?php echo $rat->date; ?></h4>
+                                <h4>By <b><?php echo $rat->name; ?></b> on <?php echo date('jS M Y', strtotime($rat->created_time)) ; ?></h4>
                                 <p><i><?php echo $rat->msg; ?></i></p>
                             </div>
                             <div class="clearfix"></div>
@@ -247,6 +247,7 @@
             </div>
             <div class="modal-body">
                 <INPUT type="HIDDEN" ID="restro_id" name="restro_id" value="<?PHP echo $this->uri->segment(2); ?>">
+                <INPUT type="HIDDEN" ID="location_id" name="location_id" value="<?PHP echo $this->uri->segment(3); ?>">
                 <INPUT type="HIDDEN" id="rating_value_id" >
 
                 <fieldset class="rating">
@@ -301,6 +302,7 @@
         var email=$("#name").val();
         var msg=$("#msg").val();
         var restro_id=$("#restro_id").val();
+        var location_id=$("#location_id").val();
         var star_value=$("#rating_value_id").val();
 
 
@@ -332,11 +334,10 @@
             $.ajax({
                 method:"post",
                 url:"/put_rating/",
-                data:{name:name,email:email,msg:msg,restro_id:restro_id,star_value:star_value},
+                data:{name:name,email:email,msg:msg,restro_id:restro_id,location_id:location_id,star_value:star_value},
                 success:function(response)
                 {
                     alert("Your Review Submitted successfully...");
-
                 }          
             });
         } 

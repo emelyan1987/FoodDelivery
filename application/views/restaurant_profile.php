@@ -105,8 +105,7 @@
                     <span <?php echo $stl;?>></span> <?php echo $status_title;?>
                 </div>
                 <div class="col-sm-12">
-                    <img class="img-responsive res-logo" alt="" src="<?php if ($restaurant->restaurant_logo != '') {getImagePath($restaurant->restaurant_logo);}
-                        ?>">
+                    <img class="img-responsive res-logo" alt="" src="<?php if ($restaurant->restaurant_logo != '') {getImagePath($restaurant->restaurant_logo);}?>">
                 </div>
                 <br>
                 <div class="col-sm-12">

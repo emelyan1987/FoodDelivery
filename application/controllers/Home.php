@@ -999,13 +999,16 @@
 
             $data['errors']=array();
 
-            $service_id = $_SESSION["filter_service"];
+            $service_id = $this->input->get('service_id');
+            if(!isset($service_id)) $service_id = $_SESSION["filter_service"];
+            if(!isset($service_id)) redirect('/');
+            
             $restro_id =$this->uri->segment('2');
             $location_id =$this->uri->segment('3');            
             $item_id =$this->uri->segment('4');            
 
-            $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_id); 
-            $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
+            $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_id);             
+            $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id)); 
             $data['restroInfo'] = $restro;
             $data['restroCat'] = $this->RestroItemCategoryModel->find(array('location_id'=>$location_id,'service_id'=>$service_id));
             $RestroUserId = $this->Home_Restro->getRestroUserId($restro_id);
@@ -1132,6 +1135,12 @@
         function checkout(){
             $data['errors']=array();
             $user_id = $_SESSION['Customer_User_Id'];
+            
+            if($this->input->get('service_id')) $_SESSION['filter_service'] = $this->input->get('service_id');
+            if($this->input->get('restro_id')) $_SESSION['order_restro_id'] = $this->input->get('restro_id');
+            if($this->input->get('location_id')) $_SESSION['order_location_id'] = $this->input->get('location_id');
+            if($this->input->get('area_id')) $_SESSION['order_area_id'] = $this->input->get('area_id');
+            
             $service_type = $_SESSION['filter_service'];
             $restro_id = $_SESSION['order_restro_id'];
             $location_id = $_SESSION['order_location_id'];
@@ -1152,9 +1161,9 @@
 
             $data['addressData'] = $this->UserAddressModel->find(array('user_id'=>$user_id));
 
-            $data['getPaymentgateways'] = $this->Home_Restro->getPaymentgatewaysByService($_SESSION['order_restro_id'],$_SESSION['filter_service']);
+            $data['getPaymentgateways'] = $this->Home_Restro->getPaymentgatewaysByService($restro_id, $service_type);
 
-            $data['deliveryCharges'] = $this->Home_Restro->getDeliveryChargesbyrestrolocation($_SESSION['order_restro_id'],$_SESSION['filter_service'],$_SESSION['filter_city']);
+            //$data['deliveryCharges'] = $this->Home_Restro->getDeliveryChargesbyrestrolocation($restro_id, $service_type, $_SESSION['filter_city']);
 
             if(($data['cartData'] == '') or ($user_id == ''))
             {

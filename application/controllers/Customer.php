@@ -34,6 +34,7 @@
             $this->load->model("RatingModel");
             $this->load->model("RestroItemVariationModel");
             $this->load->model("AreaModel");
+            $this->load->model("CartModel");
             //$this->load->helper('phpass');
             $this->load->helper('order');
             $this->load->helper('utils');
@@ -369,9 +370,10 @@
             $user_id = $this->session->userdata('user_id');
             //$UserMobileNo = $_SESSION['UserMobileNo'];
             $data['customer_maindata'] = $this->Customer_management->getCustomersDetails($user_id);
-            $data['customer_profile'] = $this->Customer_management->getCustomersProfileDetails($user_id);
+            $data['customer_profile'] = $this->Customer_management->getCustomersProfileDetails($user_id); 
 
-            $data['areas'] = $this->AreaModel->find(); //echo json_encode($data['areas']);
+
+
             //  ======================= Get Order Data ======================
             $offset = 0;
             $limit = 50;
@@ -415,7 +417,7 @@
             $points = $this->PointLogModel->find(array('user_id'=>$user_id));
             foreach($points as $point) {
                 $order = $point->order = $this->OrderModel->findById($point->service_id, $point->order_id);
-                    if($order) $point->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
+                if($order) $point->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
             }
             $data['PointData'] = $points;
 
@@ -434,9 +436,9 @@
                 $location_id = $this->input->post('hidden_pop_location');
                 $star_value = $this->input->post('star_value');
                 $msg = $this->input->post('message');
-                
+
                 $this->RatingModel->delete(array('user_id'=>$user_id, 'restro_id'=>$restro_id, 'location_id'=>$location_id));
-                                
+
                 $this->RatingModel->create(array('user_id'=>$user_id,'restro_id'=>$restro_id, 'location_id'=>$location_id, 'star_value'=>$star_value, 'msg'=>$msg, 'ip'=>$_SERVER['REMOTE_ADDR']));
 
                 redirect('/customer_dashboard/orders');
@@ -563,25 +565,24 @@
             }
 
             if (isset($_POST['btnAddressEdit'])) {
-                $editprofile = array();
-                $editprofile['area'] = $this->input->post('cus_area');
-                $editprofile['city'] = $this->input->post('cus_city');
-                $editprofile['street'] = $this->input->post('street');
-                $editprofile['block'] = $this->input->post('cus_block');
-                $editprofile['appartment'] = $this->input->post('appartment');
-                $editprofile['floor'] = $this->input->post('floor');
-                $editprofile['direction'] = $this->input->post('direction');
-                $editprofile['house_name'] = $this->input->post('house_name_no');
-                $editprofile['address'] = $this->input->post('address');
-                $editprofile['user_id'] = $this->input->post('user_id');
-                #if customer profile has data means update case
-                if (count($data['customer_profile']) > 0) {
-                    $this->db->where('user_id', $user_id);
-                    $this->db->update('user_profiles', $editprofile);
+                $address = array();
+                $id = $this->input->post('id');
+                $address['area_id'] = $this->input->post('area_id');
+                $address['city_id'] = $this->input->post('city_id');
+                $address['street'] = $this->input->post('street');
+                $address['block'] = $this->input->post('block');
+                $address['appartment'] = $this->input->post('appartment');
+                $address['floor'] = $this->input->post('floor');
+                $address['extra_directions'] = $this->input->post('extra_directions');
+                $address['house'] = $this->input->post('house');
+                $address['address_name'] = $this->input->post('address_name');
+                $address['is_primary'] = $this->input->post('is_primary');
+                $address['user_id'] = $user_id;
+
+                if (!isset($id) || $id==null) {
+                    $this->UserAddressModel->create($address);
                 } else {
-                    // you can also write queries here its valid if not ci will not allowed it by default
-                    $editprofile['user_id'] = $user_id;
-                    $this->db->insert('user_profiles', $editprofile);
+                    $this->UserAddressModel->update($id,$address);
                 }
             }
             if (isset($_POST['btnprofileEdit'])) {
@@ -658,7 +659,26 @@
             // echo "<pre>";
             // print_r($data);die;
             if ($data['page'] == "addresses") {
-                $data['city'] = $this->get_city();
+                $data['cities'] = $this->get_city();
+
+                $data['addresses'] = $addresses = $this->UserAddressModel->find(array('user_id'=>$user_id));             
+
+                $selected_address = $addresses[0];
+                $address_id = $this->input->get('address_id');
+
+                if(isset($address_id)){
+                    foreach($addresses as $address) {
+                        if($address_id==$address->id) $selected_address = $address;
+                    }
+                } else {
+                    foreach($addresses as $address) {
+                        if($address->is_primary) $selected_address = $address;
+                    }
+                }
+
+                $data['areas'] = $this->AreaModel->find(array('city_id'=>$selected_address->city_id)); 
+
+                $data['selected_address'] = $selected_address;
             }
             $this->load->view("Customer/customer_dashboard", $data);
         }
@@ -681,27 +701,72 @@
                 redirect('/');
             }
 
-            if (isset($_POST['delivery_checkout'])) {
-                $_SESSION['order_restro_id'] = $this->input->post('delivery_restro_id');
-                redirect('/checkout');
+            /*if (isset($_POST['delivery_checkout'])) {
+            $_SESSION['order_restro_id'] = $this->input->post('delivery_restro_id');
+            redirect('/checkout');
             }
             if (isset($_POST['catering_checkout'])) {
-                $_SESSION['order_restro_id'] = $this->input->post('catering_restro_id');
-                redirect('/catering_checkout');
+            $_SESSION['order_restro_id'] = $this->input->post('catering_restro_id');
+            redirect('/catering_checkout');
             }
             if (isset($_POST['pickup_checkout'])) {
-                $_SESSION['order_restro_id'] = $this->input->post('pickup_restro_id');
-                redirect('/pickup_checkout');
+            $_SESSION['order_restro_id'] = $this->input->post('pickup_restro_id');
+            redirect('/pickup_checkout');
             }
             if (isset($_POST['reservation_checkout'])) {
-                $_SESSION['order_restro_id'] = $this->input->post('reservation_restro_id');
-                redirect('/reservation_checkout');
+            $_SESSION['order_restro_id'] = $this->input->post('reservation_restro_id');
+            redirect('/reservation_checkout');
             }
             $data['DcartData'] = $this->Home_Restro->view_my_cart($user_id);
             $data['PcartData'] = $this->Home_Restro->view_my_pickup_cart($user_id);
             $data['CcartData'] = $this->Home_Restro->view_my_catering_cart($user_id);
-            $data['RcartData'] = $this->Home_Restro->view_my_table_cart($user_id);
+            $data['RcartData'] = $this->Home_Restro->view_my_table_cart($user_id);*/
 
+
+            // Getting Delivery Cart Items
+            $carts = $this->CartModel->find(1, array('user_id'=>$user_id));
+            $restros = array();
+            foreach($carts as $cart) {
+                if(!isset($restros[$cart->location_id])) {
+                    $restro = $this->RestaurantModel->findByRestroLocationService($cart->restro_id, $cart->location_id, 1); 
+                    $restros[$cart->location_id] = $restro;
+                }                
+                if($restros[$cart->location_id]!=null) {
+                    $restros[$cart->location_id]->cart_items[] = $cart;
+                }
+            }             
+            $data['deliveries'] = array_values($restros);
+
+            // Getting Catering Cart Items
+            $carts = $this->CartModel->find(2, array('user_id'=>$user_id));
+            $restros = array();
+            foreach($carts as $cart) {
+                if(!isset($restros[$cart->location_id])) {
+                    $restro = $this->RestaurantModel->findByRestroLocationService($cart->restro_id, $cart->location_id, 2); 
+                    $restros[$cart->location_id] = $restro;
+                }                
+                if($restros[$cart->location_id]!=null) {
+                    $restros[$cart->location_id]->cart_items[] = $cart;
+                }
+            }             
+            $data['caterings'] = array_values($restros);
+            
+            // Getting Pickup Cart Items
+            $carts = $this->CartModel->find(4, array('user_id'=>$user_id));
+            $restros = array();
+            foreach($carts as $cart) {
+                if(!isset($restros[$cart->location_id])) {
+                    $restro = $this->RestaurantModel->findByRestroLocationService($cart->restro_id, $cart->location_id, 4); 
+                    $restros[$cart->location_id] = $restro;
+                }                
+                if($restros[$cart->location_id]!=null) {
+                    $restros[$cart->location_id]->cart_items[] = $cart;
+                }
+            }             
+            $data['pickups'] = array_values($restros); 
+
+            // Getting Reservation Cart Items
+            $data['reservations'] = array();
             $this->load->view("Customer/mycart", $data);
         }
 
@@ -772,17 +837,17 @@
             $data['customer_data'] = $customer_data;
             $data['customer_address'] = $this->UserAddressModel->findById($data['order_data']->address_id);
             $order_details = $this->OrderDetailModel->find($service_id, array('order_id'=>$orderid));
-            
+
             foreach($order_details as $detail){
                 if(isset($detail->variation_ids) && $detail->variation_ids!="") {
                     $variation_ids = explode(",", $detail->variation_ids);
                     $detail->variations = $this->RestroItemVariationModel->findByIds($variation_ids);
                 }
             }
-            
+
             $data['order_details'] = $order_details;
-            
-            
+
+
 
             $this->load->view("Customer/order_details", $data);
         }

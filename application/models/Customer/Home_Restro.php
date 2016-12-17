@@ -1048,10 +1048,12 @@
             $this->db->order_by("restro_info.id", "desc");
             return $query = $this->db->get()->result();
         }
-        public function view_rating_restro($id) {
+        public function view_rating_restro($restro_id, $location_id) {
             $this->db->select('*');
             $this->db->from('restro_rating');
-            $this->db->where('restro_rating.restro_id', $id);
+            $this->db->where('restro_id', $restro_id);
+            $this->db->where('location_id', $location_id);
+            $this->db->order_by('created_time', 'DESC');
             return $query = $this->db->get()->result();
         }
         public function find_cuisine_by_name($txt) {
