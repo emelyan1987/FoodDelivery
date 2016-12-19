@@ -566,7 +566,7 @@
 
             if (isset($_POST['btnAddressEdit'])) {
                 $address = array();
-                $id = $this->input->post('id');
+                $id = $this->input->post('address_id');
                 $address['area_id'] = $this->input->post('area_id');
                 $address['city_id'] = $this->input->post('city_id');
                 $address['street'] = $this->input->post('street');
@@ -576,14 +576,29 @@
                 $address['extra_directions'] = $this->input->post('extra_directions');
                 $address['house'] = $this->input->post('house');
                 $address['address_name'] = $this->input->post('address_name');
-                $address['is_primary'] = $this->input->post('is_primary');
-                $address['user_id'] = $user_id;
+                $address['is_primary'] = $this->input->post('is_primary')&&$this->input->post('is_primary')=='on' ? 1 : 0;
+                $address['user_id'] = $user_id; 
 
+                if($address['is_primary']) {
+                    $this->UserAddressModel->updateByParams(array('user_id'=>$user_id), array('is_primary'=>false));
+                }
                 if (!isset($id) || $id==null) {
-                    $this->UserAddressModel->create($address);
+                    $id = $this->UserAddressModel->create($address);
                 } else {
                     $this->UserAddressModel->update($id,$address);
                 }
+                
+                redirect('/customer_dashboard/addresses?address_id='.$id);
+            }
+
+            if (isset($_POST['btndelAddress'])) {
+                $address_id = $this->input->post('address_id');
+                
+                if (isset($address_id)) {
+                    $this->UserAddressModel->delete($address_id);
+                }
+                
+                redirect('/customer_dashboard/addresses');
             }
             if (isset($_POST['btnprofileEdit'])) {
 

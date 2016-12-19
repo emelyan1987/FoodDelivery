@@ -37,11 +37,19 @@
             return $insert_id;                
 
         }
+        
         public function update($id, $data){
             $data['updated_time'] = date('Y-m-d H:i:s');
             $this->db->trans_start();
             $this->db->where('id',  $id);
             $this->db->update('user_addresses', $data);
+            $this->db->trans_complete();
+        }
+        
+        public function updateByParams($params, $data){
+            $data['updated_time'] = date('Y-m-d H:i:s');
+            $this->db->trans_start();
+            $this->db->update('user_addresses', $data, $params);
             $this->db->trans_complete();
         }
 

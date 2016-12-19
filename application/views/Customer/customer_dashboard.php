@@ -301,7 +301,7 @@
                                             <div class="col-md-12">
                                                 <h2 style="margin-left: 10px">My Addresses</h2>
                                                 <div class="margin20"></div>
-                                                <div class="row">                                                        
+                                                <div class="row" style="border-bottom:1px solid #ddd;margin-bottom:20px;">                                                        
                                                     <div class="col-md-6 form-group">
                                                         <label for="address">Select Address</label>
                                                         <select id="addess_name" class="form-control" onchange="onChangeAddress(this.value)">
@@ -312,9 +312,18 @@
                                                         </select>
                                                         <script>
                                                             function onChangeAddress(val){
-                                                                if(val==="") {alert('form reset');
-                                                                    //document.getElementById("address-edit-form").reset();
-                                                                    $('#address-edit-form')[0].reset();
+                                                                if(val==="") {
+                                                                    document.addressEditForm.address_id.value = "";
+                                                                    document.addressEditForm.address_name.value = "";
+                                                                    document.addressEditForm.is_primary.checked = false;
+                                                                    document.addressEditForm.city_id.value = "";
+                                                                    document.addressEditForm.area_id.value = "";
+                                                                    document.addressEditForm.block.value = "";
+                                                                    document.addressEditForm.street.value = "";
+                                                                    document.addressEditForm.house.value = "";
+                                                                    document.addressEditForm.floor.value = "";
+                                                                    document.addressEditForm.appartment.value = "";
+                                                                    document.addressEditForm.extra_directions.value = "";
                                                                 } else {
                                                                     location.href="/customer_dashboard/addresses?address_id="+val;
                                                                 }
@@ -1610,7 +1619,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         //$("#OtpModel123").modal('show');
-        $("#OtpModel123").modal();
+        //$("#OtpModel123").modal();
     });
 </script>
 <!-- edit address Modal -->
