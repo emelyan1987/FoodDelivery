@@ -2,7 +2,7 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
     // This can be removed if you use __autoload() in config.php OR use Modular Extensions
     require 'MyRestController.php';
-    
+
     class DataController extends MyRestController {
         function __construct()
         {
@@ -19,8 +19,9 @@
             $this->load->model('CuisineModel'); 
             $this->load->model('FoodTypeModel'); 
             $this->load->model('RestroCategoryModel'); 
+            $this->load->model('AdvertisementModel'); 
         } 
-             
+
 
         public function cities_get()
         {                 
@@ -45,7 +46,7 @@
                     ), REST_Controller::HTTP_OK);
             }
         } 
-         
+
         public function areas_get()
         {                 
             try {                
@@ -93,7 +94,7 @@
                     ), REST_Controller::HTTP_OK);
             }
         } 
-         
+
         public function food_types_get()
         {                 
             try {                
@@ -117,7 +118,7 @@
                     ), REST_Controller::HTTP_OK);
             }
         }  
-         
+
         public function restro_categories_get()
         {                 
             try {                
@@ -125,6 +126,39 @@
 
                 $keyword = $this->get('keyword');
                 $resource = $this->RestroCategoryModel->find(array("name"=>$keyword));
+
+                if(!$resource) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }  
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$resource
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        }
+
+        public function advertisements_get()
+        {                 
+            try {                
+                //$this->validateAccessToken();
+
+                $kind = $this->get('kind') ? $this->get('kind') : 1;
+                $page = $this->get('page') ? $this->get('page') : 1;
+
+                $limit = 4;
+
+                $resource = $this->AdvertisementModel->find(array(
+                        "system_status"=>$kind, 
+                        "offset"=>($page-1)*$limit,
+                        "limit"=>$limit
+                    )
+                );
 
                 if(!$resource) {
                     throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 

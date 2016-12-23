@@ -496,6 +496,7 @@ $route['api/data/areas'] = '/api/DataController/areas';
 $route['api/data/cuisines'] = '/api/DataController/cuisines'; 
 $route['api/data/food_types'] = '/api/DataController/food_types'; 
 $route['api/data/restro_categories'] = '/api/DataController/restro_categories'; 
+$route['api/data/advertisements'] = '/api/DataController/advertisements'; 
 
 $route['api/restaurants'] = '/api/RestaurantController'; 
 $route['api/restaurants/(:num)'] = '/api/RestaurantController/index/$1'; 

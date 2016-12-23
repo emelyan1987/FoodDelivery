@@ -1219,6 +1219,54 @@
         }
       }
     },
+    "/data/advertisements": {
+      "get": {
+        "tags": [
+          "data"
+        ],
+        "description": "This API is responsible for getting advertisements image list",
+        "operationId": "getAdvertisements",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "kind",
+            "description": "advertisement kind(1:Web, 2:Mobile)",
+            "required": false,
+            "type": "integer"
+          },{
+            "in": "query",
+            "name": "page",
+            "description": "page number",
+            "required": false,
+            "type": "integer"
+          }],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/restaurants": {
       "get": {
         "tags": [
