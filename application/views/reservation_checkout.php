@@ -175,7 +175,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="border-right:1px solid #ddd;padding:20px;margin:20px;">
                 <div class="row">
                     <div class="col-sm-3 pull-right">
                         <?php
@@ -193,8 +193,7 @@
                         <span <?php echo $stl;?>></span> <?php echo $status_title;?>
                     </div>
                     <div class="col-sm-12">
-                        <img class="img-responsive res-logo" alt="" src="<?php if ($restroInfo->restro_logo != '') {getImagePath($restroInfo->restro_logo);}
-                            ?>">
+                        <img class="img-responsive" style="margin:0 auto;width:150px;height:120px;" alt="" src="<?php if ($restroInfo->restro_logo != '') {getImagePath($restroInfo->restro_logo);}?>">
                     </div>
                 </div>
                 <div class="row">
@@ -389,7 +388,7 @@
 
 <script>
     $(document).ready(function(){
-        $("#rating-view").rateYo({rating:<?php echo $restroInfo->rating; ?>, starWidth:'24px', ratedFill:'#f1c40f'}); 
+        $("#rating-view").rateYo({rating:<?php echo $restroInfo->rating?$restroInfo->rating:0; ?>, starWidth:'24px', ratedFill:'#f1c40f'}); 
     });
     $("input:checkbox").click(function(){
         var self = $(this);

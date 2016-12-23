@@ -1,9 +1,6 @@
-<?php if (!defined('BASEPATH')) {
-        exit('No direct script access allowed');
-    }
-
-    @ob_start();
-    class Restaurant extends CI_Controller {
+<?php 
+    require 'AdminBaseController.php';
+    class Restaurant extends AdminBaseController {
         function __construct() {
             parent::__construct();
 
@@ -12,8 +9,6 @@
             //$this->load->library('security');
             $this->load->helper('security');
             $this->load->helper('restaurant_helper');
-            $this->load->library('tank_auth');
-            $this->lang->load('tank_auth');
             $this->load->model("Administration/Restaurant_management");
             $this->load->model("Administration/Plan_management");
             $this->load->model("Administration/Area_management");
@@ -224,7 +219,7 @@
 
         }
 
-        function restaurant_edit($id) {
+        function restaurant_edit($id) { 
 
             $restro_id = $this->uri->slash_segment(2);
             $data['errors'] = array();
@@ -241,14 +236,14 @@
             $this->form_validation->set_rules('contact_person', 'Restaurant Contact Person', 'required');
             $this->form_validation->set_rules('telephones', 'Restaurant Telehone', 'required');
             $this->form_validation->set_rules('yearly_fee', 'Restaurant Yearly Fee', 'required');
-            $this->form_validation->set_rules('feature', 'Restaurant Featured', 'required');
+            //$this->form_validation->set_rules('feature', 'Restaurant Featured', 'required');
             $this->form_validation->set_rules('owner_code', 'Restaurant Owner Code', 'required');
-            $this->form_validation->set_rules('restro_status', 'Restaurant Status', 'required');
+            //$this->form_validation->set_rules('restro_status', 'Restaurant Status', 'required');
 
             if ($this->form_validation->run() == FALSE) {
 
             } else {
-                $restroInfo['admin_id'] = $this->tank_auth->get_user_id();
+                $restroInfo['admin_id'] = $this->tank_auth->get_user_id(); 
 
                 $restroInfo['restro_name'] = $this->input->post('restro_name');
                 $restroInfo['restro_description'] = $this->input->post('restro_info');
@@ -261,7 +256,12 @@
                 $restroInfo['yearly_fee'] = $this->input->post('yearly_fee');
                 $restroInfo['assign_featured'] = $this->input->post('feature');
 
-                $restroInfo['restro_status'] = $this->input->post('restro_status');
+                $statuses = $this->input->post('restro_status');
+                $restro_status = 0;
+                foreach($statuses as $status){
+                    $restro_status += pow(2, $status-1)*1;
+                }
+                $restroInfo['restro_status'] = $restro_status; 
 
                 //$restro_item_cat=$this->input->post('restro_item_cat');
 
@@ -712,7 +712,7 @@
             //$workingInfo['happy_to'] = $this->input->post("happy_to");
 
             $seatingInfos = $this->input->post("seating_infos");
-            
+
             $this->Restaurant_management->clear_pickup_payment($payment['restro_id'], $payment['location_id'], $payment['service_type']);
             $this->Restaurant_management->clear_pickup_working_hour($workingInfo['restro_id'], $workingInfo['location_id'], $workingInfo['service_id']);
             $this->Restaurant_management->clear_seating_hours($restro_id, $location_id);
@@ -1170,7 +1170,7 @@
             $data['SeatingInfo'] = $this->RestroSeatingHourModel->find(array(
                 'restro_id'     => $restro_id,
                 'location_id'   => $location_id   
-            ), true);
+                ), true);
 
             $this->load->view("Administration/restaurant_edit_location", $data);
         }

@@ -2,7 +2,7 @@
 
     if (!defined('BASEPATH')) exit('No direct script access allowed');
     require APPPATH . '/libraries/CryptoLib.php';
-    
+
     class Auth extends CI_Controller
     {
         function __construct()
@@ -22,6 +22,7 @@
             $this->load->model("Administration/Restaurant_management");
             //$this->load->model("Customer_management");
             $this->load->model("UserAccessTokenModel");
+            $this->load->model("UserModel");
 
         }
 
@@ -41,7 +42,6 @@
         */
         function login()
         {
-
 
             if ($this->tank_auth->is_logged_in()) {
                 // logged in
@@ -106,6 +106,11 @@
                         $data['login_by_email'])) {
 
                         $role_id=$this->Custom_function->role_id($this->input->post("login"));
+                        
+                        $user_id = $this->tank_auth->get_user_id();
+                        $user = $this->UserModel->findById($user_id);
+                        $this->session->set_userdata(array('user_role'=>$user->user_role));
+                        
                         $return_url= $this->input->post("return_url");
 
                         if($return_url != '')
@@ -928,8 +933,11 @@
                         if(isset($_SERVER['REMOTE_ADDR'])) $token_data['ip_address6'] = $_SERVER['REMOTE_ADDR'];
 
                         $this->UserAccessTokenModel->create($token_data);
-                        
+
                         $_SESSION['access_token'] = $token;
+                        
+                        $user = $this->UserModel->findById($user_id);
+                        $this->session->set_userdata(array('user_role'=>$user->user_role));
 
                         redirect('/customer_login');
 

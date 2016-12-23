@@ -1,6 +1,7 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-    @ob_start();
-    class Chat_controll extends CI_Controller
+<?php 
+    require 'AdminBaseController.php';
+
+    class Chat_controll extends AdminBaseController
     {
         function __construct()
         {

@@ -231,7 +231,9 @@
 
     function getTimeSlots($restro_id, $location_id, $reserve_time, $people_number) {
         $CI = & get_instance();                     
-
+        $CI->load->model('RestroSeatingHourModel');
+        $CI->load->model('RestroTableOrderModel');
+        
         $weekday = strtolower(date('l', $reserve_time));
         $seating_infos = $CI->RestroSeatingHourModel->find(array(
             'restro_id'     => $restro_id,

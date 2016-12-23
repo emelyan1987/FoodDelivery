@@ -579,6 +579,7 @@ class Tank_auth
 								'user_id'	=> $user->id,
 								'username'	=> $user->username,
 								'status'	=> STATUS_ACTIVATED,
+								'user_role' => $user->user_role
 						));
 
 						// Renew users cookie to prevent it from expiring

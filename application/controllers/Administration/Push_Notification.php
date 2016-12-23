@@ -1,8 +1,8 @@
 <?php 
-    if (!defined('BASEPATH')) exit('No direct script access allowed');
-    
-    @ob_start();
-    class Push_Notification extends CI_Controller
+
+    require 'AdminBaseController.php';
+
+    class Push_Notification extends AdminBaseController
     {
         function __construct()
         {

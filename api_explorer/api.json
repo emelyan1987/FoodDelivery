@@ -1275,6 +1275,18 @@
             "description": "BitMask 0bit:NewlyOpened, 1bit:Featured, 2bit:Promotions, 3bit:Coupons",
             "required": false,
             "type": "integer"
+          },{
+            "in": "query",
+            "name": "reserve_time",
+            "description": "Reservation time(2016-12-25 17:35). If service_type=3(Reservation service) this paramter must be passed",
+            "required": false,
+            "type": "string"
+          },{
+            "in": "query",
+            "name": "people_number",
+            "description": "Number of people. If service_type=3(Reservation service) this paramter must be passed",
+            "required": false,
+            "type": "integer"
           }
         ],
         "responses": {

@@ -233,10 +233,6 @@
                                 }
 
                             ?>
-
-
-
-
                         </ol>
                     </div>
                     <!--/carousel-inner-->
@@ -346,7 +342,7 @@
     <span class="${statusClass(status)}"></span>&nbsp;${statusTitle(status)} 
     </div>
     <div class="col-sm-6 col-md-6">
-    <a href="/restaurant_profile/${restro_id}/${location_id}"><img class="img-responsive" alt="" src="${restroLogoPath(restro_logo)}" > </a>
+    <a href="/restaurant_profile/${restro_id}/${location_id}"><img class="img-responsive" style="width:150px; height:120px;" alt="" src="${restroLogoPath(restro_logo)}" > </a>
     </div>
     </div>
     <div class="col-md-4 col-sm-12">

@@ -1,7 +1,6 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-    @ob_start();
-    class Advertise extends CI_Controller
+<?php 
+    require 'AdminBaseController.php';
+    class Advertise extends AdminBaseController
     {
         function __construct()
         {

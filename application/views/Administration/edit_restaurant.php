@@ -84,17 +84,14 @@
                             <tr><td>Select Status:</td>
 
 
-                                <td><select name="restro_status">
-                                        <option value="">Restaurant Status</option>
-                                        <option value="1" <?php if ($REs->restro_status == 1) {echo "selected";}
-                                            ?>>Featured Restaurant</option>
-                                        <option value="3" <?php if ($REs->restro_status == 3) {echo "selected";}
-                                            ?>>Newly Opened</option>
-                                        <option value="2" <?php if ($REs->restro_status == 2) {echo "selected";}
-                                            ?>>Promotions</option>
-                                        <option value="4" <?php if ($REs->restro_status == 4) {echo "selected";}
-                                            ?>>Coupons </option>
-                                    </select><span style="color:red"><?PHP echo form_error('restro_status');?></span></td></tr>
+                                <td>
+                                <div class="col-md-12">
+                                    <span class="col-md-3"><label class="checkbox"><input type="checkbox" name="restro_status[]" value="1" <?php if (($REs->restro_status&1) == 1) {echo "checked";}?>/> Newly Opened </label></span>
+                                    <span class="col-md-3"><label class="checkbox"><input type="checkbox" name="restro_status[]" value="2" <?php if (($REs->restro_status&2) == 2) {echo "checked";}?>/> Featured Restaurant</label></span>
+                                    <span class="col-md-3"><label class="checkbox"><input type="checkbox" name="restro_status[]" value="3" <?php if (($REs->restro_status&4) == 4) {echo "checked";}?>/> Promotions</label></span>
+                                    <span class="col-md-3"><label class="checkbox"><input type="checkbox" name="restro_status[]" value="4" <?php if (($REs->restro_status&8) == 8) {echo "checked";}?>/> Coupons</label></span>
+                                    </div>
+                                            <span style="color:red"><?PHP echo form_error('restro_status');?></span></td></tr>
                         </table>
                     </div>
                     <h4 class="border_bottom">Restaurant Setup</h4>
@@ -168,13 +165,13 @@
                     <!--<h5>Assign Restaurant As Feature</h5>
 
                     <div class="col-md-5">
-                        <table class="table" style="width:100%;">
-                            <tr><td><input id="feature" name="feature" type="radio" value="1" <?php if ($REs->assign_featured == 1) {echo "checked";}
-                                    ?> /> <span>Yes</span></td>
-                                <td><input id="feature"      name="feature" type="radio" value="0" <?php if ($REs->assign_featured == 0) {echo "checked";}
-                                    ?> /> <span>No</span> <span style="color:red"><?PHP echo form_error('feature');?></span></td></tr>
-                        </table>
-                        <div class="clear_h10"></div>   
+                    <table class="table" style="width:100%;">
+                    <tr><td><input id="feature" name="feature" type="radio" value="1" <?php if ($REs->assign_featured == 1) {echo "checked";}
+                    ?> /> <span>Yes</span></td>
+                    <td><input id="feature"      name="feature" type="radio" value="0" <?php if ($REs->assign_featured == 0) {echo "checked";}
+                    ?> /> <span>No</span> <span style="color:red"><?PHP echo form_error('feature');?></span></td></tr>
+                    </table>
+                    <div class="clear_h10"></div>   
                     </div> -->
                     <button type="submit"  class="btn bg-green" value="Save">Save</button>
                 </div>

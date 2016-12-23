@@ -29,6 +29,8 @@
             $this->load->model('RestroPromotionItemModel'); 
             $this->load->model('RestroCityAreaModel'); 
             $this->load->model('AreaModel'); 
+
+            $this->load->helper('order');
         } 
 
         private function validate() {
@@ -84,7 +86,21 @@
 
                     $params["service_type"] = $service_type;   // Service Type
 
-                    $resource = $this->RestaurantModel->find($params); 
+                    $restros = $this->RestaurantModel->find($params); 
+
+                    if($service_type == 3) {
+                        $reserve_time = $this->get('reserve_time');
+                        $people_number = $this->get('people_number');
+
+                        if(isset($reserve_time) && isset($people_number)) {
+                            $reserve_time = strtotime($reserve_time);
+                            foreach($restros as $restro) {
+                                $restro->slots = getTimeSlots($restro->restro_id, $restro->location_id, $reserve_time, $people_number);
+                            }   
+                        }
+                    }
+
+                    $resource = $restros;
                 } else {     
                     $location_id = $this->get('location_id');
                     if(!isset($location_id)) {
@@ -93,6 +109,15 @@
 
                     $restro = $this->RestaurantModel->findByRestroLocationService($id, $location_id, $service_type); 
                     $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id, 'restro_id'=>$id));
+
+                    if($service_type == 3) {
+                        $reserve_time = $this->get('reserve_time');
+                        $people_number = $this->get('people_number');
+                        if(isset($reserve_time) && isset($people_number)) {
+                            $reserve_time = strtotime($reserve_time);
+                            $restro->slots = getTimeSlots($restro->restro_id, $restro->location_id, $reserve_time, $people_number);
+                        }
+                    }
 
                     $resource = $restro;
                 }
@@ -375,31 +400,31 @@
                 /*$tree = $this->get('tree');
 
                 if(isset($tree) && $tree=="true") {
-                    $trees = array();
-                    foreach ($areas as $area) {
-                        $city_id = $area->city_id;
+                $trees = array();
+                foreach ($areas as $area) {
+                $city_id = $area->city_id;
 
-                        if(!isset($trees[$city_id])) {
-                            $trees[$city_id] = array(
-                                'text'=>$area->city_name, 
-                                'nodes'=>array(), 
-                                'selectable'=>false, 
-                                'state'=>array(
-                                    'expanded'=>true
-                                )
-                            );
-                        }
+                if(!isset($trees[$city_id])) {
+                $trees[$city_id] = array(
+                'text'=>$area->city_name, 
+                'nodes'=>array(), 
+                'selectable'=>false, 
+                'state'=>array(
+                'expanded'=>true
+                )
+                );
+                }
 
-                        $trees[$city_id]['nodes'][] = array(
-                            'nodeId'=>$area->id, 
-                            'text'=>$area->name,
-                            'icon'=>''
-                        );
-                    }
+                $trees[$city_id]['nodes'][] = array(
+                'nodeId'=>$area->id, 
+                'text'=>$area->name,
+                'icon'=>''
+                );
+                }
 
-                    $resource = array_values($trees);
+                $resource = array_values($trees);
                 } else {                 
-                    $resource = $areas;   
+                $resource = $areas;   
                 }*/
                 $resource = $areas;
                 if(!$resource) {

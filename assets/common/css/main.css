@@ -144,6 +144,11 @@ input[type=radio]{outline:none;}
 
 
 
+.restro-logo {
+    margin: 0 auto;
+    width: 150px;
+    height: 120px;
+}
 
 .restro-title {
     font-weight: bold;
