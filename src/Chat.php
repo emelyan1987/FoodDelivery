@@ -15,7 +15,7 @@
             if(ENVIRONMENT === 'production') {
                 $this->db = new \PDO('mysql:host=localhost:3306;dbname=kandil_restro;', 'root', 'mataam@2016');
             } else {
-                $this->db = new \PDO('mysql:host=localhost:3306;dbname=kandil_restro;', 'root', '');
+                $this->db = new \PDO('mysql:host=localhost:3306;dbname=kandil_restro;', 'root', 'mataam@2016');
             }
 
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
