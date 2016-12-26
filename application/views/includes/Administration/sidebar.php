@@ -47,11 +47,8 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <ul class="sidebar-menu">
-
-
             <!--<li class="active"><a href="/Dashboard/"><i class="fa fa-dashboard"></i>Dashboard</a></li>
             <li class=""><a href="/delivery_orders/"><i class="fa fa-cart-arrow-down"></i>Pending Orders</a></li>-->
-
 
             <li class="treeview">
                 <a href="#">
@@ -159,12 +156,6 @@
                 </ul>
             </li>
 
-
-
-
-
-
-
             <li class="treeview">
                 <a href="#"> <i class="fa fa-coffee"></i><span>Restaurant</span> <i class="fa fa-angle-left pull-right" ></i></a>
 
@@ -259,7 +250,7 @@
         <a href='/add_restro_registration/'><i class="fa fa-plus-circle"></i>Add New</a></li>
         </ul>
         </li> -->  
-        
+
         <li class="treeview">
             <a href="#">
                 <i class="fa fa-sitemap"></i>
@@ -706,10 +697,6 @@
                     <?php }
                 ?>
 
-
-
-
-
             </ul>
         </li>
 
@@ -722,7 +709,21 @@
             ?>
             <a href='/commission_reports/'><i class="fa fa-money"></i>Commission Report</a></li>
 
+
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-wechat"></i>
+                <span>LIVE CHAT</span>  <i class="fa fa-angle-left pull-right"></i>
+            </a>
+
+            <ul class="treeview-menu" style="<?php echo $this->uri->segment(1) == "chat_list"?"display:block":"";?>">
+                <li class="<?php echo $this->uri->segment(1)=="chat_list"?"active":"";?>">
+                    <a href='/chat_list'><i class="fa fa-list"></i>CHAT LIST </a>
+                </li>
+            </ul>
+        </li>
         </ul>
     </section>
     <!-- /.sidebar -->
-          </aside>
+</aside>

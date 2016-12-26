@@ -38,6 +38,8 @@
             //$this->load->helper('phpass');
             $this->load->helper('order');
             $this->load->helper('utils');
+            
+            $this->load->model('MessageModel');
         }
 
         public function ajax_customer_login() {
@@ -239,8 +241,7 @@
                     $this->upload->initialize($config);
                     if ($this->upload->do_upload('profile_pic')) {
                         $data['image'] = $this->upload->data();
-                        $customerInfo1['image'] = $data['image']['full_path'];
-
+                        $customerInfo1['image'] = '/profile_images/'.$data['image']['file_name'];
                     } else {
                         $data['image_errors'] = $this->upload->display_errors();
 
@@ -587,17 +588,17 @@
                 } else {
                     $this->UserAddressModel->update($id,$address);
                 }
-                
+
                 redirect('/customer_dashboard/addresses?address_id='.$id);
             }
 
             if (isset($_POST['btndelAddress'])) {
                 $address_id = $this->input->post('address_id');
-                
+
                 if (isset($address_id)) {
                     $this->UserAddressModel->delete($address_id);
                 }
-                
+
                 redirect('/customer_dashboard/addresses');
             }
             if (isset($_POST['btnprofileEdit'])) {
@@ -765,7 +766,7 @@
                 }
             }             
             $data['caterings'] = array_values($restros);
-            
+
             // Getting Pickup Cart Items
             $carts = $this->CartModel->find(4, array('user_id'=>$user_id));
             $restros = array();
@@ -992,6 +993,22 @@
             $city = $this->db->get()->result();
             return $city;
         }
+
+        public function chat_window() {
+
+            $data['errors'] = array();
+
+            $messages = $this->MessageModel->getMessagesWithAdmin($this->session->userdata('user_id'));   
+            foreach($messages as $msg) {
+                $msg->user_image = getImageRealPath($msg->user_image, 'user');
+                $msg->arrow = $msg->from_id==$this->session->userdata('user_id')?'right':'left';
+            }
+
+            $data['messages'] = $messages; //echo json_encode($data); return;
+            $this->load->view("Customer/chat_window", $data);
+        }
     }
+
+
 
 ?>

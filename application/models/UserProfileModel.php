@@ -31,12 +31,12 @@
         {
             $profile = $this->findByUserId($user_id);
             
-            
             $this->db->trans_start();
-            if($profile) {
+            if($profile!==null) {
                 $this->db->where('user_id', $user_id);
                 $this->db->update('user_profiles', $data);
             } else {
+                $data['user_id'] = $user_id;
                  $this->db->insert('user_profiles', $data);
             }
             $this->db->trans_complete();           

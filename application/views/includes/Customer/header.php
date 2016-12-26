@@ -169,10 +169,11 @@ and open the template in the editor.
                             ?>
                         </li>
                         </li>
-                        <?php
+                        <?php 
                             if (@$_SESSION['Customer_User_Id'] != '') {
                             ?>
                             <li><a href="/mycart/" class="cartBtnNew"><span id="cart-count-display"><?php mycartValue($_SESSION['Customer_User_Id']);?></span><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                            <li><a href="javascript:openChatWindow()" class="btn"><i class="fa fa-comments" aria-hidden="true"></i></a></li>
                             <?php
                             } else {
                             ?>
@@ -282,5 +283,16 @@ and open the template in the editor.
         s1.setAttribute('crossorigin','*');
         s0.parentNode.insertBefore(s1,s0);
     })();
+</script>
+<!--End of Tawk.to Script-->
+
+<script>
+    var chatWin = undefined;
+    function openChatWindow() {
+        if(chatWin == undefined || chatWin.closed) {
+            chatWin = window.open('/customer_chat_window', '_blank', ' toolbar=yes, menubar=yes,scrollbars=yes,resizable=no,top=100,left=200,width=900,height=800');
+        } else {
+            chatWin.focus();
+        }
+    }
             </script>
-            <!--End of Tawk.to Script-->

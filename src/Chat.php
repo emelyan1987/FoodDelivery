@@ -17,9 +17,9 @@
             } else {
                 $this->db = new \PDO('mysql:host=localhost:3306;dbname=kandil_restro;', 'root', '');
             }
-            
+
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            
+
         }
 
         public function onOpen(ConnectionInterface $conn) {
@@ -104,13 +104,23 @@
                 }
 
                 $userId = $accessToken["user_id"];
+                $user = $this->db->query("SELECT * FROM users WHERE id=$userId")->fetchObject();
                 $profile = $this->db->query("SELECT * FROM user_profiles WHERE user_id=$userId")->fetchObject();
 
                 $client->userid = $userId;
                 $client->username = $profile->f_name." ".$profile->l_name;
                 $client->gid = $isAdmin ? 'admin' : 'user_'.$userId;
+                $client->user = $user;
+                $client->profile = $profile;
 
-                $client->send(json_encode(array('success'=>true, 'data'=>$profile)));
+                $client->send(json_encode(array(
+                    'event'=>'login',
+                    'data'=>array(
+                        "userid"=>$client->userid,
+                        "username"=>$client->username, 
+                        'profile'=>$profile
+                    )
+                )));
             } catch(\Exception $e) {
                 $client->send(json_encode(array('success'=>false,'data'=>$e->getMessage())));
             }
@@ -184,14 +194,23 @@
                 $data[':to_id'] = ($to=='admin'|| strlen($to)<6 ? null : substr($to,5));    // 'admin' or 'user_276
                 $data[':message'] = $message;
                 $data[':created_time'] = $data[':updated_time'] = date('Y-m-d H:i:s');
-                
+
                 $this->db->beginTransaction();
                 $this->db->prepare("INSERT INTO tbl_messages (from_id,to_id,message,created_time,updated_time) VALUES (:from_id,:to_id,:message,:created_time,:updated_time)")->execute($data);
-                
+
                 $message_id = $this->db->lastInsertId();
+                $this->db->commit();
+
                 $message = $this->db->query("SELECT * FROM tbl_messages WHERE id=$message_id")->fetchObject();
 
-                $this->db->commit();
+                $profile = $client->profile;
+                $user = $client->user;
+
+                $message->user_image = file_exists(dirname(__FILE__)."/..".$profile->image)?$profile->image:'/assets/common/image/male.png';
+                $message->user_fullname = $profile->f_name." ". $profile->l_name;
+                $message->user_mobile = $user->mobile_no;
+                $message->user_email = $user->email;
+                $message->arrow = 'left';
 
                 foreach($this->clients as $c) {
                     if($c->gid == $to) {
@@ -210,8 +229,16 @@
                     }
                 }
 
-
-                $client->send(json_encode(array('success'=>true, 'message'=>$message)));
+                $message->arrow = 'right';
+                $client->send(json_encode(
+                    array(
+                        "event"=>"create message",
+                        "data"=>array(
+                            "userid"=>$client->userid,
+                            "username"=>$client->username,
+                            "message"=>$message
+                    ))
+                ));
             } catch(\Exception $e) {   
                 if($this->db->inTransaction()) $this->db->rollback();
                 $client->send(json_encode(array('success'=>false,'data'=>$e->getMessage())));
@@ -240,9 +267,9 @@
 
                     $msg = $this->db->query("SELECT * FROM tbl_messages WHERE id=$message_id")->fetchObject();
                     $this->db->commit();
-                    
+
                     foreach($this->clients as $c) {
-                        if($c->userid == $msg->to_id) {
+                        if($c->userid == $msg->to_id || ($msg->to_id==0 || $msg->to_id=null) && $c->gid=='admin') {
                             $c->send(json_encode(
                                 array(
                                     "event"=>"update message",
@@ -259,7 +286,15 @@
                     }
                 }
 
-                $client->send(json_encode(array('success'=>true, 'message'=>$msg)));
+                $client->send(json_encode(
+                    array(
+                        "event"=>"update message",
+                        "data"=>array(
+                            "userid"=>$client->userid,
+                            "username"=>$client->username,
+                            "message"=>$msg
+                    ))
+                ));
             } catch(\Exception $e) {
                 if($this->db->inTransaction()) $this->db->rollback();
                 $client->send(json_encode(array('success'=>false,'data'=>$e->getMessage())));
@@ -285,11 +320,11 @@
                 $this->db->prepare('UPDATE tbl_messages SET is_deleted=1 WHERE id=:id')->execute(array(':id'=>$message_id));
 
                 $msg = $this->db->query("SELECT * FROM tbl_messages WHERE id=$message_id")->fetchObject();
-                
+
                 $this->db->commit();
 
                 foreach($this->clients as $c) {
-                    if($c->userid == $msg->to_id) {
+                    if($c->userid == $msg->to_id || ($msg->to_id==0 || $msg->to_id=null) && $c->gid=='admin') {
                         $c->send(json_encode(
                             array(
                                 "event"=>"delete message",
@@ -306,7 +341,16 @@
                 }
 
 
-                $client->send(json_encode(array('success'=>true, 'message'=>$msg)));
+                $client->send(json_encode(
+                    array(
+                        "event"=>"delete message",
+                        "data"=>array(
+                            "userid"=>$client->userid,
+                            "username"=>$client->username,
+                            "message_id"=>$message_id,
+                            "message"=>$msg
+                    ))
+                ));
             } catch(\Exception $e) {
                 if($this->db->inTransaction()) $this->db->rollback();
                 $client->send(json_encode(array('success'=>false,'data'=>$e->getMessage())));
@@ -321,18 +365,18 @@
 
                 $msg = $this->db->query("SELECT * FROM tbl_messages WHERE id=$message_id")->fetchObject();
 
-                if($msg->to_id != $client->userid) {
+                if(($msg->to_id==0||$msg->to_id==null)&&$client->gid!=='admin' || $msg->to_id>0&&$msg->to_id != $client->userid) {
                     throw new \Exception('You are not owner of this message');
                 }       
 
-                $data['message'] = $message;
                 $data['is_read'] = true;
 
                 $this->db->beginTransaction();
                 $this->db->prepare('UPDATE tbl_messages SET is_read=1 WHERE id=:id')->execute(array(':id'=>$message_id));
 
                 $msg = $this->db->query("SELECT * FROM tbl_messages WHERE id=$message_id")->fetchObject();
-                
+                $unread_cnt = $this->db->query("SELECT COUNT(*) AS cnt FROM tbl_messages WHERE (to_id IS NULL OR to_id=0) AND from_id=".$msg->from_id." AND is_read!=1")->fetchObject()->cnt;
+
                 $this->db->commit();
 
                 foreach($this->clients as $c) {
@@ -343,7 +387,8 @@
                                 "data"=>array(
                                     "userid"=>$client->userid,
                                     "username"=>$client->username,
-                                    "message_id"=>$message_id
+                                    "message"=>$msg,
+                                    "unread_cnt"=>$unread_cnt
                             ))
                         ));
 
@@ -353,10 +398,18 @@
                 }
 
 
-                $client->send(json_encode(array('success'=>true, 'message'=>$msg)));
+                $client->send(json_encode(array(
+                    "event"=>"read message",
+                    "data"=>array(
+                        "userid"=>$client->userid,
+                        "username"=>$client->username,
+                        "message"=>$msg,
+                        "unread_cnt"=>$unread_cnt
+                    ))
+                ));
             } catch(\Exception $e) {
                 if($this->db->inTransaction()) $this->db->rollback();
                 $client->send(json_encode(array('success'=>false,'data'=>$e->getMessage())));
             }
         } 
-}
+    }

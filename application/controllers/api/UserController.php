@@ -778,7 +778,7 @@
             if ($this->upload->do_upload('profile_pic')) {
                 $upload_data = $this->upload->data();
                 
-                $imageUrl = '/profile_images/'.$upload_data['file_name'];
+                $imageUrl = '/profile_images/'.$upload_data['file_name']; 
                 
                 $this->UserProfileModel->save($this->user->id, array('image'=>$imageUrl));
                 

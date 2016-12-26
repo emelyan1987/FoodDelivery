@@ -1,5 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
     @ob_start();
+    
+    require APPPATH . '/libraries/CryptoLib.php';
     class Home extends CI_Controller
     {
         function __construct()
@@ -52,7 +54,8 @@
             $this->load->library('tank_auth');
             $this->lang->load('tank_auth');
 
-
+            $this->load->model('Custom_function');
+            $this->load->model('UserAccessTokenModel');
         }
 
         public function index()
@@ -85,7 +88,6 @@
 
 
         public function login(){
-
             if ($this->tank_auth->is_logged_in()) {
                 // logged in
 
@@ -150,6 +152,25 @@
                         $data['login_by_email'])) {
 
                         $role_id=$this->Custom_function->role_id($this->input->post("login"));
+                        $this->session->set_userdata(array('user_role'=>$role_id['user_role']));
+
+                        // Set Access Token
+
+                        $token_data["user_id"] = $this->session->userdata('user_id');   
+                        $token = CryptoLib::randomString(50);
+                        $token_data["access_token"] = $token;        
+
+                        if(isset($_SERVER['HTTP_CLIENT_IP'])) $token_data['ip_address1'] = $_SERVER['HTTP_CLIENT_IP'];
+                        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $token_data['ip_address2'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                        if(isset($_SERVER['HTTP_X_FORWARDED'])) $token_data['ip_address3'] = $_SERVER['HTTP_X_FORWARDED'];
+                        if(isset($_SERVER['HTTP_FORWARDED_FOR'])) $token_data['ip_address4'] = $_SERVER['HTTP_FORWARDED_FOR'];
+                        if(isset($_SERVER['HTTP_FORWARDED'])) $token_data['ip_address5'] = $_SERVER['HTTP_FORWARDED'];
+                        if(isset($_SERVER['REMOTE_ADDR'])) $token_data['ip_address6'] = $_SERVER['REMOTE_ADDR'];
+
+                        $this->UserAccessTokenModel->create($token_data);
+
+                        $_SESSION['access_token'] = $token;
+
                         $return_url= $this->input->post("return_url");
 
                         if($return_url != '')
@@ -1002,7 +1023,7 @@
             $service_id = $this->input->get('service_id');
             if(!isset($service_id)) $service_id = $_SESSION["filter_service"];
             if(!isset($service_id)) redirect('/');
-            
+
             $restro_id =$this->uri->segment('2');
             $location_id =$this->uri->segment('3');            
             $item_id =$this->uri->segment('4');            
@@ -1135,12 +1156,12 @@
         function checkout(){
             $data['errors']=array();
             $user_id = $_SESSION['Customer_User_Id'];
-            
+
             if($this->input->get('service_id')) $_SESSION['filter_service'] = $this->input->get('service_id');
             if($this->input->get('restro_id')) $_SESSION['order_restro_id'] = $this->input->get('restro_id');
             if($this->input->get('location_id')) $_SESSION['order_location_id'] = $this->input->get('location_id');
             if($this->input->get('area_id')) $_SESSION['order_area_id'] = $this->input->get('area_id');
-            
+
             $service_type = $_SESSION['filter_service'];
             $restro_id = $_SESSION['order_restro_id'];
             $location_id = $_SESSION['order_location_id'];

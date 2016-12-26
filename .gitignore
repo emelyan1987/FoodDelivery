@@ -4,3 +4,4 @@ vendor/
 application/config/config.php
 application/config/database.php
 src/Chat.php
+profile_images/

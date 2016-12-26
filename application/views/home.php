@@ -458,13 +458,13 @@
             },
             success: function (response) {
                 console.log('getRestaurantCount',response);                
-                
+
                 if(response.code == 0) {
                     $("#display-newly-opened-restaurant-count").html(response.resource.count);
                 }
             }
         })
-        
+
         $.ajax({
             url: "/api/restaurants/count",
             type: "get",
@@ -474,13 +474,13 @@
             },
             success: function (response) {
                 console.log('getRestaurantCount',response);
-                
+
                 if(response.code == 0) {
                     $("#display-featured-restaurant-count").html(response.resource.count);
                 }
             }
         })
-        
+
         $.ajax({
             url: "/api/restaurants/count",
             type: "get",
@@ -490,13 +490,13 @@
             },
             success: function (response) {
                 console.log('getRestaurantCount',response);
-                
+
                 if(response.code == 0) {
                     $("#display-promotion-restaurant-count").html(response.resource.count);
                 }
             }
         })
-        
+
         $.ajax({
             url: "/api/restaurants/count",
             type: "get",
@@ -506,7 +506,7 @@
             },
             success: function (response) {
                 console.log('getRestaurantCount',response);
-                
+
                 if(response.code == 0) {
                     $("#display-coupon-restaurant-count").html(response.resource.count);
                 }
@@ -523,9 +523,9 @@
         $(".deliveryTab").css("display","none");
         $(".cateringTab").css("display","none");
         $(".reservationTab").css("display","none");
-        
+
         updateRestaurantCount(4);
-        
+
         selected_service = 4;
     }
     //delivery
@@ -538,9 +538,9 @@
         $(".pickupTab").css("display","none");
         $(".cateringTab").css("display","none");
         $(".reservationTab").css("display","none");
-        
+
         updateRestaurantCount(1);
-        
+
         selected_service = 1;
     }
     // catering
@@ -553,9 +553,9 @@
         $(".pickupTab").css("display","none");
         $(".cateringTab").css("display","block");
         $(".reservationTab").css("display","none");
-        
+
         updateRestaurantCount(2);
-        
+
         selected_service = 2;
     }
     // reservation
@@ -568,12 +568,12 @@
         $(".pickupTab").css("display","none");
         $(".cateringTab").css("display","none");
         $(".reservationTab").css("display","block");
-        
+
         updateRestaurantCount(3);
-        
+
         selected_service = 3;
     }
-    
+
     function onSelectRestroKind(kind) {
         location.href = "/filter?service="+selected_service+"&kind="+kind;
     }
