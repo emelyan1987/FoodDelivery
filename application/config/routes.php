@@ -443,6 +443,7 @@ $route['customer_chat_window'] = 'Customer/chat_window';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE; 
 
+
 /* ====================== API URI ========================*/
 $route['api/users'] = '/api/UserController'; 
 $route['api/users/(:num)'] = '/api/UserController/index/$1'; 
@@ -496,6 +497,7 @@ $route['api/orders/(:num)/accept'] = '/api/OrderController/accept/$1';
 
 $route['api/notifications'] = '/api/PushNotificationController'; 
 $route['api/devices'] = '/api/DeviceController'; 
+
 
 
 

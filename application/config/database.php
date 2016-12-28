@@ -81,7 +81,7 @@ $query_builder = TRUE;
  	'dsn'	=> '',
  	'hostname' => (ENVIRONMENT === 'production')?'localhost:3306':'localhost:3306',
  	'username' => (ENVIRONMENT === 'production')?'root':'root',
- 	'password' => (ENVIRONMENT === 'production')?'mataam@2016':'',
+ 	'password' => (ENVIRONMENT === 'production')?'mataam@2016':'mataam@2016',
  	'database' => 'kandil_restro',
  	'dbdriver' => 'mysqli',
  	'dbprefix' => '',
