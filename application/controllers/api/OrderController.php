@@ -47,7 +47,7 @@
             }
             return $valid;
         } 
-        public function  index_get($id=null)
+        public function index_get($id=null)
         {                 
             try {                
                 $this->validateAccessToken();
@@ -67,7 +67,7 @@
                     }
                     foreach($orders as $order) {                       
                         $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
-                        if($order->status != -1) {   // Cancelled
+                        /*if($order->status == ORDER_STATUS_UNDER_PROCESS) {   
                             $now = time();
                             $order_time = strtotime($order->date." ".$order->time);
                             if($restaurant && $now - $order_time >= $restaurant->order_time) {
@@ -75,7 +75,7 @@
                             } else {
                                 $order->status = 1; //Under Process
                             }
-                        }
+                        }*/
                     }
                     
                     object_array_sort_by_column($orders, 'created_time', SORT_DESC);
@@ -469,14 +469,14 @@
                     $orders = $this->RestroTableOrderModel->find($params);
                     foreach($orders as $order) {                       
                         $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, 3);
-                        if($order->status == 2) {   // Accepted or Waiting Payment
+                        /*if($order->status == 2) {   // Accepted or Waiting Payment
                             $weekday = strtolower(date('l', strtotime($order->date)));
                             $seating_info = getSeatingInfo($order->restro_id, $order->location_id, $weekday, $order->time);
 
                             if($seating_info['deposit']==0 || ($seating_info['deposit']>0&&$order->pay_done)) {
                                 $order->status = 3;
                             }
-                        }
+                        }*/
                     }   
                     $resource = $orders;
                 } else {
