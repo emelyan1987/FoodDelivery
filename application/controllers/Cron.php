@@ -154,11 +154,11 @@
                         ) {
                             $update_data = array('status'=>ORDER_STATUS_COMPLETED);
                         } else {
-                            $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reason'=>$this->lang->line('order_time_expired_and_pay_not_done'));                            
+                            $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reson'=>$this->lang->line('order_time_expired_and_pay_not_done'));                            
                         }
                     }   
                 } else {
-                    $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reason'=>$this->lang->line('restaurant_invalid'));
+                    $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reson'=>$this->lang->line('restaurant_invalid'));
                 }
 
                 if(!empty($update_data)) {
