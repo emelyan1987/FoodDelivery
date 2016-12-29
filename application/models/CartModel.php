@@ -67,7 +67,7 @@
             $this->db->trans_complete();
         }
 
-        public function find($service_type, $params=null, $asArray=false, $fields=array()){   
+        public function find($service_type, $params=null, $asArray=false, $allStatus=false){   
             $table_name = $this->tableName($service_type);            
             if($table_name == null) return null;
 
@@ -82,6 +82,8 @@
                 if(isset($params["date"]) && $params["date"]!="") $this->db->where('c.date', $params["date"]);   
                 if(isset($params["min_date"]) && $params["min_date"]!="") $this->db->where('c.date <=', $params["min_date"]);   
                 if(isset($params["max_date"]) && $params["max_date"]!="") $this->db->where('c.date >=', $params["max_date"]);   
+                
+                if(!$allStatus) $this->db->where('c.status', CART_STATUS_ACTIVE);
             }  
 
             $this->db->order_by('date DESC');

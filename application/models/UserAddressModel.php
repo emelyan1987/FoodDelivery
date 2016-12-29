@@ -59,9 +59,11 @@
             $this->db->join('area AS a', 'a.id=u.area_id', 'left');
             $this->db->join('city AS c', 'c.id=a.city_id', 'left');
             if(isset($params)) {
+                if(isset($params["id"]) && $params["id"]!="") $this->db->where('u.id', $params["id"]);
                 if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('u.user_id', $params["user_id"]);
                 if(isset($params["city_id"]) && $params["city_id"]!="") $this->db->where('u.city_id', $params["city_id"]);
                 if(isset($params["area_id"]) && $params["area_id"]!="") $this->db->where('u.area_id', $params["area_id"]);
+                if(isset($params["area_ids"]) && $params["area_ids"]!="") $this->db->where_in('u.area_id', $params["area_ids"]);
             }  
             $result = $this->db->get()->result();
 

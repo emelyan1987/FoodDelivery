@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
     @ob_start();
-    
+
     require APPPATH . '/libraries/CryptoLib.php';
     class Home extends CI_Controller
     {
@@ -41,8 +41,7 @@
             $this->load->model('RestroLocationModel'); 
             $this->load->model('RestroServiceCommissionModel'); 
             $this->load->model('RestroWorkingHourModel'); 
-            $this->load->model('RestroPaymentMethodModel'); 
-            $this->load->model('RestroCityAreaModel');  
+            $this->load->model('RestroPaymentMethodModel');             
             $this->load->model('AreaModel');  
             $this->load->model('RestroPromotionModel');  
             $this->load->model('RestroPromotionItemModel');  
@@ -575,9 +574,20 @@
             $data['errors']=array();
             $restro_id =$this->uri->segment('2');
             $location_id =$this->uri->segment('3');
+
+            if($this->input->get('service_id')) $_SESSION["filter_service"] = $this->input->get('service_id');
+
             $service_id = $_SESSION["filter_service"];
             //$data['restroInfo'] = $this->Home_Restro->view_delivery_restro_details($restro_id);
+
+            if(!isset($restro_id) || !isset($location_id) || !isset($service_id)) {
+                redirect('/');
+            }
             $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_id); 
+
+            if($restro==null) {
+                redirect('404_override');
+            }
             $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
             $data['restroInfo'] = $restro;
             $data['restroCat'] = $this->RestroItemCategoryModel->find(array('location_id'=>$location_id,'service_id'=>$service_id));
@@ -588,28 +598,15 @@
 
         public function ajax_show_item_by_cat(){
             $data['errors']=array();
-            $item_cat =$this->input->post('ids');
-            $restro_id =$this->input->post('restro_id');
-            $type =$this->input->post('act');
-            $RestroUserId = $this->Home_Restro->getRestroUserId($restro_id);
+            $category_id = $this->input->post('category_id');
 
-            $data['restro_item'] = $this->Home_Restro->ajax_show_item_by_cat($RestroUserId,$item_cat);
-            $data['restro_id'] = $restro_id;
+            $data['restro_item'] = $this->RestroItemModel->find(array('category_id'=>$category_id));
+
+            $data['restro_id'] = $this->input->post('restro_id');
+            $data['location_id'] = $this->input->post('location_id');
 
 
-            if($type == 'DELIVERY')
-            {
-                $this->load->view('ajax_show_item_by_cat',$data);
-            }
-            if($type == 'PICKUP')
-            {
-                $this->load->view('ajax_pickup_item_by_cat',$data);
-            }
-
-            if($type == 'CATERING')
-            {
-                $this->load->view('ajax_catering_item_by_cat',$data);	
-            }
+            $this->load->view('ajax_show_item_by_cat',$data);
         }
         public function career(){
             $data['errors']=array();
@@ -1181,7 +1178,7 @@
                 'location_id'=>$location_id,
                 ), true); 
 
-            $data['addressData'] = $this->UserAddressModel->find(array('user_id'=>$user_id));
+
 
             $data['getPaymentgateways'] = $this->Home_Restro->getPaymentgatewaysByService($restro_id, $service_type);
 
@@ -1191,6 +1188,29 @@
             {
                 redirect('/');
             }
+            
+            if(isset($_POST['btnUserAddressSave'])) {
+                $address = array();
+                $address['area_id'] = $this->input->post('area_id');
+                $address['city_id'] = $this->AreaModel->findById($address['area_id'])->city_id;
+                $address['street'] = $this->input->post('street');
+                $address['block'] = $this->input->post('block');
+                $address['appartment'] = $this->input->post('appartment');
+                $address['floor'] = $this->input->post('floor');
+                $address['extra_directions'] = $this->input->post('extra_directions');
+                $address['house'] = $this->input->post('house');
+                $address['address_name'] = $this->input->post('address_name');
+                $address['is_primary'] = $this->input->post('is_primary')&&$this->input->post('is_primary')=='on' ? 1 : 0;
+                $address['user_id'] = $user_id; 
+
+                if($address['is_primary']) {
+                    $this->UserAddressModel->updateByParams(array('user_id'=>$user_id), array('is_primary'=>false));
+                }
+                $this->UserAddressModel->create($address);
+                
+                unset($_POST['btnUserAddressSave']);
+            }
+            
 
             $datestring = "%Y-%m-%d";
             $timestring = "%h:%i %a";
@@ -1201,9 +1221,24 @@
 
             $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_type); 
             $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id));
-            $data['restroInfo'] = $restro;
 
+            if($service_type == SERVICE_DELIVERY || $service_type == SERVICE_CATERING) {
 
+                $restroCityArea = $this->RestroCityAreaModel->findOne(array("restro_id"=>$restro_id,"location_id"=>$location_id, "service_id"=>$service_type));
+
+                $area_ids = explode(',', $restroCityArea->area);
+                $restro->areas = $this->AreaModel->find(array('ids'=>$area_ids)); 
+                
+                $data['addressData'] = $this->UserAddressModel->find(array('user_id'=>$user_id, 'area_ids'=>$area_ids));
+                if(count($data['addressData']) == 0) {
+                    $data['errors']['address_not_exist'] = "There are no addresses matched to restaurant's service areas";
+                }
+            } else {
+                $data['addressData'] = $this->UserAddressModel->find(array('user_id'=>$user_id));
+            }
+            $data['restroInfo'] = $restro; 
+
+            
             if(isset($_POST['btncheckout']))
             {
                 $this->form_validation->set_rules('address_id', 'Address', 'required');

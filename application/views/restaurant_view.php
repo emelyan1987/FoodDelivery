@@ -145,7 +145,7 @@
                             $i = 1;
                             foreach ($restroCat as $res_cat => $cat_id) {
                             ?>
-                            <li onclick='datafetchbycat("<?php echo $cat_id->id;?>");'>
+                            <li onclick='datafetchbycat("<?php echo $cat_id->id;?>")'>
                                 <a data-toggle="tab" href="#tab<?php echo $cat_id->id;?>" aria-expanded="true">
                                     <img class="menuListImg" src="/assets/Customer/img/icon/smallLogoCss.png">
                                     <span class="menuListTitle"><?php get_itemcatName($cat_id->id);?></span>
@@ -280,14 +280,12 @@
     $this->load->view("includes/Customer/footer");
 ?>
 <script>
-    function datafetchbycat(str){
-        var item_cat = str;
-        var restro_id = document.getElementById("restroID").value;
+    function datafetchbycat(category_id){ console.log(category_id);
         $.ajax({
             url: "/ajax_show_item_by_cat/",
             type: "post",
-            data: {ids:item_cat,restro_id:restro_id,act:'DELIVERY'} ,
-            success: function (response) {
+            data: {category_id:category_id, restro_id:'<?php echo $restroInfo->restro_id;?>', location_id:'<?php echo $restroInfo->location_id;?>'} ,
+            success: function (response) { console.log(response);
                 $("#tab1").html(response);
             }
         })

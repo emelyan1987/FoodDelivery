@@ -738,9 +738,12 @@
             $data['CcartData'] = $this->Home_Restro->view_my_catering_cart($user_id);
             $data['RcartData'] = $this->Home_Restro->view_my_table_cart($user_id);*/
 
-
+            $params = array(
+                'user_id'=>$user_id
+            );
+            
             // Getting Delivery Cart Items
-            $carts = $this->CartModel->find(1, array('user_id'=>$user_id));
+            $carts = $this->CartModel->find(1, $params);
             $restros = array();
             foreach($carts as $cart) {
                 if(!isset($restros[$cart->location_id])) {
@@ -754,7 +757,7 @@
             $data['deliveries'] = array_values($restros);
 
             // Getting Catering Cart Items
-            $carts = $this->CartModel->find(2, array('user_id'=>$user_id));
+            $carts = $this->CartModel->find(2, $params);
             $restros = array();
             foreach($carts as $cart) {
                 if(!isset($restros[$cart->location_id])) {
@@ -768,7 +771,7 @@
             $data['caterings'] = array_values($restros);
 
             // Getting Pickup Cart Items
-            $carts = $this->CartModel->find(4, array('user_id'=>$user_id));
+            $carts = $this->CartModel->find(4, $params);
             $restros = array();
             foreach($carts as $cart) {
                 if(!isset($restros[$cart->location_id])) {

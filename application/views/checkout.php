@@ -4,6 +4,24 @@
 
     $payMethod = explode(',', $restroInfo->payment_method);
 
+    if($_SESSION['filter_service'] == 1) {
+        $borderClass = "greenBorder";
+        $bulletinIcon = "/assets/Customer/img/icon/smallLogo.png";
+        $color = "#73B720";
+    } else if($_SESSION['filter_service'] == 2) {
+        $borderClass = "orangeBorder";
+        $bulletinIcon = "/assets/Customer/img/icon/smallLogoOrange.png";
+        $color = "#FF8205";
+    } else if($_SESSION['filter_service'] == 3) {
+        $borderClass = "redBorder";
+        $bulletinIcon = "/assets/Customer/img/icon/smallLogoRed.png";
+        $color = "#D31E03";
+    } else if($_SESSION['filter_service'] == 4) {
+        $borderClass = "blueBorder";
+        $bulletinIcon = "/assets/Customer/img/icon/smallLogoBlue.png";
+        $color = "#2793FF";
+    }
+
 ?>
 <style>
     body{
@@ -64,8 +82,8 @@
         border-radius: 9px;
         width: 136px;
     }
-    .green {
-        color: #73b720;
+    .label-color {
+        color: <?php echo $color;?>;
     }
     .btn-warning-shade{
         background-color: #fec707;
@@ -142,6 +160,9 @@
     }
     .roundedOne > label > span {
         padding-left: 34px;
+    }
+    .roundedOne label:after{
+        background: <?php echo $color;?>;
     }
     .btn-yellow-new-sm {
         box-shadow: 0px -31px 0px rgba(0, 0, 0, 0.18) inset !important;
@@ -236,32 +257,32 @@
                         <h4 class="text-center"><?php echo ucwords($restroInfo->restro_name);?></h4>
                     </div>
                     <div class="col-sm-12">
-                    <div class="row">
-                        <label class="list-label">Min. Order:</label>
-                        <label class="list-data">&nbsp;KD <?php echo number_format($restroInfo->min_order, 3);?></label>
+                        <div class="row">
+                            <label class="list-label">Min. Order:</label>
+                            <label class="list-data">&nbsp;KD <?php echo number_format($restroInfo->min_order, 3);?></label>
                         </div>
                         <div class="row">
-                        <label class="list-label">Delivery Time:</label>
-                        <label class="list-data">&nbsp;<?php echo $restroInfo->order_time . " Min. ";?></label>
+                            <label class="list-label">Date/Time(Planned Order):</label>
+                            <label class="list-data">&nbsp;<?php echo $restroInfo->order_time . " Min. ";?></label>
                         </div>
                         <div class="row">
-                        <label class="list-label">Payment:</label>
-                        <label class="list-data">&nbsp;<?php
-                                $payArray = explode(',', $restroInfo->payment_method);
-                                if (in_array(1, $payArray)) {
-                                    echo '<img class="" alt="" src="/assets/Customer/img/cash.png">';
-                                }
-                                if (in_array(2, $payArray)) {
-                                    echo '<img class="" alt="" src="/assets/Customer/img/knet.png">';
-                                }
-                                if (in_array(3, $payArray)) {
-                                    echo '<img class="" alt="" src="/assets/Customer/img/card.png">';
-                                }
-                                if (in_array(4, $payArray)) {
-                                    echo '<img class="" alt="" src="/assets/Customer/img/paypal.png">';
-                                }
-                            ?>
-                        </label>
+                            <label class="list-label">Payment:</label>
+                            <label class="list-data">&nbsp;<?php
+                                    $payArray = explode(',', $restroInfo->payment_method);
+                                    if (in_array(1, $payArray)) {
+                                        echo '<img class="" alt="" src="/assets/Customer/img/cash.png">';
+                                    }
+                                    if (in_array(2, $payArray)) {
+                                        echo '<img class="" alt="" src="/assets/Customer/img/knet.png">';
+                                    }
+                                    if (in_array(3, $payArray)) {
+                                        echo '<img class="" alt="" src="/assets/Customer/img/card.png">';
+                                    }
+                                    if (in_array(4, $payArray)) {
+                                        echo '<img class="" alt="" src="/assets/Customer/img/paypal.png">';
+                                    }
+                                ?>
+                            </label>
                         </div>
                         <div>
                             <div id="rating-view" style="display:inline-block;"></div>
@@ -281,6 +302,13 @@
                         <label class="list-label">Address:</label>
                         <label>&nbsp;<?php echo $restroInfo->street." ".$restroInfo->building." ".$restroInfo->block." ".$restroInfo->area." ".$restroInfo->city;?></label>                    
                     </div>
+                    <?php if($_SESSION['filter_service']==SERVICE_DELIVERY || $_SESSION['filter_service']==SERVICE_CATERING){?>
+
+                        <div class="col-sm-12">
+                            <div class="list-label">Service Areas:</div>
+                            <div><?php foreach($restroInfo->areas as $area){echo $area->name." ".$area->city_name.", ";}?></div>                    
+                        </div>
+                        <?php }?>
                 </div>
             </div>
             <div class="col-md-5">
@@ -358,8 +386,8 @@
                                     <div class="border">
                                         <div class="col-sm-12" style="padding: 0 5px;">
                                             <p>Loyalty Points</p>
-                                            <div class="green">Gained/Used: <span id="loyalty-gained-points-display">16</span>pt/<span id="loyalty-used-points-display">16</span>pt</div>
-                                            <div class="green">Balance: <span id="loyalty-balance-points-display">16</span>pt</div>
+                                            <div class="label-color">Gained/Used: <span id="loyalty-gained-points-display">16</span>pt/<span id="loyalty-used-points-display">16</span>pt</div>
+                                            <div class="label-color">Balance: <span id="loyalty-balance-points-display">16</span>pt</div>
                                         </div>
                                     </div>
                                 </div>
@@ -367,8 +395,8 @@
                                     <div class="border">
                                         <div class="col-sm-12" style="padding: 0 5px;">
                                             <p>Mataam Points</p>
-                                            <div class="green">Gained/Used: <span id="mataam-gained-points-display">16</span>pt/<span id="mataam-used-points-display">16</span>pt</div>
-                                            <div class="green">Balance: <span id="mataam-balance-points-display">16</span>pt</div>
+                                            <div class="label-color">Gained/Used: <span id="mataam-gained-points-display">16</span>pt/<span id="mataam-used-points-display">16</span>pt</div>
+                                            <div class="label-color">Balance: <span id="mataam-balance-points-display">16</span>pt</div>
                                         </div>
                                     </div>
                                 </div>
@@ -379,10 +407,10 @@
                                 <div class="col-sm-12" style="padding:0px 3px">
                                     <div class="border" style="">
                                         <div class="col-sm-12" style="padding: 0 5px;">
-                                            <div>Subtotal: <span class="green pull-right">KD&nbsp;<span id="subtotal-display">0.000</span></span></div>
-                                            <div>Discount: <span class="green pull-right">KD&nbsp;<span id="discount-display">0.000</span></span></div>
-                                            <div>Delivery Charges: <span class="green pull-right">KD&nbsp;<span id="charge-display">0.000</span></span></div>
-                                            <div>Grand Total: <span class="green pull-right">KD&nbsp;<span id="grandtotal-display">0.000</span>
+                                            <div>Subtotal: <span class="label-color pull-right">KD&nbsp;<span id="subtotal-display">0.000</span></span></div>
+                                            <div>Discount: <span class="label-color pull-right">KD&nbsp;<span id="discount-display">0.000</span></span></div>
+                                            <div>Delivery Charges: <span class="label-color pull-right">KD&nbsp;<span id="charge-display">0.000</span></span></div>
+                                            <div>Grand Total: <span class="label-color pull-right">KD&nbsp;<span id="grandtotal-display">0.000</span>
                                                 </span></div>
                                         </div>
                                     </div>
@@ -404,22 +432,18 @@
                         <div class="col-md-12">
                             <div class="col-md-6">
                                 <h4 class="text-uppercase">Address</h4>
+                                <span class="red"><?php echo form_error('address_id');?><?php echo isset($errors['address_not_exist'])?$errors['address_not_exist']:"";?></span>
                             </div>
                             <div class="col-md-6">
                                 <select class="addressSelection" name="address_id" onchange="changeAddress(this.value)" id="CustomerAddressData">
                                     <option value="">-Select Address-</option>
-                                    <?php
-                                        foreach ($addressData as $add => $address):
-                                        ?>
+                                    <?php foreach ($addressData as $add => $address):?>
                                         <option value="<?php echo $address->id;?>"><?php echo $address->address_name;?></option>
-                                        <?php
-                                            endforeach;
-                                    ?>
+                                        <?php endforeach; ?>
                                 </select>
-                                <span class="red"><?php echo form_error('useraddress');?></span>
-                                <!--<div class="pull-right">
-                                    <a data-toggle="modal" data-target="#customerAddress" style="cursor: pointer;"><span class="checkoutEdit"><i class="fa fa-home"></i> Add New Address</span></a>
-                                </div>-->
+                                <div class="pull-right">
+                                    <a data-toggle="modal" data-target="#new-address-modal" style="cursor: pointer;"><i class="fa fa-home"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -654,103 +678,91 @@
     $this->load->view("includes/Customer/footer");
 ?>
 
-
-<!-- Modal -->
-<div id="customerAddress" class="modal fade" role="dialog" data-backdrop="static" >
+<div id="new-address-modal" class="modal fade" role="dialog" data-backdrop="static" >
     <div class="modal-dialog">
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Address</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="msgadress">
+            <form action="" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Address</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="msgadress">
 
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label for="user-address-area-select" class="col-xs-3 col-form-label">Area</label>
+                                    <div class="col-xs-9">
+                                        <select class="form-control" name="area_id" id="user-address-area-select" required>
+                                            <option value="">-Select Area-</option>
+                                            <?php foreach ($restroInfo->areas as $index => $area):?>
+                                                <option value="<?php echo $area->id;?>"><?php echo $area->name;?>, <?php echo $area->city_name;?></option>
+                                                <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-name-input" class="col-xs-3 col-form-label">Address Name</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="text" id="user-address-name-input" name="address_name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-street-input" class="col-xs-3 col-form-label">Street</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="text" id="user-address-street-input" name="street" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-appartment-input" class="col-xs-3 col-form-label">Appartment</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="text" id="user-address-appartment-input" name="appartment" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-block-input" class="col-xs-3 col-form-label">Block</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="text" id="user-address-block-input" name="block" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-floor-input" class="col-xs-3 col-form-label">Floor</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="text" id="user-address-floor-input" name="floor" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-house-input" class="col-xs-3 col-form-label">House Number</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="text" id="user-address-house-input" name="house" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-direction-textarea" class="col-xs-3 col-form-label">Extra Direction</label>
+                                    <div class="col-xs-9">
+                                        <textarea type="textarea" class="form-control" id="user-address-direction-textarea" name="extra_directions"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-address-primary-checkbox" class="col-xs-3 col-form-label">Set as Primary</label>
+                                    <div class="col-xs-9">
+                                        <input type="checkbox" id="user-address-primary-checkbox" name="is_primary" class="form-control">
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                        <form action="" method="post">
-                            <div class="col-md-6">
-                                <h3>Billing Address</h3>
-
-                                <div class="form-group">
-                                    <label for="email">Full Name:</label>
-                                    <input type="text" class="form-control" id="billing_full_name" name="billing_full_name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Area:</label>
-                                    <input type="text" class="form-control" id="billing_city" name="billing_city">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Building:</label>
-                                    <input type="text" class="form-control" id="billing_addres_1" name="billing_addres_1">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Block:</label>
-                                    <input type="text" class="form-control" id="billing_address_2" name="billing_address_2">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="email">Floor:</label>
-                                    <input type="text" class="form-control" id="billing_state" name="billing_state">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Street:</label>
-                                    <input type="text" class="form-control" id="billing_zip_code" name="billing_zip_code">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Apartment:</label>
-                                    <input type="text" class="form-control" id="billing_phoneno" name="billing_phoneno">
-                                </div>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="1" onchange="toggleCheckbox(this)"> Shipping Address Same as billing </label>
-                                </div>
-
-                            </div>
-                            <div class="col-md-6">
-                                <h3>Shipping Address</h3>
-
-                                <div class="form-group">
-                                    <label for="email">Full Name:</label>
-                                    <input type="text" class="form-control" id="shipping_full_name" name="shipping_full_name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Area:</label>
-                                    <input type="text" class="form-control" id="shipping_city" name="shipping_city">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Building:</label>
-                                    <input type="text" class="form-control" id="shipping_address_1" name="shipping_address_1">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Block:</label>
-                                    <input type="text" class="form-control" id="shipping_address_2" name="shipping_address_2">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="email">Floor:</label>
-                                    <input type="text" class="form-control" id="shipping_state" name="shipping_state">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Street:</label>
-                                    <input type="text" class="form-control" id="shipping_zip_code" name="shipping_zip_code">
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd">Apartment:</label>
-                                    <input type="text" class="form-control" id="shipping_phoneno" name="shipping_phoneno">
-                                </div>
-                                <button type="button" class="btn btn-success" name="btnaddressave" onclick="saveAddress()">Save</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-
-            </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" name="btnUserAddressSave">Save</button>
+                </div>
+            </form>
         </div>
 
     </div>
@@ -919,7 +931,7 @@
 </script>
 
 <script>
-    function changeAddress(address_id){
+    function changeAddress(address_id){ console.log(address_id);
         if(address_id != '')
         {
             $.ajax({
@@ -975,14 +987,14 @@
 
     function updateCartData() {
         /*$.ajax({
-            url: "/api/orders/cart/count?service_type=<?php echo $_SESSION['filter_service'];?>",
-            type: "GET",
-            success: function(response) {
-                console.log('getCartCount response', response);
-                if(response.code == 0) {
-                    $("#cart-count-display").html(response.resource);
-                }
-            }
+        url: "/api/orders/cart/count?service_type=<?php echo $_SESSION['filter_service'];?>",
+        type: "GET",
+        success: function(response) {
+        console.log('getCartCount response', response);
+        if(response.code == 0) {
+        $("#cart-count-display").html(response.resource);
+        }
+        }
         });*/
         $.ajax({
             url: "/api/orders/point?service_type=<?php echo $_SESSION['filter_service'];?>&restro_id=<?php echo $_SESSION['order_restro_id'];?>&location_id=<?php echo $_SESSION['order_location_id'];?>",

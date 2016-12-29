@@ -360,13 +360,12 @@ return $results['table_no'];
 function mycartValue($user_id) {
 
 	$CI = &get_instance();
-	$mod = $CI->load->model('Customer/Home_Restro');
-	$data['DcartData'] = $CI->Home_Restro->view_my_cart($user_id);
-	$data['PcartData'] = $CI->Home_Restro->view_my_pickup_cart($user_id);
-	$data['CcartData'] = $CI->Home_Restro->view_my_catering_cart($user_id);
-	$data['RcartData'] = $CI->Home_Restro->view_my_table_cart($user_id);
-
-	echo count($data['DcartData']) + count($data['PcartData']) + count($data['CcartData']) + count($data['RcartData']);
+    
+    $CI->load->model('CartModel');
+    $params = array('user_id'=>$user_id);
+    $carts = array_merge($CI->CartModel->find(SERVICE_DELIVERY, $params), $CI->CartModel->find(SERVICE_CATERING, $params), $CI->CartModel->find(SERVICE_PICKUP, $params));
+    
+    echo count($carts);
 }
 
 function getOwnerIdByCode($code) {

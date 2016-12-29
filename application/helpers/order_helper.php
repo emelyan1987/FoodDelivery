@@ -3,7 +3,8 @@
         $CI = & get_instance();                     
         $carts = $CI->CartModel->find($service_type, array(
             "user_id"   => $user_id, 
-            "restro_id" => $restro_id
+            "restro_id" => $restro_id,
+			"location_id" => $location_id
         ));       
         if(!$carts) {
             throw new Exception('Cart list ' . $CI->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 

@@ -801,7 +801,7 @@
                 if(isset($service_type)) {
                     $carts = $this->CartModel->find($service_type, $params);
                 } else {
-                    $carts = array_merge($this->CartModel->find(1, $params), $this->CartModel->find(2, $params), $this->CartModel->find(3, $params), $this->CartModel->find(4, $params));                        
+                    $carts = array_merge($this->CartModel->find(SERVICE_DELIVERY, $params), $this->CartModel->find(SERVICE_CATERING, $params), $this->CartModel->find(SERVICE_PICKUP, $params));                        
                 }       
 
                 if(!$carts) {

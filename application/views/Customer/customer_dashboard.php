@@ -909,7 +909,7 @@
                                                         <a href="#" data-toggle="modal" data-target="#areaSelectModal" style="font-size: 14px;" class="btn btn-yellow btn-yellow-new-sm btn-block" onclick="onClickAddPromotionToCart(<?php echo $proData->id;?>, <?php echo $proData->restro_id;?>, <?php echo $proData->location_id;?>, <?php echo $proData->service_id;?>)"><img src="/assets/Administration/images/icon/cartIcon.png" alt="" style="height: 20px;"> ADD TO CART </a>
                                                     </div>
                                                     <div class="col-md-6 col-xs-12 col-sm-8">
-                                                        <a href="/restaurant_view/<?php echo $proData->restro_id;?>/<?php echo $proData->location_id;?>" style="font-size: 14px !important;background-color:<?php echo $color;?>;border-color:<?php echo $color;?>;" class="btn btn-block btn_new_section btn-success-new pull-right">GO TO MENU <i class="fa fa-caret-right"></i></a>
+                                                        <a href="#" data-toggle="modal" data-target="#areaSelectModal" style="font-size: 14px !important;background-color:<?php echo $color;?>;border-color:<?php echo $color;?>;" onclick="onClickGoToMenuPromotion(<?php echo $proData->restro_id;?>,<?php echo $proData->location_id;?>, <?php echo $proData->service_id;?>)" class="btn btn-block btn_new_section btn-success-new pull-right">GO TO MENU <i class="fa fa-caret-right"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1474,6 +1474,73 @@
             });
         } else {
             location.href = "/add_promo_to_cart?service_id="+service_type+"&promo_id="+promo_id;
+        }
+    }
+    
+    function onClickGoToMenuPromotion(restro_id, location_id, service_type) {
+        if(service_type == 1 || service_type == 2) {
+
+            $.ajax({
+                url: "/api/restaurants/"+restro_id+"/areas?location_id="+location_id+"&service_id="+service_type,
+                type: "GET",
+                success: function(response) {
+                    console.log('getRestroAreas response', response);                
+
+                    if(response.code == 0 && response.resource.length>0) {
+                        var color = "";
+                        if(service_type == 1) {
+                            color = "green";
+                        } else if(service_type == 2) {
+                            color = "orange";
+                        }
+                        var trees = [];
+                        response.resource.forEach(function(area){
+                            console.log(area);
+                            if(trees[area.city_id] === undefined) {
+                                trees[area.city_id] = {
+                                    text: area.city_name, 
+                                    selectable: false, 
+                                    state: {
+                                        expanded:true
+                                    },
+                                    nodes: []
+                                };
+                            }
+                            trees[area.city_id].nodes.push({
+                                areaId: area.id,
+                                text: area.name,
+                                icon: 'custom-icon-normal icon-item',
+                                selectedIcon: 'custom-icon-normal icon-item-selected-'+color
+                            });
+                        });
+
+                        console.log(Object.values(trees));
+                        $('#area-tree-view').treeview({
+                            data: Object.values(trees),
+                            highlightSelected: false,
+                            expandIcon: 'custom-icon-large icon-bulletin-gray',
+                            collapseIcon: 'custom-icon-large icon-bulletin-'+color,
+                            color: '#6B6B6B',
+                            backColor: '#F5F5F5',
+                            onhoverColor: '#F5F5F5',
+                            borderColor: '#FFFFFF'
+                        });
+
+                        $('#btn-area-select-submit').click(function(e){
+                            var selectedNodes =  $('#area-tree-view').treeview('getSelected'); console.log(selectedNodes); //return;
+
+                            if(selectedNodes.length == 0) {
+                                alert('Please select an area'); return;
+                            }
+                            location.href = "/restaurant_view/"+restro_id+"/"+location_id+"?service_id="+service_type+"&area_id="+selectedNodes[0].areaId;
+                        });
+                    } else {
+                        alert("Can't find restro areas");
+                    }
+                }
+            });
+        } else {
+            location.href = "/restaurant_view/"+restro_id+"/"+location_id+"?service_id="+service_type;
         }
     }
 </script>
