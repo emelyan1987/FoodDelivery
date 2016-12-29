@@ -13,7 +13,9 @@
 
             $this->load->model('RestaurantModel');
             $this->load->model('OrderModel');
+            $this->load->model('CartModel');
             $this->lang->load('cron');
+            $this->load->helper('order');
         }
 
         public function index()
@@ -126,7 +128,8 @@
         }
 
         public function update_status() {
-            $this->update_order_status();
+            //$this->update_order_status();
+            $this->update_cart_status();
         }
 
         /**
@@ -137,32 +140,57 @@
             $params = array('status!='=>ORDER_STATUS_COMPLETED,'status!='=>ORDER_STATUS_CANCELED);
             $orders = array_merge($this->OrderModel->find(1, $params), $this->OrderModel->find(2, $params), $this->OrderModel->find(3, $params), $this->OrderModel->find(4, $params)); 
 
+            $now = time();
             foreach($orders as $order) {                       
                 $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
 
                 $update_data = array();
                 if($restaurant) {
-                    $now = time();
                     $order_time = strtotime($order->date." ".$order->time);
-                    if(
-                        $order->service_type != SERVICE_RESERVATION && ($now - $order_time) > $restaurant->order_time ||
-                        $order->service_type == SERVICE_RESERVATION && $now > $order_time
-                    ) {
-                        if(
-                            $order->service_type != SERVICE_RESERVATION && $order->pay_done ||
-                            $order->service_type == SERVICE_RESERVATION && $order->status == ORDER_STATUS_ACCEPTED && $order->pay_done
-                        ) {
-                            $update_data = array('status'=>ORDER_STATUS_COMPLETED);
-                        } else {
-                            $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reson'=>$this->lang->line('order_time_expired_and_pay_not_done'));                            
+
+                    if($order->service_type == SERVICE_RESERVATION) {
+                        if($now > $order_time) {
+                            if($order->status == ORDER_STATUS_ACCEPTED) {
+                                $weekday = strtolower(date('l', $order_time));
+                                $seating_info = getSeatingInfo($order->restro_id, $order->location_id, $weekday, $order->time);
+
+                                if($seating_info['deposit']==0 || ($seating_info['deposit']>0&&$order->pay_done)) {
+                                    $update_data = array('status'=>ORDER_STATUS_COMPLETED);
+                                } else {
+                                    $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reson'=>$this->lang->line('order_time_expired_and_pay_not_done'));
+                                } 
+                            } else {
+                                $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reson'=>$this->lang->line('order_time_expired_and_pay_not_done'));
+                            }
                         }
-                    }   
+                    } else {
+                        if($now > $order_time + $restaurant->order_time) {
+                            if($order->pay_done) {
+                                $update_data = array('status'=>ORDER_STATUS_COMPLETED);
+                            } else {
+                                $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reson'=>$this->lang->line('order_time_expired_and_pay_not_done'));
+                            }
+                        } 
+                    }
                 } else {
                     $update_data = array('status'=>ORDER_STATUS_CANCELED, 'reject_reson'=>$this->lang->line('restaurant_invalid'));
                 }
 
                 if(!empty($update_data)) {
                     $this->OrderModel->update($order->service_type, $order->id, $update_data);
+                }
+            }
+        }
+
+        private function update_cart_status() {            
+            $params = array('status!='=>CART_STATUS_CANCELED);
+            $carts = array_merge($this->CartModel->find(1, $params), $this->CartModel->find(2, $params), $this->CartModel->find(4, $params));
+            
+            $now = time();
+            foreach($carts as $cart) {
+                $time = strtotime($cart->created_time); 
+                if($now > $time + CART_TIMEOUT) {
+                    $this->CartModel->update($cart->service_type, $cart->id, array('status'=>CART_STATUS_CANCELED));
                 }
             }
         }

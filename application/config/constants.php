@@ -112,3 +112,6 @@ defined('SERVICE_DELIVERY')     OR define('SERVICE_DELIVERY', 1);
 defined('SERVICE_CATERING')     OR define('SERVICE_CATERING', 2); 
 defined('SERVICE_RESERVATION')  OR define('SERVICE_RESERVATION', 3); 
 defined('SERVICE_PICKUP')       OR define('SERVICE_PICKUP', 4); 
+
+/* =========== TIME CONSTANTS ============= */
+defined('CART_TIMEOUT')     OR define('CART_TIMEOUT', 30 * 60); 

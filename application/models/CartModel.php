@@ -45,6 +45,8 @@
 
             $insert_id = null;
             $this->db->trans_start();
+            
+            $data['created_time'] = $data['updated_time'] = date('Y:m:d H:i:s');
             if($this->db->insert($table_name, $data)) {
                 $insert_id = $this->db->insert_id();
             }
@@ -58,6 +60,7 @@
             $table_name = $this->tableName($service_type);            
             if($table_name == null) return;
 
+            $data['updated_time'] = date('Y:m:d H:i:s');
             $this->db->trans_start();
             $this->db->where('id',  $id);
             $this->db->update($table_name, $data);

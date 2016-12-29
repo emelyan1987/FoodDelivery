@@ -526,6 +526,7 @@
                 $params["spacial_request"] = $this->post('spacial_request');
                 $params["variation_ids"] = isset($variation_ids) ? $variation_ids : 0;    // variation ids string delimited by comma(,)
                 $params["date"] = date("Y-m-d H:i:s");
+                $params["status"] = CART_STATUS_ACTIVE;
                 $insert_id = $this->CartModel->create($service_type, $params);
                 $resource = $this->CartModel->findById($service_type, $insert_id);
                 $this->response(array(

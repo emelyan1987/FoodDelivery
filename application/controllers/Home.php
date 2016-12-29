@@ -1054,6 +1054,7 @@
                 $CartArray['user_id'] = $user_id;
                 $CartArray['spacial_request'] = $this->input->post('spacial_request'); 
                 $CartArray['variation_ids'] = $variation_ids;
+                $CartArray["status"] = CART_STATUS_ACTIVE;
 
                 if(isset($cart_item_id)) {
                     $this->CartModel->update($service_id, $cart_item_id, $CartArray);
