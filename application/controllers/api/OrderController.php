@@ -525,8 +525,9 @@
                 $params["location_id"] = $item->restro_id;
                 $params["spacial_request"] = $this->post('spacial_request');
                 
+                $params["variation_ids"] = isset($variation_ids) ? $variation_ids : 0;    // variation ids string delimited by comma(,)
+                    
                 if(isset($variation_ids)) {
-                    $params["variation_ids"] = isset($variation_ids) ? $variation_ids : 0;    // variation ids string delimited by comma(,)
                     $variation_ids = explode(",", $variation_ids);
 
                     $variations = $this->RestroItemVariationModel->findByIds($variation_ids);

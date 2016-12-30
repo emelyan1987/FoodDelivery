@@ -71,7 +71,7 @@
             $table_name = $this->tableName($service_type);            
             if($table_name == null) return null;
 
-            $this->db->select('c.*, i.image AS item_image, i.item_name, i.item_price, (i.item_price*c.quantity) AS subtotal, i.location_id');
+            $this->db->select('c.*, i.image AS item_image, i.item_name, i.item_price, (c.price*c.quantity) AS subtotal, i.location_id');
             $this->db->from($table_name.' AS c');  
             $this->db->join('tbl_item AS i', 'i.id=c.product_id', 'left'); 
 

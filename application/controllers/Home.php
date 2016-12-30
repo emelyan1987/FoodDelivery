@@ -45,6 +45,7 @@
             $this->load->model('AreaModel');  
             $this->load->model('RestroPromotionModel');  
             $this->load->model('RestroPromotionItemModel');  
+            $this->load->model('RestroItemVariationModel');  
 
             $this->load->helper('captcha');
             $this->load->helper('utils');
@@ -1045,7 +1046,7 @@
                 }
                 $CartArray['product_id'] = $this->input->post('item_id');
                 $CartArray['quantity'] = $this->input->post('quantity');
-                $CartArray['price'] = $this->input->post('last_price'); 
+                //$CartArray['price'] = $this->input->post('last_price'); 
                 $CartArray['restro_id'] = $restro_id;
                 $CartArray['location_id'] = $location_id;
                 $CartArray['user_id'] = $user_id;
@@ -1053,6 +1054,22 @@
                 $CartArray['variation_ids'] = $variation_ids;
                 $CartArray["status"] = CART_STATUS_ACTIVE;
 
+                $item = $this->RestroItemModel->findById($item_id);
+                if(isset($variation_ids)) {
+                    $variation_ids = explode(",", $variation_ids); 
+
+                    $variations = $this->RestroItemVariationModel->findByIds($variation_ids); 
+                
+                    $price = 0;
+                    if($item->price_type == ITEM_PRICE_TYPE_BY_MAIN) $price = $item->price;
+                    
+                    foreach($variations as $v) {
+                        $price += $v->price;
+                    }
+                    $CartArray["price"] = $price;
+                } else {
+                    $CartArray["price"] = $item->price;   
+                }
                 if(isset($cart_item_id)) {
                     $this->CartModel->update($service_id, $cart_item_id, $CartArray);
                 } else {
