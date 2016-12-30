@@ -150,8 +150,8 @@
                                         </tr>
                                         <tr>
                                             <td>MULTIPLE ITEMS</td>
-                                            <td>&nbsp; <input id="Radio11" type="radio" name="v_multi_item1" checked="checked" value="1" <?php if($varData1['multi_item'] == 1){ echo "checked"; } ?> > <span>YES</span>
-                                                &nbsp; <input id="Radio12" type="radio" name="v_multi_item1" value="0" <?php if($varData1['multi_item'] == 1){ echo "checked"; } ?>> <span>NO</span></td>
+                                            <td>&nbsp; <input id="Radio11" type="radio" name="v_multi_item1" value="1" <?php if($varData1['multi_item'] == 1){ echo "checked"; } ?> > <span>YES</span>
+                                                &nbsp; <input id="Radio12" type="radio" name="v_multi_item1" value="0" <?php if($varData1['multi_item'] != 1){ echo "checked"; } ?>> <span>NO</span></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
@@ -200,8 +200,8 @@
                                         </tr>
                                         <tr>
                                             <td>MULTIPLE ITEMS</td>
-                                            <td>&nbsp; <input id="Radio11" type="radio" name="v_multi_item2" checked="checked" value="1" <?php if($varData2['multi_item'] == 1){ echo "checked"; } ?> > <span>YES</span>
-                                                &nbsp; <input id="Radio12" type="radio" name="v_multi_item2" value="0" <?php if($varData2['multi_item'] == 0){ echo "checked"; } ?> > <span>NO</span></td>
+                                            <td>&nbsp; <input id="Radio11" type="radio" name="v_multi_item2" value="1" <?php if($varData2['multi_item'] == 1){ echo "checked"; } ?> > <span>YES</span>
+                                                &nbsp; <input id="Radio12" type="radio" name="v_multi_item2" value="0" <?php if($varData2['multi_item'] != 1){ echo "checked"; } ?> > <span>NO</span></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
@@ -248,8 +248,8 @@
                                         </tr>
                                         <tr>
                                             <td>MULTIPLE ITEMS</td>
-                                            <td>&nbsp; <input id="Radio11" type="radio" name="v_multi_item3" checked="checked" value="1" <?php if($varData3['multi_item'] == 1){ echo "checked"; } ?>> <span>YES</span>
-                                                &nbsp; <input id="Radio12" type="radio" name="v_multi_item3" value="0" <?php if($varData3['multi_item'] == 0){ echo "checked"; } ?>> <span>NO</span></td>
+                                            <td>&nbsp; <input id="Radio11" type="radio" name="v_multi_item3" value="1" <?php if($varData3['multi_item'] == 1){ echo "checked"; } ?>> <span>YES</span>
+                                                &nbsp; <input id="Radio12" type="radio" name="v_multi_item3" value="0" <?php if($varData3['multi_item'] != 1){ echo "checked"; } ?>> <span>NO</span></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">

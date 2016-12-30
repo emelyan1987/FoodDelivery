@@ -303,7 +303,7 @@
                     $variations = array();
                     foreach($vlist as $v) {
                         if(!isset($variations[$v->variation_id])) {
-                            $variations[$v->variation_id] = array("id"=>$v->variation_id, "name"=>$v->variation_name, "type"=>$v->variation_type, "details"=>array());                            
+                            $variations[$v->variation_id] = array("id"=>$v->variation_id, "name"=>$v->variation_name, "is_mandatory"=>$v->mandatory, "is_multiple"=>$v->multi_item, "type"=>$v->variation_type, "details"=>array());                            
                         }
                         $variations[$v->variation_id]["details"][] = array("id"=>$v->id, "title"=>$v->title, "price"=>$v->price);
                     }

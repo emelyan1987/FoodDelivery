@@ -25,7 +25,7 @@
         } 
 
         public function findByItemId($item_id){   
-            $this->db->select('d.*, v.variation_name, v.variation_type');
+            $this->db->select('d.*, v.variation_name, v.mandatory, v.multi_item, v.variation_type');
             $this->db->from('restro_item_variation_data AS d');
             $this->db->join('restro_item_variation AS v', 'v.id=d.variation_id');
             $this->db->where('d.item_id', $item_id);
