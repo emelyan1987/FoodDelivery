@@ -19,6 +19,7 @@
             $this->load->model('RestroSeatingHourModel'); 
             $this->load->model('RestroTableOrderModel'); 
             $this->load->model('PointLogModel'); 
+            $this->load->model('RestroItemVariationModel'); 
             $this->load->helper('utils');
             $this->load->helper('order');
         } 
@@ -68,16 +69,16 @@
                     foreach($orders as $order) {                       
                         $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
                         /*if($order->status == ORDER_STATUS_UNDER_PROCESS) {   
-                            $now = time();
-                            $order_time = strtotime($order->date." ".$order->time);
-                            if($restaurant && $now - $order_time >= $restaurant->order_time) {
-                                $order->status = 3; //Completed
-                            } else {
-                                $order->status = 1; //Under Process
-                            }
+                        $now = time();
+                        $order_time = strtotime($order->date." ".$order->time);
+                        if($restaurant && $now - $order_time >= $restaurant->order_time) {
+                        $order->status = 3; //Completed
+                        } else {
+                        $order->status = 1; //Under Process
+                        }
                         }*/
                     }
-                    
+
                     object_array_sort_by_column($orders, 'created_time', SORT_DESC);
                     $resource = $orders;
                 } else {                         
@@ -470,12 +471,12 @@
                     foreach($orders as $order) {                       
                         $restaurant = $order->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, 3);
                         /*if($order->status == 2) {   // Accepted or Waiting Payment
-                            $weekday = strtolower(date('l', strtotime($order->date)));
-                            $seating_info = getSeatingInfo($order->restro_id, $order->location_id, $weekday, $order->time);
+                        $weekday = strtolower(date('l', strtotime($order->date)));
+                        $seating_info = getSeatingInfo($order->restro_id, $order->location_id, $weekday, $order->time);
 
-                            if($seating_info['deposit']==0 || ($seating_info['deposit']>0&&$order->pay_done)) {
-                                $order->status = 3;
-                            }
+                        if($seating_info['deposit']==0 || ($seating_info['deposit']>0&&$order->pay_done)) {
+                        $order->status = 3;
+                        }
                         }*/
                     }   
                     $resource = $orders;
@@ -520,11 +521,26 @@
                 $params["user_id"] = $this->user->id;                                                        
                 $params["product_id"] = $product_id;
                 $params["quantity"] = $quantity;
-                $params["price"] = $item->price;
                 $params["restro_id"] = $item->restro_id;
                 $params["location_id"] = $item->restro_id;
                 $params["spacial_request"] = $this->post('spacial_request');
-                $params["variation_ids"] = isset($variation_ids) ? $variation_ids : 0;    // variation ids string delimited by comma(,)
+                
+                if(isset($variation_ids)) {
+                    $params["variation_ids"] = isset($variation_ids) ? $variation_ids : 0;    // variation ids string delimited by comma(,)
+                    $variation_ids = explode(",", $variation_ids);
+
+                    $variations = $this->RestroItemVariationModel->findByIds($variation_ids);
+                
+                    $price = 0;
+                    if($item->price_type == ITEM_PRICE_TYPE_BY_MAIN) $price = $item->price;
+                    
+                    foreach($variations as $v) {
+                        $price += $v->price;
+                    }
+                    $params["price"] = $price;
+                } else {
+                    $params["price"] = $item->price;   
+                }
                 $params["date"] = date("Y-m-d H:i:s");
                 $params["status"] = CART_STATUS_ACTIVE;
                 $insert_id = $this->CartModel->create($service_type, $params);
