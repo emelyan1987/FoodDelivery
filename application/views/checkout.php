@@ -435,6 +435,7 @@
                                 <span class="red"><?php echo form_error('address_id');?><?php echo isset($errors['address_not_exist'])?$errors['address_not_exist']:"";?></span>
                             </div>
                             <div class="col-md-6">
+                                <input type="hidden" name="area_id" id="checkout_area_id_hidden" value="<?php echo $_SESSION['order_area_id'];?>"/>
                                 <select class="addressSelection" name="address_id" onchange="changeAddress(this.value)" id="CustomerAddressData">
                                     <option value="">-Select Address-</option>
                                     <?php foreach ($addressData as $add => $address):?>
@@ -622,39 +623,6 @@
                             <div class="clearfix"></div>
                             <div class="line"></div>
                         </div>
-                        <!--<div class="col-md-12">
-                        <div class="col-md-6">
-                        <h4>Total :</h4>
-                        </div>
-                        <div class="col-md-6">
-                        <h4 class="text-right" id="order_total">KD 0.000</h4>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="line"></div>
-                        </div>
-                        <div class="col-md-12" id="discountvalue">
-
-                        </div>
-                        <div class="col-md-12">
-                        <div class="col-md-6">
-                        <h4>Delivery Charges :</h4>
-                        </div>
-                        <div class="col-md-6">
-                        <h4 class="text-right" id="order_charges">KD 0.000</h4>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="line"></div>
-                        </div>
-                        <div class="col-md-12">
-                        <div class="col-md-6">
-                        <h4>Grand Total :</h4>
-                        </div>
-                        <div class="col-md-6">
-                        <h4 class="text-right" id="order_grandTotal">KD 0.000</h4>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="margin20"></div>
-                        </div>-->
                     </div>
                     <div class="clearfix"></div>
                     <div class="margin20"></div>
@@ -944,7 +912,29 @@
                         var html = "<div>Area: "+address.area_name+"</div>" +
                         "<div>Block: "+address.block+" | Street: "+address.street+" | Building no: "+address.house+" | Floor: "+address.floor+" | Apartment: "+address.appartment+"</div>";
 
-                        $("#addressdata").html(html);   
+                        $("#addressdata").html(html);  
+
+
+                        $.ajax({
+                            url: "/api/orders/sum?service_type=<?php echo $_SESSION['filter_service'];?>&restro_id=<?php echo $_SESSION['order_restro_id'];?>&location_id=<?php echo $_SESSION['order_location_id'];?>&area_id="+address.area_id,
+                            type: "GET",
+                            success: function(response) {
+                                console.log('getSum response', response);
+                                if(response.code == 0) {
+                                    var subtotal = response.resource.total_amount,
+                                    charge = response.resource.charge_amount;
+
+                                    $("#subtotal-display").text(subtotal.toFixed(3));
+                                    $("#charge-display").text(charge.toFixed(3));
+
+                                    var discount = $("#discount-display").text();
+
+                                    $("#grandtotal-display").text((subtotal-discount+charge).toFixed(3));
+                                }
+                            }
+                        }); 
+                        
+                        $('#checkout_area_id_hidden').val(address.area_id);
                     }
                 }
             })

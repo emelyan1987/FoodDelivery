@@ -1011,7 +1011,7 @@
             $this->load->view('view_restro_table',$data);
         }
 
-        function view_restro_item(){
+        function view_restro_item(){ 
             $user_id = $_SESSION['Customer_User_Id'];
 
             if(!isset($user_id)) redirect('customer_login');
@@ -1019,7 +1019,7 @@
             $data['errors']=array();
 
             $service_id = $this->input->get('service_id');
-            if(!isset($service_id)) $service_id = $_SESSION["filter_service"];
+            if(!isset($service_id)) $service_id = $_SESSION["filter_service"]; 
             if(!isset($service_id)) redirect('/');
 
             $restro_id =$this->uri->segment('2');
@@ -1180,7 +1180,6 @@
             $service_type = $_SESSION['filter_service'];
             $restro_id = $_SESSION['order_restro_id'];
             $location_id = $_SESSION['order_location_id'];
-            $area_id = $_SESSION['order_area_id'];
 
             $Mnumber = $this->Customer_management->get_user_mobile_number($user_id);
             $mobileNumber = $Mnumber['mobile_no'];
@@ -1268,6 +1267,7 @@
                 }
                 else
                 {
+                    $area_id = $this->input->post('area_id');//$_SESSION['order_area_id'];
                     $order['restro_id'] = $restro_id;
                     $order['location_id'] = $location_id;
                     // Get Sum Info
