@@ -354,6 +354,7 @@
                 if(isset($restro_id))$params["restro_id"] = $restro_id;                    
                 if(isset($location_id))$params["location_id"] = $location_id;    
 
+                $params['date'] = date('Y-m-d');
                 $promotions = $this->RestroPromotionModel->find($params);
 
                 foreach($promotions as $promotion) {
