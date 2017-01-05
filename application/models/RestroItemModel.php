@@ -36,6 +36,7 @@
                 if(isset($params["category_id"]) && $params["category_id"]!="") $this->db->where('c.category_id', $params["category_id"]);          
                 if(isset($params["location_id"]) && $params["location_id"]!="") $this->db->where('ic.location_id', $params["location_id"]);          
                 if(isset($params["service_id"]) && $params["service_id"]!="") $this->db->where('ic.service_id', $params["service_id"]);          
+                if(isset($params["status"]) && $params["status"]!="") $this->db->where('i.status', $params["status"]);          
             }  
             
             $this->db->group_by('i.id');

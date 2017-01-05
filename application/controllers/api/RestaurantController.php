@@ -273,11 +273,18 @@
                 $params["location_id"] = $location_id;                    
                 $params["service_id"] = $service_id;                    
 
-                $resource = $this->RestroItemCategoryModel->find($params, array("id", "cat_name", "item_cat_description", "image", "status", "location_id", "service_id"));
+                $categories = $this->RestroItemCategoryModel->find($params, array("id", "cat_name", "item_cat_description", "image", "status", "location_id", "service_id"));
 
-                if(!$resource) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
-                }  
+                $resource = array();
+                foreach($categories as $cat) {
+                    $items = $this->RestroItemModel->find(array('category_id'=>$cat->id));
+                    
+                    if(count($items)) {
+                        $resource[] = $cat;
+                    }
+                    
+                }                
+                  
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$resource
@@ -318,7 +325,9 @@
                     $params = array();  
                     if(isset($category_id))$params["category_id"] = $category_id;                   
                     if(isset($location_id))$params["location_id"] = $location_id;                   
-                    if(isset($service_id))$params["service_id"] = $service_id;                   
+                    if(isset($service_id))$params["service_id"] = $service_id;   
+                    
+                    $params['status'] = 1;  // Active item only
                     $resource = $this->RestroItemModel->find($params);
 
                 }
