@@ -92,7 +92,7 @@
             GROUP BY l.id
             ) AS a 
             LEFT JOIN restro_rating AS rt ON rt.location_id=a.location_id AND rt.restro_id=a.restro_id
-            LEFT JOIN restro_promotion AS pt ON pt.location_id=a.location_id AND pt.service_id=$service_type
+            LEFT JOIN restro_promotion AS pt ON pt.location_id=a.location_id AND pt.service_id=$service_type AND pt.from_date<=CURDATE() AND pt.to_date>=CURDATE()
             GROUP BY a.location_id";
 
             $result = $this->db->query($query)->result();

@@ -114,7 +114,7 @@
         }
         $total_amount = 0; 
         foreach($carts as $cart) {
-            $total_amount += $cart->price * $cart->quantity;
+            $total_amount += $cart->subtotal;
         }
         $result = array('total_amount'=>$total_amount);
         if(($service_type==1 || $service_type==2) && $area_id) { // service type is "DELIVERY" or "CATERING"      
