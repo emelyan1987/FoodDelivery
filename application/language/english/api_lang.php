@@ -33,3 +33,4 @@ $lang['mobile_no_not_matched'] = 'The mobile_no not matched.';
 $lang['password_not_matched'] = 'The password not matched.';
 $lang['time_invalid'] = 'The time invalid.';
 $lang['time_expired'] = 'Time expired';
+$lang['order_time_should_be_greater_than_now'] = 'Order time should be greater than now.';

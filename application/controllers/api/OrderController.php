@@ -214,6 +214,11 @@
                 if(!isset($schedule_time)) {
                     throw new Exception('schedule_time '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
+                
+                if(time()>strtotime("$schedule_date $schedule_time")) {
+                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                }
+                
                 if($service_type==1 || $service_type==4) {                    
                     $order['delivery_date'] = $schedule_date;  // Y-m-d
                     $order['delivery_time'] = $schedule_time;  // H:i:s
