@@ -1267,6 +1267,48 @@
         }
       }
     },
+    "/data/faqs": {
+      "get": {
+        "tags": [
+          "data"
+        ],
+        "description": "This API is responsible for getting faqs list",
+        "operationId": "getFaqs",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "page",
+            "description": "page number",
+            "required": false,
+            "type": "integer"
+          }],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/restaurants": {
       "get": {
         "tags": [

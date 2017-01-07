@@ -1059,10 +1059,10 @@
                     $variation_ids = explode(",", $variation_ids); 
 
                     $variations = $this->RestroItemVariationModel->findByIds($variation_ids); 
-                
+
                     $price = 0;
                     if($item->price_type == ITEM_PRICE_TYPE_BY_MAIN) $price = $item->price;
-                    
+
                     foreach($variations as $v) {
                         $price += $v->price;
                     }
@@ -1204,7 +1204,7 @@
             {
                 redirect('/');
             }
-            
+
             if(isset($_POST['btnUserAddressSave'])) {
                 $address = array();
                 $address['area_id'] = $this->input->post('area_id');
@@ -1223,10 +1223,10 @@
                     $this->UserAddressModel->updateByParams(array('user_id'=>$user_id), array('is_primary'=>false));
                 }
                 $this->UserAddressModel->create($address);
-                
+
                 unset($_POST['btnUserAddressSave']);
             }
-            
+
 
             $datestring = "%Y-%m-%d";
             $timestring = "%h:%i %a";
@@ -1244,7 +1244,7 @@
 
                 $area_ids = explode(',', $restroCityArea->area);
                 $restro->areas = $this->AreaModel->find(array('ids'=>$area_ids)); 
-                
+
                 $data['addressData'] = $this->UserAddressModel->find(array('user_id'=>$user_id, 'area_ids'=>$area_ids));
                 if(count($data['addressData']) == 0) {
                     $data['errors']['address_not_exist'] = "There are no addresses matched to restaurant's service areas";
@@ -1254,7 +1254,7 @@
             }
             $data['restroInfo'] = $restro; 
 
-            
+
             if(isset($_POST['btncheckout']))
             {
                 $this->form_validation->set_rules('address_id', 'Address', 'required');
@@ -1305,6 +1305,11 @@
                     if(!isset($schedule_time)) {
                         throw new Exception('schedule_time '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                     }
+
+                    if(time()>strtotime("$schedule_date $schedule_time")) {
+                        throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                    }
+                    
                     if($service_type==1 || $service_type==4) {                    
                         $order['delivery_date'] = $schedule_date;  // Y-m-d
                         $order['delivery_time'] = $schedule_time;  // H:i:s

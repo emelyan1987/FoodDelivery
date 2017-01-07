@@ -20,6 +20,7 @@
             $this->load->model('FoodTypeModel'); 
             $this->load->model('RestroCategoryModel'); 
             $this->load->model('AdvertisementModel'); 
+            $this->load->model('FaqModel'); 
         } 
 
 
@@ -155,6 +156,36 @@
 
                 $resource = $this->AdvertisementModel->find(array(
                         "system_status"=>$kind, 
+                        "offset"=>($page-1)*$limit,
+                        "limit"=>$limit
+                    )
+                );
+
+                if(!$resource) {
+                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }  
+                $this->response(array(
+                    "code"=>RESULT_SUCCESS,
+                    "resource"=>$resource
+                    ), REST_Controller::HTTP_OK);
+
+            } catch (Exception $e) {
+                $this->response(array(
+                    "code"=>$e->getCode(),
+                    "message"=>$e->getMessage()
+                    ), REST_Controller::HTTP_OK);
+            }
+        }
+
+        public function faqs_get()
+        {                 
+            try {                
+                //$this->validateAccessToken();
+                $page = $this->get('page') ? $this->get('page') : 1;
+
+                $limit = 100;
+
+                $resource = $this->FaqModel->find(array(
                         "offset"=>($page-1)*$limit,
                         "limit"=>$limit
                     )
