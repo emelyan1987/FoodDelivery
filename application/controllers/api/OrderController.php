@@ -405,6 +405,11 @@
                 if(!isset($reserve_time)) {
                     throw new Exception("reserve_time ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
+                
+                if(time()>strtotime("$reserve_date $reserve_time")) {
+                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                }
+                
                 $weekday = strtolower(date('l', strtotime($reserve_date)));
                 $seating_info = getSeatingInfo($restro_id, $location_id, $weekday, $reserve_time);
                 if($seating_info === null || !isAvailableTime($reserve_date, $reserve_time, $seating_info, $people_number, $restro_id, $location_id))  {

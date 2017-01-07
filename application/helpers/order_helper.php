@@ -231,6 +231,7 @@
     }
 
     function getTimeSlots($restro_id, $location_id, $reserve_time, $people_number) {
+        if($reserve_time < time()) return null;
         $CI = & get_instance();                     
         $CI->load->model('RestroSeatingHourModel');
         $CI->load->model('RestroTableOrderModel');
