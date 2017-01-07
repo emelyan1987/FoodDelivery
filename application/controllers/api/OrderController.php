@@ -115,17 +115,27 @@
 
 
                 $points = $this->PointLogModel->find($params);
+                $resource = array();
                 foreach($points as $point) {
                     $order = $point->order = $this->OrderModel->findById($point->service_id, $point->order_id);
-                    if($order) $point->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
+                    if($order){
+                        $point->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
+                        if(!isset($resource[$order->location_id."_".$order->service_type])) {
+                            $resource[$order->location_id."_".$order->service_type] = $point;
+                        } else {
+                            $resource[$order->location_id."_".$order->service_type]->gained_loyalty_point += $point->gained_loyalty_point;
+                            $resource[$order->location_id."_".$order->service_type]->used_loyalty_point += $point->used_loyalty_point;
+                            $resource[$order->location_id."_".$order->service_type]->gained_mataam_point += $point->gained_mataam_point;
+                            $resource[$order->location_id."_".$order->service_type]->used_mataam_point += $point->used_mataam_point;
+                        }
+                    }
+                    
                 }
-                $resource = $points;
-                if(!$resource) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
-                }  
+                
+                
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
-                    "resource"=>$resource
+                    "resource"=>array_values($resource)
                     ), REST_Controller::HTTP_OK);
             } catch (Exception $e) {
                 $this->response(array(
