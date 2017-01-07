@@ -234,15 +234,17 @@ class Order_Management extends CI_Model
     }
 
 
-        public function view_delivery_order($orderid){
-        $this->db->select('a.restro_name,d.*,b.email,g.email as Cust_email,f.f_name,f.l_name,e.billing_full_name,e.billing_addres_1,e.billing_address_2,e.billing_city,e.billing_state,e.billing_zip_code,e.billing_phoneno,e.shipping_full_name,e.shipping_address_1,e.shipping_address_2,e.shipping_city,e.shipping_state,e.shipping_zip_code,e.shipping_phoneno');
+    public function view_delivery_order($orderid){
+        $this->db->select('a.restro_name,d.*,b.email,g.email as Cust_email,f.f_name,f.l_name, concat(i.city_name," ", h.name) as address_area,e.address_name as address_building,e.block as address_block,e.floor as address_floor,e.street as address_street,e.appartment as address_apartment,e.extra_directions as address_direction');
         $this->db->from('restro_info a');
         $this->db->join('users b', 'b.id = a.user_id');
         $this->db->join('restro_order_details c', 'c.restro_id = a.id'); 
         $this->db->join('restro_order d', 'd.id = c.order_id');
-        $this->db->join('restro_customer_address e', 'e.user_id = d.user_id and e.id = d.address_id'); 
+        $this->db->join('user_addresses e', 'e.user_id = d.user_id and e.id = d.address_id'); 
         $this->db->join('user_profiles f', 'f.user_id = d.user_id'); 
         $this->db->join('users g', 'g.id = d.user_id'); 
+        $this->db->join('area h', 'h.id = e.area_id'); 
+        $this->db->join('city i', 'i.id = e.city_id'); 
         $this->db->where('d.status !=',0);
         $this->db->where('d.id',$orderid);
         $this->db->group_by("d.id");

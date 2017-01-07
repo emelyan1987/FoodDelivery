@@ -122,7 +122,7 @@ class Order extends AdminBaseController
 
         
         $data['orderdata'] = $this->Order_Management->view_delivery_order($orderid);
-        $data['orderdetails'] = $this->Order_Management->delivery_order_details($orderid);
+        $data['orderdetails'] = $this->Order_Management->delivery_order_details($orderid); //echo json_encode($data); return;
         $this->load->view("Administration/delivery_order_details",$data);
     }
 

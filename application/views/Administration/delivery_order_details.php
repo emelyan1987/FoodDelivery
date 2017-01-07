@@ -134,13 +134,13 @@
                     <div class="clear_h10"></div>
                     <h4 class="border_bottom">Delivery Address</h4>
                     <ul class="listOdnary">
-                        <li><div class="listOdnaryTitle">Area: </div><div class="listOdnaryDetail"> <?php echo $ordD->shipping_city; ?> </div></li>
-                        <li><div class="listOdnaryTitle">Building:</div><div class="listOdnaryDetail"> <?php echo $ordD->shipping_address_1; ?> </div></li>
-                        <li><div class="listOdnaryTitle">Block:</div><div class="listOdnaryDetail"> <?php echo $ordD->shipping_address_2; ?></div></li>
-                        <li><div class="listOdnaryTitle">Floor:</div><div class="listOdnaryDetail"> <?php echo $ordD->shipping_state; ?></div></li>
-                        <li><div class="listOdnaryTitle">Street:</div><div class="listOdnaryDetail"><?php echo $ordD->shipping_zip_code; ?></div></li>
-                        <li><div class="listOdnaryTitle">Apartment:</div><div class="listOdnaryDetail"> <?php echo $ordD->shipping_phoneno; ?></div></li>
-                        <li><div class="listOdnaryTitle">Extra Direction:</div><div class="listOdnaryDetail"> <?php echo $ordD->extra_direction; ?> </div></li>
+                        <li><div class="listOdnaryTitle">Area: </div><div class="listOdnaryDetail"> <?php echo $ordD->address_area; ?> </div></li>
+                        <li><div class="listOdnaryTitle">Building:</div><div class="listOdnaryDetail"> <?php echo $ordD->address_building; ?> </div></li>
+                        <li><div class="listOdnaryTitle">Block:</div><div class="listOdnaryDetail"> <?php echo $ordD->address_block; ?></div></li>
+                        <li><div class="listOdnaryTitle">Floor:</div><div class="listOdnaryDetail"> <?php echo $ordD->address_floor; ?></div></li>
+                        <li><div class="listOdnaryTitle">Street:</div><div class="listOdnaryDetail"><?php echo $ordD->address_street; ?></div></li>
+                        <li><div class="listOdnaryTitle">Apartment:</div><div class="listOdnaryDetail"> <?php echo $ordD->address_apartment; ?></div></li>
+                        <li><div class="listOdnaryTitle">Extra Direction:</div><div class="listOdnaryDetail"> <?php echo $ordD->address_direction; ?> </div></li>
 
                     </ul>
                     <div class="clear_h10"></div>
