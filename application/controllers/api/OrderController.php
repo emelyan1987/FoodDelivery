@@ -235,11 +235,14 @@
                     throw new Exception('schedule_time '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
                 
-                if(time()>strtotime("$schedule_date $schedule_time")) {
-                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                $interval = ($restro->order_time ? $restro->order_time : 30)*60;
+                $now = time();
+                if($now-$interval>strtotime("$schedule_date $schedule_time")) {
+                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now').$interval.":".$now."->".date("H:i:s", $now).":".strtotime("$schedule_date $schedule_time")."->".date("H:i:s", strtotime("$schedule_date $schedule_time")), RESULT_ERROR_PARAMS_INVALID);
                 }
                 
-                $weekday = strtolower(date('l', strtotime($schedule_date)));                
+                $weekday = strtolower(date('l', strtotime($schedule_date)));   
+                
                 if(
                     $restro->{$weekday.'_from'} && strtotime($schedule_time)<strtotime($restro->{$weekday.'_from'}) ||
                     $restro->{$weekday.'_to'} && strtotime($schedule_time)>strtotime($restro->{$weekday.'_to'})
@@ -255,13 +258,13 @@
                 $order['time'] = $schedule_time;  // H:i:s
                 $order['user_id'] = $this->user->id;
                 $payment_method = $this->post('payment_method');
-                if(!isset($payment_method)) {
+                if(!isset($payment_method) || !$payment_method) {
                     throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 } 
                 $order['payment_method'] = $payment_method;
                 $order['status'] = 1; 
                 $address_id = $this->post('address_id');
-                if(($service_type == 1 || $service_type == 2) && !isset($address_id)) {
+                if(($service_type == 1 || $service_type == 2) && (!isset($address_id) || !$address_id)) {
                     throw new Exception('address_id '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
                 $order['address_id'] = $address_id;

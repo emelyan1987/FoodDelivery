@@ -176,7 +176,7 @@
     }
     }
 </style>
-<form action="" method="post" >
+<form id="checkout-form" name="checkoutForm" action="" method="post" >
     <div class="container-fluid">
         <div class="margin20"></div>
         <div class="row">
@@ -468,85 +468,10 @@
                     <div class="row">
                         <div class="col-sm-12 col-sm-12 col-md-12">
                             <div class="col-sm-3 col-sm-3 col-md-3">
-                                <h4>Delivery Time: </h4>
-                            </div>
-                            <div class="col-sm-3 col-sm-3 col-md-3">
-                                <div class="form-horizontal">
-                                    <div class="col-sm-12">
-                                        <div class="padTB10">
-
-
-                                            <div class="roundedOne">
-                                                <input type="radio" value="1" onClick="selectTimeType(1)"  id="time-type-now-radio" class="" name="hd_orderTime" />
-                                                <label for="time-type-now-radio"><span>Order Now</span></label>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="red"><?php echo form_error('hd_orderTime');?></span>
+                                <h4>Planed Time: </h4>
                             </div>
                             <div class="col-sm-6 col-sm-6 col-md-6">
-                                <div class="form-horizontal">
-                                    <div class="col-sm-12">
-                                        <div class="padTB10">
-                                            <div class="roundedOne">
-
-                                                <div class="roundedOne">
-                                                    <input type="radio" value="2" onClick="selectTimeType(2)"  id="time-type-schedule-radio" class="myCheckBox1" name="hd_orderTime" />
-                                                    <label for="time-type-schedule-radio"><span>Scheduled for : </span></label>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="padTB10" id="sheduledate" style="display:none;">
-                                            <div class="col-md-6">
-                                                <input type="text" name="schedule_date" value="<?php echo date('Y-m-d');?>" id="scheduled_date" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" name="schedule_time" value="<?php echo date('H:i');?>" class="form-control text-center openTimeController" id="scheduled_time">
-                                                <div id="datetimepicker3" class="input-append">
-                                                    <!---Time Picker-->
-                                                    <div style="margin-top: 15px;">
-                                                        <span class="closeTimeInput">x</span>
-                                                        <select onchange="gettimevalue()" id="time1" style="height:30px;">
-                                                            <?php
-                                                                for ($h = 1; $h <= 12; $h++) {
-                                                                ?>
-                                                                <option value="<?php if ($h < 10) {echo 0;}
-                                                                    ?><?php echo $h;?>"> <?php if ($h < 10) {echo 0;}
-                                                                ?><?php echo $h;?></option>
-                                                                <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                        <select onchange="gettimevalue()" id="time2" style="height:30px;">
-                                                            <?php
-                                                                for ($M = 1; $M <= 60; $M++) {
-                                                                ?>
-                                                                <option value="<?php if ($M < 10) {echo 0;}
-                                                                    ?><?php echo $M;?>"> <?php if ($M < 10) {echo 0;}
-                                                                ?><?php echo $M;?></option>
-                                                                <?php
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                        <select onchange="gettimevalue()" id="time3" style="height:30px;">
-                                                            <option value="AM">AM</option>
-                                                            <option value="PM">PM</option>
-                                                        </select>
-                                                    </div>
-                                                    <!---Time Picker-->
-                                                    <span class="add-on">
-                                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                                                        </i>
-                                                    </span>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <input class="form-control" type="text" placeholder="DD-MM-YYYY hh:mm" value="<?php echo date('Y-m-d H:i');?>" id="order_time" name="order_time" required >
                             </div>
                             <div class="clearfix"></div>
                             <div class="margin20"></div>
@@ -571,7 +496,7 @@
                                             <div class="paymentMethod">
 
                                                 <div class="roundedOne">
-                                                    <input type="radio" value="1" id="payment-type-cash-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <input type="radio" value="1" id="payment-type-cash-radio" class="myCheckBox1" name="payment_method" />
                                                     <label for="payment-type-cash-radio"><span><img class="" alt="" src="/assets/Customer/img/cash.png"> cash</span></label>
                                                 </div>
                                             </div>
@@ -584,7 +509,7 @@
                                             <div class="paymentMethod">
 
                                                 <div class="roundedOne">
-                                                    <input type="radio" value="2" id="payment-type-knet-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <input type="radio" value="2" id="payment-type-knet-radio" class="myCheckBox1" name="payment_method" />
                                                     <label for="payment-type-knet-radio"><span><img class="" alt="" src="/assets/Customer/img/knet.png"> Knet</span></label>
                                                 </div>
                                             </div>
@@ -596,7 +521,7 @@
                                             ?>
                                             <div class="paymentMethod">
                                                 <div class="roundedOne">
-                                                    <input type="radio" value="3" id="payment-type-card-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <input type="radio" value="3" id="payment-type-card-radio" class="myCheckBox1" name="payment_method" />
                                                     <label for="payment-type-card-radio"><span><img class="" alt="" src="/assets/Customer/img/card.png"> Credit Card</span></label>
                                                 </div>
                                             </div>
@@ -609,7 +534,7 @@
                                             <div class="paymentMethod">
 
                                                 <div class="roundedOne">
-                                                    <input type="radio" value="4" id="payment-type-paypal-radio" class="myCheckBox1" name="hd_paymentType" />
+                                                    <input type="radio" value="4" id="payment-type-paypal-radio" class="myCheckBox1" name="payment_method" />
                                                     <label for="payment-type-paypal-radio"><span><img class="" alt="" src="/assets/Customer/img/paypal.png"> Paypal</span></label>
                                                 </div>
                                             </div>
@@ -618,7 +543,7 @@
                                         ?>
                                     </div>
                                 </div>
-                                <span class="red"><?php echo form_error('hd_paymentType');?></span>
+                                <span class="red"><?php echo form_error('payment_method');?></span>
                             </div>
                             <div class="clearfix"></div>
                             <div class="line"></div>
@@ -629,7 +554,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-offset-4 col-md-4">
-                                <button style="width: 100%" type="submit" name="btncheckout" class="btn btn-yellow btn-yellow-new btn-block"><img src="/assets/Administration/images/icon/cartIcon.png" alt=""> CHECKOUT</button>
+                                <button style="width: 100%" type="button" name="btncheckout" class="btn btn-yellow btn-yellow-new btn-block" onclick="submitCheckout()"><img src="/assets/Administration/images/icon/cartIcon.png" alt=""> CHECKOUT</button>
                             </div>
                         </div>
                     </div>
@@ -738,9 +663,14 @@
 
 <!-- Modal -->
 <script src="/assets/common/plugins/rating/jquery.rateyo.js" type="text/javascript"></script>
+
+<link href="/assets/Customer/plugins/datepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>
+<script src="/assets/Customer/plugins/datepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/assets/common/moment.js" type="text/javascript"></script>
+
 <script> 
     $(document).ready(function(){
-        $("#rating-view").rateYo({rating:<?php echo $restroInfo->rating; ?>, starWidth:'24px', ratedFill:'#f1c40f'}); 
+        $("#rating-view").rateYo({rating:<?php echo isset($restroInfo->rating)?$restroInfo->rating:0; ?>, starWidth:'24px', ratedFill:'#f1c40f'}); 
     });
     function selectTimeType(time_type)
     {
@@ -769,7 +699,7 @@
         document.getElementById('hd_orderTime').value = str;
     }
     function paymentget(str){
-        document.getElementById('hd_paymentType').value = str;
+        document.getElementById('payment_method').value = str;
     }
 </script>
 
@@ -933,7 +863,7 @@
                                 }
                             }
                         }); 
-                        
+
                         $('#checkout_area_id_hidden').val(address.area_id);
                     }
                 }
@@ -1119,7 +1049,49 @@
         }   
     }
 
+
+
+    function submitCheckout() {
+        var form = $('#checkout-form'); 
+        var data = {
+            redeem_type: $('input[name="redeem_type"]:checked').val(),
+            coupon_code: checkoutForm.coupon_code.value,
+            schedule_date: moment(checkoutForm.order_time.value).format('YYYY-MM-DD'),
+            schedule_time: moment(checkoutForm.order_time.value).format('HH:mm'),
+            payment_method: checkoutForm.payment_method.value,
+            address_id: checkoutForm.address_id.value,
+            extra_direction: checkoutForm.extra_direction.value
+        }; console.log('Checkout Data', data);
+
+
+        $.ajax({
+            url: "/api/orders?service_type=<?php echo $_SESSION['filter_service'];?>&restro_id=<?php echo $_SESSION['order_restro_id'];?>&location_id=<?php echo $_SESSION['order_location_id'];?>&area_id=<?php echo $_SESSION['order_area_id'];?>",
+            type: "POST",
+            data: data,
+            success: function(response) {
+                console.log('checkout response', response);
+
+                if(response.code == 0) {
+                    location.href = "/";
+                } else {
+                    bootbox.alert({
+                        message: response.message,
+                        className: 'bb-alternate-modal',
+                        size: 'small'
+                    });
+                }
+            }
+        });
+    }
+
+
     $(document).ready(function(){
         updateCartData();
+
+        $("#order_time").datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            linkFormat: "hh:ii",
+            autoclose:true
+        });
     });
 </script>

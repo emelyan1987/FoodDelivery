@@ -1259,7 +1259,7 @@
             {
                 $this->form_validation->set_rules('address_id', 'Address', 'required');
                 $this->form_validation->set_rules('hd_orderTime', 'Delivery Time', 'required');
-                $this->form_validation->set_rules('hd_paymentType', 'Payment Option', 'required');
+                $this->form_validation->set_rules('payment_type', 'Payment Option', 'required');
 
                 if ($this->form_validation->run() == FALSE)
                 {
@@ -1313,8 +1313,8 @@
                     }
 
                     if(time()>strtotime("$schedule_date $schedule_time")) {
-                        //throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
-                        $data['errors'][] = $this->lang->line('order_time_should_be_greater_than_now');
+                        $data['errors']['order_time_invalid'] = $this->lang->line('order_time_should_be_greater_than_now');
+                        redirect('/checkout');
                     }
 
                     $weekday = strtolower(date('l', strtotime($schedule_date)));                
@@ -1334,7 +1334,7 @@
                     $order['time'] = $schedule_time;  // H:i:s
                     $order['user_id'] = $user_id;
 
-                    $payment_method = $this->input->post('hd_paymentType');
+                    $payment_method = $this->input->post('payment_type');
                     if(!isset($payment_method)) {
                         throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                     } 
@@ -1414,7 +1414,7 @@
 
 
                     //order msg send here
-                    if($hd_paymentType == 4)
+                    if($payment_type == 4)
                     {
                         $_SESSION['pay_type'] = 1;
                         $_SESSION['pay_order_id'] = $order_id;
@@ -2054,7 +2054,7 @@
                 $this->form_validation->set_rules('useraddress', 'Address', 'required');
                 $this->form_validation->set_rules('Ddate', 'Date', 'required');
                 $this->form_validation->set_rules('Dtime', 'Time', 'required');
-                $this->form_validation->set_rules('hd_paymentType', 'Payment option', 'required');
+                $this->form_validation->set_rules('payment_type', 'Payment option', 'required');
 
                 if ($this->form_validation->run() == FALSE)
                 {
@@ -2067,7 +2067,7 @@
                     $hd_charges = $this->input->post('hd_charges');
                     $Ddate = $this->input->post('Ddate');
                     $Dtime = $this->input->post('Dtime');
-                    $hd_paymentType = $this->input->post('hd_paymentType');
+                    $payment_type = $this->input->post('payment_type');
                     $addressid = $this->input->post('useraddress'); 
                     $extra_direction = $this->input->post('extra_direction');
                     $hd_points = $this->input->post('hd_points');
@@ -2104,7 +2104,7 @@
                     $order['date'] = $Mdate;
                     $order['time'] = date('H:i:s',strtotime($Mtime));
                     $order['user_id'] = $user_id;
-                    $order['payment_method'] = $hd_paymentType;
+                    $order['payment_method'] = $payment_type;
                     $order['status'] = 1;
                     $order['address_id'] = $addressid;
                     $order['extra_direction'] = $extra_direction;
@@ -2157,7 +2157,7 @@
                     $this->Home_Restro->empty_my_cart_pickup($user_id);
 
 
-                    if($hd_paymentType == 4)
+                    if($payment_type == 4)
                     {
                         $_SESSION['pay_type'] = 4;
                         $_SESSION['pay_order_id'] = $getId;
@@ -2406,7 +2406,7 @@
                 $this->form_validation->set_rules('useraddress', 'Address', 'required');
                 $this->form_validation->set_rules('Ddate', 'Delivery Date', 'required');
                 $this->form_validation->set_rules('Dtime', 'Delivery Time', 'required');
-                $this->form_validation->set_rules('hd_paymentType', 'Payment Option', 'required');
+                $this->form_validation->set_rules('payment_type', 'Payment Option', 'required');
 
                 if ($this->form_validation->run() == FALSE)
                 {
@@ -2419,7 +2419,7 @@
                     $hd_charges = $this->input->post('hd_charges');
                     $Ddate = $this->input->post('Ddate');
                     $Dtime = $this->input->post('Dtime');
-                    $hd_paymentType = $this->input->post('hd_paymentType');
+                    $payment_type = $this->input->post('payment_type');
                     $addressid = $this->input->post('useraddress'); 
                     $extra_direction = $this->input->post('extra_direction');
                     $hd_points = $this->input->post('hd_points');
@@ -2456,7 +2456,7 @@
                     $order['date'] = $Ddate;
                     $order['time'] = $Dtime;
                     $order['user_id'] = $user_id;
-                    $order['payment_method'] = $hd_paymentType;
+                    $order['payment_method'] = $payment_type;
                     $order['status'] = 1;
                     $order['address_id'] = $addressid;
                     $order['extra_direction'] = $extra_direction;
@@ -2514,7 +2514,7 @@
 
                     $this->Home_Restro->empty_my_cart_catering($user_id);
 
-                    if($hd_paymentType == 4)
+                    if($payment_type == 4)
                     {
                         $_SESSION['pay_type'] = 2;
                         $_SESSION['pay_order_id'] = $getId;
