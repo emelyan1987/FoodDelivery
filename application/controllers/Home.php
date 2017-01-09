@@ -1272,7 +1272,13 @@
                     $order['location_id'] = $location_id;
                     // Get Sum Info
                     $sum = getSum($user_id, $service_type, $restro_id, $location_id, $area_id);
-                    $order['total'] = $sum['total_amount'];
+
+                    $total = $sum['total_amount'];
+                    if($restro->min_order>0 && $total<$restro->min_order) {
+                        throw new Exception("Cart list total amount should be greater than min_order($restro->min_order)", RESULT_ERROR_TOTAL_INVALID);
+                    }
+
+                    $order['total'] = $total;
                     $order['delivery_charges'] = $sum['charge_amount'];
 
                     // Get Discount Amount
@@ -1307,9 +1313,19 @@
                     }
 
                     if(time()>strtotime("$schedule_date $schedule_time")) {
-                        throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                        //throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                        $data['errors'][] = $this->lang->line('order_time_should_be_greater_than_now');
                     }
-                    
+
+                    $weekday = strtolower(date('l', strtotime($schedule_date)));                
+                    if(
+                        $restro->{$weekday.'_from'} && strtotime($schedule_time)<strtotime($restro->{$weekday.'_from'}) ||
+                        $restro->{$weekday.'_to'} && strtotime($schedule_time)>strtotime($restro->{$weekday.'_to'})
+                    ) {
+                        throw new Exception('schedule_time '.$this->lang->line('parameter_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                    }
+
+
                     if($service_type==1 || $service_type==4) {                    
                         $order['delivery_date'] = $schedule_date;  // Y-m-d
                         $order['delivery_time'] = $schedule_time;  // H:i:s

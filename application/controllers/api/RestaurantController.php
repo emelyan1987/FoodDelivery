@@ -109,7 +109,6 @@
 
                     $restro = $this->RestaurantModel->findByRestroLocationService($id, $location_id, $service_type); 
                     $restro->reviews = $this->RatingModel->find(array('location_id'=>$location_id, 'restro_id'=>$id));
-
                     if($service_type == 3) {
                         $reserve_time = $this->get('reserve_time');
                         $people_number = $this->get('people_number');

@@ -190,12 +190,22 @@
                 if(!isset($location_id)) {
                     throw new Exception("location_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
+                
+                // Get restaurant info and check time avaiable and min_order available
+                $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_type);
+                
                 $order['restro_id'] = $restro_id;
                 $order['location_id'] = $location_id;
                 $redeem_type = $this->post('redeem_type');
                 $coupon_code = $this->post('coupon_code');
                 $sum = getSum($this->user->id, $service_type, $restro_id, $location_id, $area_id);
-                $order['total'] = $sum['total_amount'];
+                
+                $total = $sum['total_amount'];
+                if($restro->min_order>0 && $total<$restro->min_order) {
+                    throw new Exception("Cart list total amount should be greater than min_order($restro->min_order)", RESULT_ERROR_TOTAL_INVALID);
+                }
+                
+                $order['total'] = $total;
                 $order['delivery_charges'] = $sum['charge_amount'];            
 
                 $point = getPoint($this->user->id, $service_type, $restro_id, $location_id); 
@@ -227,6 +237,15 @@
                 
                 if(time()>strtotime("$schedule_date $schedule_time")) {
                     throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                }
+                
+                $weekday = strtolower(date('l', strtotime($schedule_date)));
+                
+                if(
+                    $restro->{$weekday.'_from'} && strtotime($schedule_time)<strtotime($restro->{$weekday.'_from'}) ||
+                    $restro->{$weekday.'_to'} && strtotime($schedule_time)>strtotime($restro->{$weekday.'_to'})
+                ) {
+                    throw new Exception('schedule_time '.$this->lang->line('parameter_invalid'), RESULT_ERROR_PARAMS_INVALID);
                 }
                 
                 if($service_type==1 || $service_type==4) {                    
