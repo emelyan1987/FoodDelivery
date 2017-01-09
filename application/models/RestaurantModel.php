@@ -79,7 +79,8 @@
             INNER JOIN restro_seo_category_list AS rc ON rc.restro_id=r.id
             JOIN restro_services_commission AS s ON s.location_id=l.id AND s.restro_id=r.id AND s.service_type=$service_type
             LEFT JOIN restro_working_hour AS w ON w.location_id=l.id AND w.restro_id=r.id AND w.service_id=$service_type
-            LEFT JOIN restro_payments_method AS p ON p.location_id=l.id AND p.restro_id=r.id AND p.service_type=$service_type";
+            LEFT JOIN restro_payments_method AS p ON p.location_id=l.id AND p.restro_id=r.id AND p.service_type=$service_type
+            JOIN users AS u ON u.id=r.user_id";
             
             if($service_type == 1 || $service_type == 2) {
                 $query .= " LEFT JOIN restro_city_area AS ca ON ca.restro_id=r.id AND ca.location_id=l.id AND ca.service_id=$service_type";   
