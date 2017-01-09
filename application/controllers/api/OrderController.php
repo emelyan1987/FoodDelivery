@@ -239,8 +239,7 @@
                     throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
                 }
                 
-                $weekday = strtolower(date('l', strtotime($schedule_date)));
-                
+                $weekday = strtolower(date('l', strtotime($schedule_date)));                
                 if(
                     $restro->{$weekday.'_from'} && strtotime($schedule_time)<strtotime($restro->{$weekday.'_from'}) ||
                     $restro->{$weekday.'_to'} && strtotime($schedule_time)>strtotime($restro->{$weekday.'_to'})
@@ -262,7 +261,7 @@
                 $order['payment_method'] = $payment_method;
                 $order['status'] = 1; 
                 $address_id = $this->post('address_id');
-                if(!isset($address_id)) {
+                if(($service_type == 1 || $service_type == 2) && !isset($address_id)) {
                     throw new Exception('address_id '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
                 $order['address_id'] = $address_id;
