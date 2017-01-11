@@ -248,14 +248,14 @@
             }
 
             $code = generateRandomCode(6); 
-            $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token')); echo $mobile_no; return;
+            $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token')); 
             $client->messages->create(
                 $mobile_no,
                 array(
                     'from' => $this->config->item('twilio_phone_number'),
                     'body' => "Mataam register verification code! ".$code
                 )
-            );
+            );echo $mobile_no; return;
 
             $data["user_id"] = $this->user->id;
             $data["mobile_no"] = $mobile_no;
