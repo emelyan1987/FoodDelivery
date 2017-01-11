@@ -7,7 +7,7 @@
 
         protected $publicFields = array();
 
-        protected $tableName = "tbl_messages";
+        protected $tableName = "";
 
         function __construct($tableName)
         {

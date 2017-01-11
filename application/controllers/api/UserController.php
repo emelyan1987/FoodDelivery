@@ -34,6 +34,7 @@
         $this->load->model('UserSmsModel');
         $this->load->model('RestroCustomerAddressModel');
         $this->load->model('UserAddressModel');
+        $this->load->model('TwilioStatusModel');
 
         $this->load->config('twilio');
     } 
@@ -253,9 +254,10 @@
                 $mobile_no,
                 array(
                     'from' => $this->config->item('twilio_phone_number'),
-                    'body' => "Mataam register verification code! ".$code
+                    'body' => "Mataam register verification code! ".$code,
+                    'statusCallback' => 'http://82.223.68.80/api/twilio_sms_status_callback'
                 )
-            );echo $mobile_no; return;
+            );
 
             $data["user_id"] = $this->user->id;
             $data["mobile_no"] = $mobile_no;
@@ -309,6 +311,13 @@
         } 
     }
 
+    public function twilioSmsStatusCallback_post() {
+        $message_status = $this->post('MessageStatus');
+        $error_code = $this->post('ErrorCode');
+        
+        $this->TwilioStatusModel->create(array('message_status'=>$message_status, 'error_code'=>$error_code));
+    }
+    
     public function login_post() {
         try { 
             $mobile_no = $this->post('mobile_no');

@@ -450,6 +450,7 @@ $route['api/users/(:num)'] = '/api/UserController/index/$1';
 $route['api/users/(:num)(\.)([a-zA-Z0-9_-]+)(.*)'] = 'api/UserController/$1/format/$3$4'; 
 $route['api/users/send_sms_code'] = '/api/UserController/sendSmsCode'; 
 $route['api/users/verify_sms_code'] = '/api/UserController/verifySmsCode'; 
+$route['api/twilio_sms_status_callback'] = '/api/UserController/twilioSmsStatusCallback'; 
 $route['api/login'] = '/api/UserController/login'; 
 $route['api/check_token'] = '/api/UserController/check_token'; 
 $route['api/users/me'] = '/api/UserController/me'; 
