@@ -248,7 +248,7 @@
             }
 
             $code = generateRandomCode(6); 
-            $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token')); echo serialize($client); return;
+            $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token')); echo $mobile_no; return;
             $client->messages->create(
                 $mobile_no,
                 array(
