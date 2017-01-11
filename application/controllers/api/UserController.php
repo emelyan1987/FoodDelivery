@@ -247,7 +247,7 @@
                 throw new Exception($this->lang->line('parameter_incorrect'), RESULT_ERROR_PARAMS_INVALID);
             }
 
-            $code = generateRandomCode(6); echo $code; return;
+            $code = generateRandomCode(6); 
             $client = new Client($this->config->item('twilio_account_sid'), $this->config->item('twilio_auth_token'));
             $client->messages->create(
                 $mobile_no,
@@ -257,7 +257,7 @@
                 )
             );
 
-            
+            echo $mobile_no; return;
             $data["user_id"] = $this->user->id;
             $data["mobile_no"] = $mobile_no;
             $data["code"] = $code;
