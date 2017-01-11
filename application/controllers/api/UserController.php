@@ -315,7 +315,7 @@
         $message_status = $this->post('MessageStatus');
         $error_code = $this->post('ErrorCode');
         
-        $this->TwilioStatusModel->create(array('message_status'=>$message_status, 'error_code'=>$error_code));
+        $this->TwilioStatusModel->create(array('data'=>serialize($this->post())));
     }
     
     public function login_post() {
