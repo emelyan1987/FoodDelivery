@@ -358,7 +358,7 @@
         }
       }
     },
-    "/users/{id}/send_sms_code": {
+    "/users/send_sms_code": {
       "post": {
         "tags": [
           "users"
@@ -373,11 +373,11 @@
         ],
         "parameters": [
           {
-            "name": "id",
-            "required": false,
-            "in": "path",
-            "description": "User id",
-            "type": "integer"
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
           }, {
             "in": "formData",
             "name": "mobile_no",
@@ -408,7 +408,7 @@
         }
       }
     } ,
-    "/users/{id}/verify_sms_code": {
+    "/users/verify_sms_code": {
       "post": {
         "tags": [
           "users"
@@ -423,11 +423,11 @@
         ],
         "parameters": [
           {
-            "name": "id",
-            "required": false,
-            "in": "path",
-            "description": "User id",
-            "type": "integer"
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
           }, {
             "in": "formData",
             "name": "mobile_no",

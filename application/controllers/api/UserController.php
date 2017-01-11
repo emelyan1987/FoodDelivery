@@ -239,20 +239,12 @@
         } 
     }
 
-    public function sendSmsCode_post($user_id) {
+    public function sendSmsCode_post() {
         try { 
+            $this->validateAccessToken();
             $mobile_no = $this->post('mobile_no');
-            if(!$user_id || !isset($mobile_no)) {
+            if(!isset($mobile_no)) {
                 throw new Exception($this->lang->line('parameter_incorrect'), RESULT_ERROR_PARAMS_INVALID);
-            }
-
-            $user = $this->UserModel->find(array(
-                'id'=>$user_id,
-                'mobile_no'=>$mobile_no
-            ));        
-
-            if(!$user) {
-                throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
             }
 
             $code = generateRandomCode(6);
@@ -266,10 +258,9 @@
             );
 
 
-            $data["user_id"] = $user_id;
+            $data["user_id"] = $this->user->id;
             $data["mobile_no"] = $mobile_no;
             $data["code"] = $code;
-
 
             $id = $this->UserSmsModel->create($data);
 
@@ -283,33 +274,31 @@
         } 
     }
 
-    public function verifySmsCode_post($user_id) {
+    public function verifySmsCode_post() {
         try { 
+            $this->validateAccessToken();
+            
             $mobile_no = $this->post('mobile_no');
             $code = $this->post('code');
-            if(!$user_id || !isset($mobile_no) || !isset($code)) {
+            if(!isset($mobile_no) || !isset($code)) {
                 throw new Exception($this->lang->line('parameter_incorrect'), RESULT_ERROR_PARAMS_INVALID);
             }
 
-            $user = $this->UserSmsModel->findOne(array(
-                'user_id'=>$user_id,
-                'mobile_no'=>$mobile_no
+            $sms = $this->UserSmsModel->findOne(array(
+                'user_id'=>$this->user->id,
+                'mobile_no'=>$mobile_no,
+                'code'=>$code
             ));        
 
-            if(!$user) {
+            if(!$sms) {
                 throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
             }
 
-            if($user->code != $code) {
-                throw new Exception($this->lang->line('code_invalid'), RESULT_ERROR_PARAMS_INVALID);
-            }
-
-            if(strtotime($user->expires_at) < time()) {
+            if(strtotime($sms->expires_at) < time()) {
                 throw new Exception($this->lang->line('code_expired'), RESULT_ERROR_PARAMS_INVALID);
             }
 
-            $data["sms_verified"] = true;
-            $this->UserModel->update($user_id, $data);
+            $this->UserModel->update($this->user->id, array('mobile_no'=>$mobile_no, 'sms_verified'=>true));
 
             $this->response(array("code"=>RESULT_SUCCESS), REST_Controller::HTTP_ACCEPTED); 
 
