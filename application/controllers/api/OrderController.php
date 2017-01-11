@@ -238,7 +238,7 @@
                 $interval = ($restro->order_time ? $restro->order_time : 30)*60;
                 $now = time();
                 if($now-$interval>strtotime("$schedule_date $schedule_time")) {
-                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now').$interval.":".$now."->".date("H:i:s", $now).":".strtotime("$schedule_date $schedule_time")."->".date("H:i:s", strtotime("$schedule_date $schedule_time")), RESULT_ERROR_PARAMS_INVALID);
+                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
                 }
                 
                 $weekday = strtolower(date('l', strtotime($schedule_date)));   
