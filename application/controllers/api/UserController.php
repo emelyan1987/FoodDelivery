@@ -257,7 +257,6 @@
                 )
             );
 
-            echo $mobile_no; return;
             $data["user_id"] = $this->user->id;
             $data["mobile_no"] = $mobile_no;
             $data["code"] = $code;
