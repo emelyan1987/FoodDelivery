@@ -432,33 +432,46 @@
                 $this->validateAccessToken();
                 $restro_id = $this->post('restro_id');
                 if(!isset($restro_id)) {
-                    throw new Exception("restro_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "restro_id");
                 }
                 $location_id = $this->post('location_id');
                 if(!isset($location_id)) {
-                    throw new Exception("location_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "location_id");
                 }
                 $people_number = $this->post('people_number');
                 if(!isset($people_number)) {
-                    throw new Exception("people_number ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "people_number");
                 }
+                
+                if($people_number==0) {
+                    throw new ApiException($this->lang->line('parameter_invalid'), RESULT_ERROR_PARAMS_INVALID, "people_number");
+                }
+                
                 $reserve_date = $this->post('reserve_date');
                 if(!isset($reserve_date)) {
-                    throw new Exception("reserve_date ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "reserve_date");
                 }
                 $reserve_time = $this->post('reserve_time');
                 if(!isset($reserve_time)) {
-                    throw new Exception("reserve_time ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "reserve_time");
+                }
+
+                if($reserve_date != date('Y-m-d', strtotime($reserve_date))){
+                    throw new ApiException($this->lang->line('date_format_invalid'), RESULT_ERROR_PARAMS_INVALID, "reserve_date");
+                }
+
+                if($reserve_time != date('H:i', strtotime($reserve_time))){
+                    throw new ApiException($this->lang->line('time_format_invalid'), RESULT_ERROR_PARAMS_INVALID, "reserve_time");
                 }
 
                 if(time()>strtotime("$reserve_date $reserve_time")) {
-                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('date_cannot_back'), RESULT_ERROR_PARAMS_INVALID);
                 }
-
+                
                 $weekday = strtolower(date('l', strtotime($reserve_date)));
                 $seating_info = getSeatingInfo($restro_id, $location_id, $weekday, $reserve_time);
                 if($seating_info === null || !isAvailableTime($reserve_date, $reserve_time, $seating_info, $people_number, $restro_id, $location_id))  {
-                    throw new Exception($this->lang->line('time_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('time_invalid'), RESULT_ERROR_PARAMS_INVALID, "reserve_time");
                 }
                 $largest_party_size = $seating_info['largest_party_size'];
                 if($largest_party_size > 0) {             
@@ -514,9 +527,10 @@
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$order
                     ), REST_Controller::HTTP_OK);
-            } catch (Exception $e) {
+            } catch (ApiException $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "parameter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
@@ -866,19 +880,19 @@
                 $this->validateAccessToken();
                 $restro_id = $this->get('restro_id');
                 if(!isset($restro_id)) {
-                    throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "restro_id");
                 }
                 $location_id = $this->get('location_id');
                 if(!isset($restro_id)) {
-                    throw new Exception('location_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "location_id");
                 }
                 $people_number = $this->get('people_number');
                 if(!isset($people_number)) {
-                    throw new Exception('people_number ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "people_number");
                 }
                 $reserve_time = $this->get('reserve_time');
                 if(!isset($reserve_time)) {
-                    throw new Exception('reserve_time ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "reserve_time");
                 }
                 $reserve_time = strtotime($reserve_time);
 
@@ -893,9 +907,10 @@
                         'slots'=>$time_slots, 
                         //'closest'=>$closest
                     )), REST_Controller::HTTP_OK);
-            } catch (Exception $e) {
+            } catch (ApiException $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "parameter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
