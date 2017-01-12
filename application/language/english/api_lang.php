@@ -34,4 +34,10 @@ $lang['mobile_no_not_matched'] = 'The mobile_no not matched.';
 $lang['password_not_matched'] = 'The password not matched.';
 $lang['time_invalid'] = 'The time invalid.';
 $lang['time_expired'] = 'Time expired';
-$lang['order_time_should_be_greater_than_now'] = 'Order time should be greater than now.';
+
+
+
+// Order relation
+$lang['date_cannot_back'] = 'Order time cannot be back.';
+$lang['date_format_invalid'] = 'Date should be YYYY-MM-DD format';
+$lang['time_format_invalid'] = 'Time should be hh:ii format';

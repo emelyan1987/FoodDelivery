@@ -2,6 +2,7 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
     // This can be removed if you use __autoload() in config.php OR use Modular Extensions
     require 'MyRestController.php';
+    
     class OrderController extends MyRestController {
         function __construct()
         {
@@ -50,7 +51,7 @@
         } 
         public function index_get($id=null)
         {                 
-            try {                
+            try {          
                 $this->validateAccessToken();
                 $service_type = $this->get('service_type');
                 if ($id === NULL)
@@ -93,9 +94,10 @@
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$resource
                     ), REST_Controller::HTTP_OK);
-            } catch (Exception $e) {
+            } catch (ApiException $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "parameter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
@@ -176,19 +178,19 @@
                 $this->validateAccessToken();
                 $service_type = $this->input->get('service_type');
                 if(!isset($service_type)) {
-                    throw new Exception("service_type ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "service_type");
                 }
                 $area_id = $this->input->get('area_id');
                 if(!isset($area_id)) {
-                    throw new Exception("area_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "area_id");
                 }
                 $restro_id = $this->input->get('restro_id');
                 if(!isset($restro_id)) {
-                    throw new Exception("restro_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "restro_id");
                 }
                 $location_id = $this->input->get('location_id');
                 if(!isset($location_id)) {
-                    throw new Exception("location_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "location_id");
                 }
                 
                 // Get restaurant info and check time avaiable and min_order available
@@ -202,7 +204,7 @@
                 
                 $total = $sum['total_amount'];
                 if($restro->min_order>0 && $total<$restro->min_order) {
-                    throw new Exception("Cart list total amount should be greater than min_order($restro->min_order)", RESULT_ERROR_TOTAL_INVALID);
+                    throw new ApiException("Cart list total amount should be greater than min_order($restro->min_order)", RESULT_ERROR_TOTAL_INVALID);
                 }
                 
                 $order['total'] = $total;
@@ -215,7 +217,7 @@
                     $order['coupon_point_apply'] = $redeem_type;                   
                     if($redeem_type == 1) { //  Redeem Coupon
                         if(!isset($coupon_code)) {
-                            throw new Exception('coupon_code '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                            throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "coupon_code");
                         }
                         $order['coupon_code'] = $coupon_code;
                     } else if($redeem_type == 2) {  // Loyalty Point
@@ -226,19 +228,28 @@
                 }  
                 $order['order_points'] = $point['loyalty']['gained_points'];       
                 $order['mataam_order_points'] = $point['mataam']['gained_points'];       
+                
+                // Order date and time validation
                 $schedule_date = $this->post('schedule_date');
                 if(!isset($schedule_date)) {
-                    throw new Exception('schedule_date '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "schedule_date");
                 }
+                if($schedule_date != date('Y-m-d', strtotime($schedule_date))){
+                    throw new ApiException($this->lang->line('date_format_invalid'), RESULT_ERROR_PARAMS_INVALID, "schedule_date");
+                }
+                
                 $schedule_time = $this->post('schedule_time');
                 if(!isset($schedule_time)) {
-                    throw new Exception('schedule_time '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new Exception($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "schedule_time");
+                }
+                if($schedule_time != date('H:i', strtotime($schedule_time))){
+                    throw new ApiException($this->lang->line('time_format_invalid'), RESULT_ERROR_PARAMS_INVALID, "schedule_time");
                 }
                 
                 $interval = ($restro->order_time ? $restro->order_time : 30)*60;
                 $now = time();
                 if($now-$interval>strtotime("$schedule_date $schedule_time")) {
-                    throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('date_cannot_back'), RESULT_ERROR_PARAMS_INVALID, 'schedule_date, schedule_time');
                 }
                 
                 $weekday = strtolower(date('l', strtotime($schedule_date)));   
@@ -247,7 +258,7 @@
                     $restro->{$weekday.'_from'} && strtotime($schedule_time)<strtotime($restro->{$weekday.'_from'}) ||
                     $restro->{$weekday.'_to'} && strtotime($schedule_time)>strtotime($restro->{$weekday.'_to'})
                 ) {
-                    throw new Exception('schedule_time '.$this->lang->line('parameter_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException("Order time is not within working time(".$restro->{$weekday.'_from'}." and ".$restro->{$weekday.'_to'}.")", RESULT_ERROR_PARAMS_INVALID, "schedule_date, schedule_time");
                 }
                 
                 if($service_type==1 || $service_type==4) {                    
@@ -259,13 +270,13 @@
                 $order['user_id'] = $this->user->id;
                 $payment_method = $this->post('payment_method');
                 if(!isset($payment_method) || !$payment_method) {
-                    throw new Exception('payment_method '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "payment_method");
                 } 
                 $order['payment_method'] = $payment_method;
                 $order['status'] = 1; 
                 $address_id = $this->post('address_id');
                 if(($service_type == 1 || $service_type == 2) && (!isset($address_id) || !$address_id)) {
-                    throw new Exception('address_id '.$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "address_id");
                 }
                 $order['address_id'] = $address_id;
                 $order['extra_direction'] = $this->post('extra_direction'); 
@@ -328,9 +339,10 @@
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$order
                     ), REST_Controller::HTTP_OK);
-            } catch (Exception $e) {
+            } catch (ApiException $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "parameter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
