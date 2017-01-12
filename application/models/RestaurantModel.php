@@ -65,7 +65,7 @@
                 $where .= " AND rc.category_id IN (" . $params["restro_categories"] . ")";
             } 
             if(isset($params["kind"])) {
-                $where .= " AND r.restro_state&" . $params["kind"] . "!=0";
+                $where .= " AND r.restro_status&" . $params["kind"] . "!=0";
             }
             
 
@@ -116,7 +116,7 @@
             if($location_id==null || $service_type==null) return null;
             
             $query = "SELECT a.*, AVG(rt.star_value) AS rating, pt.id AS promo_id FROM 
-            (SELECT r.id AS restro_id, r.restro_name, r.restro_description, r.restaurant_logo AS restro_logo, r.assign_featured, r.status, r.restro_state, l.id AS location_id, l.location_name, l.telephones, l.latitude, l.longitude, ct.city_name AS city, a.name AS area, l.block, l.street, l.building, p.method_type AS payment_method, s.open_status, s.open_from, s.open_to, w.min_order, w.order_days*24*60+w.order_hour*60+w.order_minitue AS order_time, w.monday_from, w.monday_to, w.tuesday_from, w.tuesday_to, w.wednesday_from, w.wednesday_to, w.thursday_from, w.thursday_to, w.friday_from, w.friday_to, w.saturday_from, w.saturday_to, w.sunday_from, w.sunday_to
+            (SELECT r.id AS restro_id, r.restro_name, r.restro_description, r.restaurant_logo AS restro_logo, r.assign_featured, r.status, r.restro_status, l.id AS location_id, l.location_name, l.telephones, l.latitude, l.longitude, ct.city_name AS city, a.name AS area, l.block, l.street, l.building, p.method_type AS payment_method, s.open_status, s.open_from, s.open_to, w.min_order, w.order_days*24*60+w.order_hour*60+w.order_minitue AS order_time, w.monday_from, w.monday_to, w.tuesday_from, w.tuesday_to, w.wednesday_from, w.wednesday_to, w.thursday_from, w.thursday_to, w.friday_from, w.friday_to, w.saturday_from, w.saturday_to, w.sunday_from, w.sunday_to
             FROM restro_location AS l
             JOIN restro_info AS r ON r.id=l.restro_id
             LEFT JOIN restro_payments_method AS p ON p.location_id=l.id AND service_type=$service_type

@@ -361,7 +361,7 @@
     {{/if}}
 
         <div class="restroheart">
-        {{if restro_state==1}}<img src="/assets/Customer/img/icon/love.png" alt="">{{/if}}
+        {{if restro_status==1}}<img src="/assets/Customer/img/icon/love.png" alt="">{{/if}}
     {{if promo_id}}<img src="/assets/Customer/img/icon/bow.png" alt="">{{/if}}
     </div>
     </div>
