@@ -222,9 +222,6 @@
 
                 $point = getPoint($carts, $this->user->id, $service_type, $restro_id, $location_id); 
                 if(isset($redeem_type)) {
-                    $discount = getDiscount($carts, $redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code);
-                    $order['discount_amount'] = $discount['discount_amount'];
-                    $order['coupon_point_apply'] = $redeem_type;                   
                     if($redeem_type == 1) { //  Redeem Coupon
                         if(!isset($coupon_code)) {
                             throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "coupon_code");
@@ -235,6 +232,11 @@
                     } else if($redeem_type == 3) {  // Mataam Point
                         $order['used_points'] = $point['mataam']['used_points'];
                     }   
+                    
+                    $discount = getDiscount($carts, $redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code);
+                    $order['discount_amount'] = $discount['discount_amount'];
+                    $order['coupon_point_apply'] = $redeem_type;                   
+                    
                 }  
                 $order['order_points'] = $point['loyalty']['gained_points'];       
                 $order['mataam_order_points'] = $point['mataam']['gained_points'];       

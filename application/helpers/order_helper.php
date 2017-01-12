@@ -122,7 +122,7 @@
                 "restro_id"     => $restro_id
             ));
             if(!$coupon) {
-                throw new Exception($CI->lang->line('coupon_code_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                throw new ApiException($CI->lang->line('coupon_code_invalid'), RESULT_ERROR_PARAMS_INVALID, "coupon_code");
             }
             if($coupon->from_date != '')
             {
