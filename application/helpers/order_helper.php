@@ -1,14 +1,7 @@
 <?PHP
-    function getPoint($user_id, $service_type, $restro_id, $location_id, $cartIds=null) {  
-        $CI = & get_instance();                     
-        $carts = $CI->CartModel->find($service_type, array(
-            "user_id"   => $user_id, 
-            "restro_id" => $restro_id,
-			"location_id" => $location_id
-        ));       
-        if(!$carts) {
-            throw new Exception('Cart list ' . $CI->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
-        }
+    function getPoint($carts, $user_id, $service_type, $restro_id, $location_id, $cartIds=null) {  
+        $CI = & get_instance();
+        
         $total_amount = 0; 
         $loyalty_gained_points = 0;
         foreach($carts as $cart) {
@@ -99,19 +92,9 @@
         return $result;
     }
 
-    function getSum($user_id, $service_type, $restro_id, $location_id, $area_id=null) {                       
-        $CI = & get_instance();                     
-        $params = array();
-        $params["user_id"] = $user_id; 
-        $params["restro_id"] = $restro_id;
-        $carts = $CI->CartModel->find($service_type, array(
-            'user_id'   => $user_id,
-            'restro_id' => $restro_id,
-            'location_id' => $location_id
-        ));       
-        if(!$carts) {
-            throw new Exception('Cart list ' . $CI->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
-        }
+    function getSum($carts, $service_type, $restro_id, $location_id, $area_id=null) {                       
+        $CI = & get_instance();   
+        
         $total_amount = 0; 
         foreach($carts as $cart) {
             $total_amount += $cart->subtotal;
@@ -124,16 +107,10 @@
         return $result;
     }
 
-    function getDiscount($redeem_type, $user_id, $service_type, $restro_id, $location_id, $coupon_code) {
+    function getDiscount($carts, $redeem_type, $user_id, $service_type, $restro_id, $location_id, $coupon_code) {
         $CI = & get_instance();                     
-        $carts = $CI->CartModel->find($service_type, array(
-            "user_id"   => $user_id, 
-            "restro_id" => $restro_id,
-            "location_id" => $location_id
-        ));     
-        if(!$carts) {
-            throw new Exception('Cart list ' . $CI->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
-        }
+        
+        
         $total_amount = 0; 
         foreach($carts as $cart) {
             $total_amount += $cart->price * $cart->quantity;
@@ -154,10 +131,10 @@
                 {                                 
                     return array('discount_amount'=>($total_amount * $coupon->discount) / 100);
                 } else {
-                    throw new Exception($CI->lang->line('coupon_code_expired'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($CI->lang->line('coupon_code_expired'), RESULT_ERROR_PARAMS_INVALID, "coupon_code");
                 }
             } else {
-                throw new Exception($CI->lang->line('coupon_code_invalid'), RESULT_ERROR_PARAMS_INVALID);
+                throw new ApiException($CI->lang->line('paramter_invalid'), RESULT_ERROR_PARAMS_INVALID, "coupon_code");
             }
         } else if($redeem_type == 2) {  // Loyalty Point
             // Calculate Loyalty Point 

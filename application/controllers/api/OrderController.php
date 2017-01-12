@@ -2,7 +2,7 @@
     defined('BASEPATH') OR exit('No direct script access allowed');
     // This can be removed if you use __autoload() in config.php OR use Modular Extensions
     require 'MyRestController.php';
-    
+
     class OrderController extends MyRestController {
         function __construct()
         {
@@ -131,10 +131,10 @@
                             $resource[$order->location_id."_".$order->service_type]->used_mataam_point += $point->used_mataam_point;
                         }
                     }
-                    
+
                 }
-                
-                
+
+
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>array_values($resource)
@@ -192,27 +192,37 @@
                 if(!isset($location_id)) {
                     throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "location_id");
                 }
-                
+
+                $carts = $this->CartModel->find($service_type, array(
+                    'user_id'   => $this->user->id,
+                    'restro_id' => $restro_id,
+                    'location_id' => $location_id
+                ));      
+                 
+                if(!$carts) {
+                    throw new ApiException($this->lang->line('cart_empty'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }
+
                 // Get restaurant info and check time avaiable and min_order available
                 $restro = $this->RestaurantModel->findByRestroLocationService($restro_id, $location_id, $service_type);
-                
+
                 $order['restro_id'] = $restro_id;
                 $order['location_id'] = $location_id;
                 $redeem_type = $this->post('redeem_type');
                 $coupon_code = $this->post('coupon_code');
-                $sum = getSum($this->user->id, $service_type, $restro_id, $location_id, $area_id);
-                
+                $sum = getSum($carts, $service_type, $restro_id, $location_id, $area_id);
+
                 $total = $sum['total_amount'];
                 if($restro->min_order>0 && $total<$restro->min_order) {
                     throw new ApiException("Cart list total amount should be greater than min_order($restro->min_order)", RESULT_ERROR_TOTAL_INVALID);
                 }
-                
+
                 $order['total'] = $total;
                 $order['delivery_charges'] = $sum['charge_amount'];            
 
-                $point = getPoint($this->user->id, $service_type, $restro_id, $location_id); 
+                $point = getPoint($carts, $this->user->id, $service_type, $restro_id, $location_id); 
                 if(isset($redeem_type)) {
-                    $discount = getDiscount($redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code);
+                    $discount = getDiscount($carts, $redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code);
                     $order['discount_amount'] = $discount['discount_amount'];
                     $order['coupon_point_apply'] = $redeem_type;                   
                     if($redeem_type == 1) { //  Redeem Coupon
@@ -228,7 +238,7 @@
                 }  
                 $order['order_points'] = $point['loyalty']['gained_points'];       
                 $order['mataam_order_points'] = $point['mataam']['gained_points'];       
-                
+
                 // Order date and time validation
                 $schedule_date = $this->post('schedule_date');
                 if(!isset($schedule_date)) {
@@ -237,7 +247,7 @@
                 if($schedule_date != date('Y-m-d', strtotime($schedule_date))){
                     throw new ApiException($this->lang->line('date_format_invalid'), RESULT_ERROR_PARAMS_INVALID, "schedule_date");
                 }
-                
+
                 $schedule_time = $this->post('schedule_time');
                 if(!isset($schedule_time)) {
                     throw new Exception($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "schedule_time");
@@ -245,22 +255,22 @@
                 if($schedule_time != date('H:i', strtotime($schedule_time))){
                     throw new ApiException($this->lang->line('time_format_invalid'), RESULT_ERROR_PARAMS_INVALID, "schedule_time");
                 }
-                
+
                 $interval = ($restro->order_time ? $restro->order_time : 30)*60;
                 $now = time();
                 if($now-$interval>strtotime("$schedule_date $schedule_time")) {
                     throw new ApiException($this->lang->line('date_cannot_back'), RESULT_ERROR_PARAMS_INVALID, 'schedule_date, schedule_time');
                 }
-                
+
                 $weekday = strtolower(date('l', strtotime($schedule_date)));   
-                
+
                 if(
                     $restro->{$weekday.'_from'} && strtotime($schedule_time)<strtotime($restro->{$weekday.'_from'}) ||
                     $restro->{$weekday.'_to'} && strtotime($schedule_time)>strtotime($restro->{$weekday.'_to'})
                 ) {
                     throw new ApiException("Order time is not within working time(".$restro->{$weekday.'_from'}." and ".$restro->{$weekday.'_to'}.")", RESULT_ERROR_PARAMS_INVALID, "schedule_date, schedule_time");
                 }
-                
+
                 if($service_type==1 || $service_type==4) {                    
                     $order['delivery_date'] = $schedule_date;  // Y-m-d
                     $order['delivery_time'] = $schedule_time;  // H:i:s
@@ -289,7 +299,7 @@
 
                 // Create Order Details
                 $order_details['order_id'] = $order_id;
-                $carts = $this->CartModel->find($service_type, array("user_id"=>$this->user->id, "restro_id"=>$restro_id, "location_id"=>$location_id));
+                
                 foreach($carts as $cart){
                     $order_details['product_id'] = $cart->product_id;
                     $order_details['price'] = $cart->price;
@@ -300,10 +310,10 @@
                     $order_details['user_id'] = $cart->user_id;
                     $order_details['variation_ids'] = $cart->variation_ids;
                     $this->OrderDetailModel->create($service_type, $order_details);
+                    
+                    $this->CartModel->delete($service_type, $cart->id);
                 }
 
-                // Delete Cart List
-                $this->CartModel->deleteAll($service_type, array('user_id'=>$this->user->id,'restro_id'=>$restro_id, 'location_id'=>$location_id));
                 $params = array();
                 $order = $this->OrderModel->findById($service_type, $order_id);
                 $order->details = $this->OrderDetailModel->find($service_type, array('order_id'=>$order_id));
@@ -438,11 +448,11 @@
                 if(!isset($reserve_time)) {
                     throw new Exception("reserve_time ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
                 }
-                
+
                 if(time()>strtotime("$reserve_date $reserve_time")) {
                     throw new Exception($this->lang->line('order_time_should_be_greater_than_now'), RESULT_ERROR_PARAMS_INVALID);
                 }
-                
+
                 $weekday = strtolower(date('l', strtotime($reserve_date)));
                 $seating_info = getSeatingInfo($restro_id, $location_id, $weekday, $reserve_time);
                 if($seating_info === null || !isAvailableTime($reserve_date, $reserve_time, $seating_info, $people_number, $restro_id, $location_id))  {
@@ -555,39 +565,39 @@
                 $this->validateAccessToken();
                 $service_type = $this->input->get('service_type');
                 if(!isset($service_type)) {
-                    throw new Exception("service_type ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "service_type");
                 }
                 $product_id = $this->post('product_id');
                 if(!isset($product_id)) {
-                    throw new Exception("product_id ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "product_id");
                 }
                 $quantity = $this->post('quantity');
                 if(!isset($quantity) || $quantity<=0) {
-                    throw new Exception("quantity ".$this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "quantity");
                 } 
                 $variation_ids = $this->post('variation_ids');
                 $item = $this->RestroItemModel->findById($product_id);
                 if(!$item) {
-                    throw new Exception("Product ".$this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND);
+                    throw new ApiException($this->lang->line('resource_not_found'), RESULT_ERROR_PARAMS_INVALID, "product_id");
                 }
                 $params = array();
                 $params["user_id"] = $this->user->id;                                                        
                 $params["product_id"] = $product_id;
                 $params["quantity"] = $quantity;
                 $params["restro_id"] = $item->restro_id;
-                $params["location_id"] = $item->restro_id;
+                $params["location_id"] = $item->location_id;
                 $params["spacial_request"] = $this->post('spacial_request');
-                
+
                 $params["variation_ids"] = isset($variation_ids) ? $variation_ids : 0;    // variation ids string delimited by comma(,)
-                    
+
                 if(isset($variation_ids)) {
                     $variation_ids = explode(",", $variation_ids);
 
                     $variations = $this->RestroItemVariationModel->findByIds($variation_ids);
-                
+
                     $price = 0;
                     if($item->price_type == ITEM_PRICE_TYPE_BY_MAIN) $price = $item->price;
-                    
+
                     foreach($variations as $v) {
                         $price += $v->price;
                     }
@@ -606,6 +616,7 @@
             } catch (Exception $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "paramter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
@@ -727,27 +738,39 @@
                 $this->validateAccessToken();
                 $service_type = $this->get('service_type');                 
                 if(!isset($service_type)) {
-                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "service_type");
                 }
                 $restro_id = $this->get('restro_id');
                 if(!isset($restro_id)) {
-                    throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "restro_id");
                 }
                 $location_id = $this->get('location_id');
                 if(!isset($location_id)) {
-                    throw new Exception('location_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "location_id");
                 }
                 $area_id = $this->get('area_id');
                 if(!isset($area_id)) {
-                    throw new Exception('area_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "area_id");
                 }
+                
+                $carts = $this->CartModel->find($service_type, array(
+                    'user_id'   => $this->user->id,
+                    'restro_id' => $restro_id,
+                    'location_id' => $location_id
+                ));      echo json_encode($carts); return;
+                 
+                if(!$carts) {
+                    throw new ApiException($this->lang->line('cart_empty'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }
+                
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
-                    "resource"=>getSum($this->user->id, $service_type, $restro_id, $location_id, $area_id)
+                    "resource"=>getSum($carts, $service_type, $restro_id, $location_id, $area_id)
                     ), REST_Controller::HTTP_OK);
-            } catch (Exception $e) {
+            } catch (ApiException $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "parameter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
@@ -758,28 +781,40 @@
                 $this->validateAccessToken();
                 $redeem_type = $this->get('redeem_type');                 
                 if(!isset($redeem_type)) {
-                    throw new Exception('redeem_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "redeem_type");
                 }
                 $service_type = $this->get('service_type');                 
                 if(!isset($service_type)) {
-                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "service_type");
                 }
                 $restro_id = $this->get('restro_id');
                 if(!isset($restro_id)) {
-                    throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "restro_id");
                 }
                 $location_id = $this->get('location_id');
-                if(!isset($restro_id)) {
-                    throw new Exception('location_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                if(!isset($location_id)) {
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "location_id");
                 }
                 $coupon_code = $this->get('coupon_code');
+
+                $carts = $this->CartModel->find($service_type, array(
+                    'user_id'   => $this->user->id,
+                    'restro_id' => $restro_id,
+                    'location_id' => $location_id
+                ));      
+                 
+                if(!$carts) {
+                    throw new ApiException($this->lang->line('cart_empty'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }
+                
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
-                    "resource"=>getDiscount($redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code)
+                    "resource"=>getDiscount($carts, $redeem_type, $this->user->id, $service_type, $restro_id, $location_id, $coupon_code)
                     ), REST_Controller::HTTP_OK);
-            } catch (Exception $e) {
+            } catch (ApiException $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "parameter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }
@@ -790,23 +825,35 @@
                 $this->validateAccessToken();
                 $service_type = $this->get('service_type');                 
                 if(!isset($service_type)) {
-                    throw new Exception('service_type ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "service_type");
                 }
                 $restro_id = $this->get('restro_id');
                 if(!isset($restro_id)) {
-                    throw new Exception('restro_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "restro_id");
                 }
                 $location_id = $this->get('location_id');
                 if(!isset($location_id)) {
-                    throw new Exception('location_id ' . $this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_INVALID);
+                    throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "location_id");
                 }
+
+                $carts = $this->CartModel->find($service_type, array(
+                    'user_id'   => $this->user->id,
+                    'restro_id' => $restro_id,
+                    'location_id' => $location_id
+                ));      
+                 
+                if(!$carts) {
+                    throw new ApiException($this->lang->line('cart_empty'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                }
+                
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
-                    "resource"=>getPoint($this->user->id, $service_type, $restro_id, $location_id)
+                    "resource"=>getPoint($carts, $this->user->id, $service_type, $restro_id, $location_id)
                     ), REST_Controller::HTTP_OK);
             } catch (Exception $e) {
                 $this->response(array(
                     "code"=>$e->getCode(),
+                    "parameter"=>$e->getParameter(),
                     "message"=>$e->getMessage()
                     ), REST_Controller::HTTP_OK);
             }

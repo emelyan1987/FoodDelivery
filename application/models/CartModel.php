@@ -73,7 +73,7 @@
 
             $this->db->select('c.*, i.image AS item_image, i.item_name, i.item_price, (c.price*c.quantity) AS subtotal, i.location_id');
             $this->db->from($table_name.' AS c');  
-            $this->db->join('tbl_item AS i', 'i.id=c.product_id', 'left'); 
+            $this->db->join('tbl_item AS i', 'i.id=c.product_id'); 
 
             if(isset($params)) {
                 if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('c.user_id', $params["user_id"]);
