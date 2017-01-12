@@ -41,4 +41,5 @@ $lang['time_expired'] = 'Time expired';
 $lang['date_cannot_back'] = 'Order time cannot be back.';
 $lang['date_format_invalid'] = 'Date should be YYYY-MM-DD format';
 $lang['time_format_invalid'] = 'Time should be hh:ii format';
+$lang['date_time_format_invalid'] = 'Time should be YYYY-MM-DD hh:ii format';
 $lang['cart_empty'] = 'Cart empty';

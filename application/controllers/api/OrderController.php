@@ -894,6 +894,10 @@
                 if(!isset($reserve_time)) {
                     throw new ApiException($this->lang->line('parameter_required'), RESULT_ERROR_PARAMS_REQUIRED, "reserve_time");
                 }
+                if($reserve_time!=date('Y-m-d H:i', strtotime($reserve_time))) {
+                    throw new ApiException($this->lang->line('date_time_format_invalid'), RESULT_ERROR_PARAMS_INVALID, "reserve_time");
+                }
+                
                 $reserve_time = strtotime($reserve_time);
 
                 $time_slots = getTimeSlots($restro_id, $location_id, $reserve_time, $people_number);
