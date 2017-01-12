@@ -154,9 +154,26 @@
             $user = $this->UserModel->findById($id);
             $user->profile = $this->UserProfileModel->findByUserId($id);
 
+            
+            $token_data["user_id"] = $user->id;   
+            $token = CryptoLib::randomString(50);
+            $token_data["access_token"] = $token;          
+        
+            if(isset($_SERVER['HTTP_CLIENT_IP'])) $token_data['ip_address1'] = $_SERVER['HTTP_CLIENT_IP'];
+            if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $token_data['ip_address2'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            if(isset($_SERVER['HTTP_X_FORWARDED'])) $token_data['ip_address3'] = $_SERVER['HTTP_X_FORWARDED'];
+            if(isset($_SERVER['HTTP_FORWARDED_FOR'])) $token_data['ip_address4'] = $_SERVER['HTTP_FORWARDED_FOR'];
+            if(isset($_SERVER['HTTP_FORWARDED'])) $token_data['ip_address5'] = $_SERVER['HTTP_FORWARDED'];
+            if(isset($_SERVER['REMOTE_ADDR'])) $token_data['ip_address6'] = $_SERVER['REMOTE_ADDR'];
+            
+            $accessTokenId = $this->UserAccessTokenModel->create($token_data);
+            $accessToken = $this->UserAccessTokenModel->findById($accessTokenId);
+            $accessToken->user = $user;
+            
+            
             $this->response(array(
                 "code"=>RESULT_SUCCESS,
-                "resource"=>$user   
+                "resource"=>$accessToken   
                 ), REST_Controller::HTTP_CREATED); 
 
         } catch (Exception $e) {
