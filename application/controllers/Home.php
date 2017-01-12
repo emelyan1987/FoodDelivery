@@ -779,7 +779,7 @@
                 $data['selected_kind'] = $filter_kind;
             }
 
-            $data['restro_list'] = $this->RestaurantModel->find($params); 
+            $data['restro_list'] = $this->RestaurantModel->find($params);  echo json_encode($data['restro_list']); echo json_encode($params); return;
 
             if($filter_service == 3) {
                 $reserve_time = $this->input->post('reserve_time');
