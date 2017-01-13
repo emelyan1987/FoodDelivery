@@ -119,7 +119,7 @@
                 $points = $this->PointLogModel->find($params);
                 $resource = array();
                 foreach($points as $point) {
-                    $order = $this->OrderModel->findById($point->service_id, $point->order_id);
+                    $order = $point->order = $this->OrderModel->findById($point->service_id, $point->order_id);
                     if($order){
                         $point->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
                         if(!isset($resource[$order->restro_id])) {
