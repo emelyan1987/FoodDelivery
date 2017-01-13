@@ -88,19 +88,28 @@
 
                     $restros = $this->RestaurantModel->find($params); 
 
-                    if($service_type == 3) {
-                        $reserve_time = $this->get('reserve_time');
-                        $people_number = $this->get('people_number');
+                    $resource = array();
+                    foreach($restros as $restro) {
+                        $categories = $this->RestroItemCategoryModel->find(array('location_id'=>$restro->location_id));
+                        $items = array();
+                        foreach($categories as $category) {
+                            $items = array_merge($items, $this->RestroItemModel->find(array('category_id'=>$category->id)));
+                        }
 
-                        if(isset($reserve_time) && isset($people_number)) {
-                            $reserve_time = strtotime($reserve_time);
-                            foreach($restros as $restro) {
-                                $restro->slots = getTimeSlots($restro->restro_id, $restro->location_id, $reserve_time, $people_number);
-                            }   
+                        if(count($items)>0) {
+                            if($service_type == 3) {
+                                $reserve_time = $this->get('reserve_time');
+                                $people_number = $this->get('people_number');
+
+                                if(isset($reserve_time) && isset($people_number)) {
+                                    $reserve_time = strtotime($reserve_time);
+                                    $restro->slots = getTimeSlots($restro->restro_id, $restro->location_id, $reserve_time, $people_number);   
+                                }
+                            }
+                            
+                            $resource[] = $restro;
                         }
                     }
-
-                    $resource = $restros;
                 } else {     
                     $location_id = $this->get('location_id');
                     if(!isset($location_id)) {
@@ -277,13 +286,13 @@
                 $resource = array();
                 foreach($categories as $cat) {
                     $items = $this->RestroItemModel->find(array('category_id'=>$cat->id));
-                    
+
                     if(count($items)) {
                         $resource[] = $cat;
                     }
-                    
+
                 }                
-                  
+
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
                     "resource"=>$resource
@@ -325,7 +334,7 @@
                     if(isset($category_id))$params["category_id"] = $category_id;                   
                     if(isset($location_id))$params["location_id"] = $location_id;                   
                     if(isset($service_id))$params["service_id"] = $service_id;   
-                    
+
                     $params['status'] = 1;  // Active item only
                     $resource = $this->RestroItemModel->find($params);
 
