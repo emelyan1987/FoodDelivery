@@ -119,16 +119,16 @@
                 $points = $this->PointLogModel->find($params);
                 $resource = array();
                 foreach($points as $point) {
-                    $order = $point->order = $this->OrderModel->findById($point->service_id, $point->order_id);
+                    $order = $this->OrderModel->findById($point->service_id, $point->order_id);
                     if($order){
                         $point->restaurant = $this->RestaurantModel->findByRestroLocationService($order->restro_id, $order->location_id, $order->service_type);
-                        if(!isset($resource[$order->location_id."_".$order->service_type])) {
-                            $resource[$order->location_id."_".$order->service_type] = $point;
+                        if(!isset($resource[$order->restro_id])) {
+                            $resource[$order->restro_id] = $point;
                         } else {
-                            $resource[$order->location_id."_".$order->service_type]->gained_loyalty_point += $point->gained_loyalty_point;
-                            $resource[$order->location_id."_".$order->service_type]->used_loyalty_point += $point->used_loyalty_point;
-                            $resource[$order->location_id."_".$order->service_type]->gained_mataam_point += $point->gained_mataam_point;
-                            $resource[$order->location_id."_".$order->service_type]->used_mataam_point += $point->used_mataam_point;
+                            $resource[$order->restro_id]->gained_loyalty_point += $point->gained_loyalty_point;
+                            $resource[$order->restro_id]->used_loyalty_point += $point->used_loyalty_point;
+                            $resource[$order->restro_id]->gained_mataam_point += $point->gained_mataam_point;
+                            $resource[$order->restro_id]->used_mataam_point += $point->used_mataam_point;
                         }
                     }
 
