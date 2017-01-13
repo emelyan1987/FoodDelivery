@@ -50,7 +50,7 @@
                 if(isset($params["service_id"]) && $params["service_id"]!="") $this->db->where('service_id', $params["service_id"]);
             }  
             
-            $this->db->order_by('created_time', 'DESC');
+            $this->db->order_by('created_time', 'ASC');
             $result = $this->db->get()->result();
 
             return $result;
