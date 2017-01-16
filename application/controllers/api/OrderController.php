@@ -88,7 +88,7 @@
                     $resource = $order;
                 }
                 if(!$resource) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
+                    throw new ApiException($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
                 }  
                 $this->response(array(
                     "code"=>RESULT_SUCCESS,    
