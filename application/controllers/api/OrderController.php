@@ -773,7 +773,7 @@
                     'user_id'   => $this->user->id,
                     'restro_id' => $restro_id,
                     'location_id' => $location_id
-                ));      echo json_encode($carts); return;
+                ));      
                  
                 if(!$carts) {
                     throw new ApiException($this->lang->line('cart_empty'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
