@@ -29,6 +29,7 @@
             $this->load->model('RestroPromotionItemModel'); 
             $this->load->model('RestroCityAreaModel'); 
             $this->load->model('AreaModel'); 
+            $this->load->model('CuisineModel'); 
 
             $this->load->helper('order');
         } 
@@ -107,6 +108,7 @@
                                 }
                             }
                             
+                            $restro->cuisines = $this->CuisineModel->findByRestroId($restro->restro_id);
                             $resource[] = $restro;
                         }
                     }
