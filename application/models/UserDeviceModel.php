@@ -43,14 +43,17 @@
         }
 
         public function find($params=null, $fields=array()){   
-            $this->db->select('*');
-            $this->db->from('user_devices');   
+            $this->db->select('d.*');
+            $this->db->from('user_devices AS d');
+            $this->db->join('users AS u', 'u.id=d.user_id');   
             
             if(isset($params)) {
-                if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('user_id', $params["user_id"]);
-                if(isset($params["device_token"]) && $params["device_token"]!="") $this->db->where('device_token', $params["device_token"]);
-                if(isset($params["device_type"]) && $params["device_type"]!="") $this->db->where('device_type', $params["device_type"]);
+                if(isset($params["user_id"]) && $params["user_id"]!="") $this->db->where('d.user_id', $params["user_id"]);
+                if(isset($params["device_token"]) && $params["device_token"]!="") $this->db->where('d.device_token', $params["device_token"]);
+                if(isset($params["device_type"]) && $params["device_type"]!="") $this->db->where('d.device_type', $params["device_type"]);
             }  
+            
+            $this->db->where('u.notification_subscription', 1);
             
             //$this->db->group_by('user_id');
             //$this->db->group_by('device_type');
