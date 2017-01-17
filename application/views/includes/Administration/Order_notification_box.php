@@ -175,7 +175,7 @@ foreach($servicedata as $ser => $SR):
                       <tr><td colspan="2" id="dMsg"></td></tr>
                     </table>
                   </div>
-                </div>
+                </div> 
       <?php
       }
       elseif($SR->service_type == 2)
