@@ -98,6 +98,7 @@
                         }
 
                         if(count($items)>0) {
+							$restro->cuisines = $this->CuisineModel->findByRestroId($restro->restro_id);
                             if($service_type == 3) {
                                 $reserve_time = $this->get('reserve_time');
                                 $people_number = $this->get('people_number');
@@ -105,11 +106,13 @@
                                 if(isset($reserve_time) && isset($people_number)) {
                                     $reserve_time = strtotime($reserve_time);
                                     $restro->slots = getTimeSlots($restro->restro_id, $restro->location_id, $reserve_time, $people_number);   
+
+									if($restro->slots) $resource[] = $restro;
                                 }
-                            }
+                            } else {
+								$resource[] = $restro;
+							}
                             
-                            $restro->cuisines = $this->CuisineModel->findByRestroId($restro->restro_id);
-                            $resource[] = $restro;
                         }
                     }
                 } else {     
