@@ -116,7 +116,7 @@ defined('SERVICE_RESERVATION')  OR define('SERVICE_RESERVATION', 3);
 defined('SERVICE_PICKUP')       OR define('SERVICE_PICKUP', 4); 
 
 /* =========== TIME CONSTANTS ============= */
-defined('CART_TIMEOUT')     OR define('CART_TIMEOUT', 30 * 60); 
+defined('CART_TIMEOUT')     OR define('CART_TIMEOUT', 15 * 60); 
 
 defined('ITEM_PRICE_TYPE_BY_VARIATION')     OR define('ITEM_PRICE_TYPE_BY_VARIATION', 1); 
 defined('ITEM_PRICE_TYPE_BY_MAIN')          OR define('ITEM_PRICE_TYPE_BY_MAIN', 2); 
