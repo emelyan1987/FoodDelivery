@@ -382,6 +382,9 @@
 
                 foreach($promotions as $promotion) {
                     $promotion->items = $this->RestroPromotionItemModel->findByPromoId($promotion->id);
+                    foreach($promotion->items as $promo_item) {
+                        $promo_item->variations = $this->RestroPromotionItemModel->findVariationItemsByPromoItemId($promo_item->id);
+                    }
                     $promotion->restaurant = $this->RestaurantModel->findById($promotion->restro_id);
                 }
 

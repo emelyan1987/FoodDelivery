@@ -64,4 +64,16 @@
             return $result&&count($result)>0?$result[0]:null;
         }   
 
+        
+
+        public function findVariationItemsByPromoItemId($promo_item_id){   
+            $this->db->select('*');
+            $this->db->from('restro_promotion_item_variation');
+            
+            $this->db->where('promotion_detail_id', $promo_item_id);   
+            
+            $result = $this->db->get()->result();
+
+            return $result;
+        }
 }
