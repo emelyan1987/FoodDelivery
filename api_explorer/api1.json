@@ -1894,13 +1894,13 @@
         }
       }
     },
-    "/restaurants/promotions": {
+    "/promotions": {
       "get": {
         "tags": [
-          "restaurants"
+          "promotions"
         ],
         "description": "This API is responsible for getting promotion list",
-        "operationId": "getRestroPromotions",
+        "operationId": "getPromotions",
         "consumes": [
           "application/json"
         ],
@@ -1933,6 +1933,56 @@
             "name": "service_id",
             "required": false,
             "description": "Service id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Invalid json/ invalid dataset",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/promotions/{id}/add_to_cart": {
+      "post": {
+        "tags": [
+          "promotions"
+        ],
+        "description": "This API is responsible for adding promotion items to cart",
+        "operationId": "addPromotionsToCart",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "query",
+            "name": "access_token",
+            "description": "User access token for authorized requests",
+            "required": true,
+            "type": "string"
+          },
+          {                         
+            "in": "path",
+            "name": "id",  
+            "required": true,
+            "description": "promotion id",
             "type": "integer"
           }
         ],

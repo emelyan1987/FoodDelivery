@@ -25,8 +25,6 @@
             $this->load->model('RestroItemCategoryModel'); 
             $this->load->model('RestroItemModel'); 
             $this->load->model('RestroItemVariationModel'); 
-            $this->load->model('RestroPromotionModel'); 
-            $this->load->model('RestroPromotionItemModel'); 
             $this->load->model('RestroCityAreaModel'); 
             $this->load->model('AreaModel'); 
             $this->load->model('CuisineModel'); 
@@ -362,48 +360,6 @@
             }
         }    
 
-
-        public function promotions_get()
-        {                 
-            try {                
-                $this->validateAccessToken();
-
-                $restro_id = $this->input->get('location_id');
-                $location_id = $this->input->get('location_id');
-
-
-                $params = array();
-
-                if(isset($restro_id))$params["restro_id"] = $restro_id;                    
-                if(isset($location_id))$params["location_id"] = $location_id;    
-
-                $params['date'] = date('Y-m-d');
-                $promotions = $this->RestroPromotionModel->find($params);
-
-                foreach($promotions as $promotion) {
-                    $promotion->items = $this->RestroPromotionItemModel->findByPromoId($promotion->id);
-                    foreach($promotion->items as $promo_item) {
-                        $promo_item->variations = $this->RestroPromotionItemModel->findVariationItemsByPromoItemId($promo_item->id);
-                    }
-                    $promotion->restaurant = $this->RestaurantModel->findById($promotion->restro_id);
-                }
-
-                $resource = $promotions;
-                if(!$resource) {
-                    throw new Exception($this->lang->line('resource_not_found'), RESULT_ERROR_RESOURCE_NOT_FOUND); 
-                }  
-                $this->response(array(
-                    "code"=>RESULT_SUCCESS,    
-                    "resource"=>$resource
-                    ), REST_Controller::HTTP_OK);
-
-            } catch (Exception $e) {
-                $this->response(array(
-                    "code"=>$e->getCode(),
-                    "message"=>$e->getMessage()
-                    ), REST_Controller::HTTP_OK);
-            }
-        } 
 
         public function areas_get($restro_id)
         {                 

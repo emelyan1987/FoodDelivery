@@ -478,8 +478,10 @@ $route['api/restaurants/(:num)/ratings'] = '/api/RestaurantController/ratings/$1
 $route['api/restaurants/item_categories'] = '/api/RestaurantController/item_categories'; 
 $route['api/restaurants/items'] = '/api/RestaurantController/items'; 
 $route['api/restaurants/items/(:num)'] = '/api/RestaurantController/items/$1'; 
-$route['api/restaurants/promotions'] = '/api/RestaurantController/promotions';
 $route['api/restaurants/(:num)/areas'] = '/api/RestaurantController/areas/$1';
+
+$route['api/promotions'] = '/api/PromotionController';
+$route['api/promotions/(:num)/add_to_cart'] = '/api/PromotionController/add_to_cart/$1';
 
 $route['api/orders'] = '/api/OrderController'; 
 $route['api/orders/(:num)/details'] = '/api/OrderController/details/$1'; 
